@@ -21,3 +21,4 @@ function backpoints(width, height) {
     }
     return coords;
 }
+console.debug(backpoints(1280, 780));
