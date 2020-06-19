@@ -31,6 +31,7 @@ function createTriangles() {
         svg.id = "triangle" + i;
         document.getElementById("backsplash").appendChild(svg);
     }
+    console.log("CreatedTriangles");
 }
 
 function pointsToString(one, two, three) {
@@ -77,6 +78,5 @@ function makeTriangleRows() {
         }
         currentTriangle += 4;
     }
+    console.log("did it?");
 }
-createTriangles();
-makeTriangleRows();
