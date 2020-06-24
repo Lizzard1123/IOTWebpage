@@ -47,3 +47,10 @@
     left: 15%;
     bottom: 0%;
 }
+
+svg {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+}
