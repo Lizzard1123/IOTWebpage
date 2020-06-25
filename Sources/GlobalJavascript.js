@@ -26,43 +26,37 @@ function backpoints(width, height) {
     return coords;
 }
 
-function createTriangles() {
-    for (var i = 0; i < 485; i++) {
-        const svg = document.getElementById("parent");
-        const mypolygon = document.createElementNS("http://www.w3.org/2000/svg", 'polygon');
-        svg.appendChild(mypolygon);
-        mypolygon.id = "triangle" + (i + 1);
-    }
-    console.log("CreatedTriangles");
-}
-
-function CreateTriangle(name) {
-    const svg = document.getElementById("parent");
-    const mypolygon = document.createElementNS("http://www.w3.org/2000/svg", 'polygon');
-    svg.appendChild(mypolygon);
-    mypolygon.id = name;
-
-}
-
 function pointsToString(one, two, three) {
     var endstring = "";
     endstring = one[0] + "," + one[1] + " " + two[0] + "," + two[1] + " " + three[0] + "," + three[1];
     return endstring;
 }
 var colors = ["#34b4eb", "#1b8ebf", "#0b5b7d", "#34708a", "#134b63", "#359fcc", "#00acf5", "#0e52c7", "#357efc", "#2e7bff", "#0e7ead", "#40addb", "#1483b3", "#6bc6ed", "#44aedb", "#196f94", "#146fc9", "#4487c9", "#0575e3", "#298ff2", "#034e96", "#78b8f5", "#2289b5", "#23afeb", "#0373a3", "#06668f", "#0489c2", "#77a8f2", "#3882f2", "#1051b3", "#267ea3"];
+var totalTriangles = 0;
+
+function CreateTriangle(name, stringOfPoints) {
+    const svg = document.getElementById("parent");
+    const mypolygon = document.createElementNS("http://www.w3.org/2000/svg", 'polygon');
+    svg.appendChild(mypolygon);
+    mypolygon.id = name;
+    mypolygon.setAttribute("points", stringOfPoints);
+    mypolygon.setAttribute("fill", colors[Math.floor(Math.random() * colors.length)]);
+    mypolygon.setAttribute("onmouseover", "hoverchange(this)");
+    mypolygon.setAttribute("onclick", "fadeBody()");
+    totalTriangles++;
+}
 
 function makeTriangleRows(list) {
     console.log(list);
     var currentTriangle = 0;
-    var numberofrows = (actualhigh) / 2;
+    var numberofrows = (actualhigh - 2) / 2;
     var numberofsections = numberwide - 1;
     for (var t = 0; t < numberofrows + 1; t++) {
         var begstringOfPoints = pointsToString(list[t * 2][0], list[t * 2 + 1][0], list[t * 2 + 2][0]);
+        console.log(t);
         currentTriangle++;
         var begtriangleName = "triangle" + currentTriangle;
-        CreateTriangle(begtriangleName);
-        document.getElementById(begtriangleName).setAttribute("points", begstringOfPoints);
-        document.getElementById(begtriangleName).setAttribute("fill", colors[Math.floor(Math.random() * 10)]);
+        CreateTriangle(begtriangleName, begstringOfPoints);
         for (var g = 0; g < numberofsections + 1; g++) {
             for (var i = 0; i < 4; i++) {
                 var first = [0 + (t * 2), 0 + g];
@@ -85,10 +79,9 @@ function makeTriangleRows(list) {
                 var third = [1 + (t * 2), 0 + g];
                 currentTriangle++;
                 var triangleName = "triangle" + currentTriangle;
-                CreateTriangle(triangleName);
+
                 var stringOfPoints = pointsToString(list[first[0]][first[1]], list[second[0]][second[1]], list[third[0]][third[1]]);
-                document.getElementById(triangleName).setAttribute("points", stringOfPoints);
-                document.getElementById(triangleName).setAttribute("fill", colors[Math.floor(Math.random() * colors.length)]);
+                CreateTriangle(triangleName, stringOfPoints);
             }
         }
 
@@ -137,4 +130,123 @@ for (var i = 0; i < testing.length; i++) {
     }
 }
 */
+
 makeTriangleRows(randomizecoords(backpoints(width, height)));
+
+/*
+
+
+
+
+*/
+
+function hoverchange(triangle) {
+    triangle.removeAttribute("fill");
+    triangle.setAttribute("fill", colors[Math.floor(Math.random() * colors.length)]);
+}
+
+
+var Fadeinterval;
+var Fadetime = 1;
+var FadeTotalTime = 800;
+var bodyVisible = true;
+var dissapearingActs = ["header", "scrollbar", "body", "footer"];
+var opacitysetting = 1;
+var inProgress = false;
+
+function fadeInBody() {
+    inProgress = true;
+    console.log("fading in");
+    document.getElementById("backsplash").style.zIndex = -1;
+    if (opacitysetting < 1) {
+        opacitysetting += (1 / FadeTotalTime);
+        for (var i = 0; i < dissapearingActs.length; i++) {
+            document.getElementById(dissapearingActs[i]).style.opacity = opacitysetting;
+        }
+        console.log(opacitysetting);
+        console.log(1 / FadeTotalTime);
+    } else {
+        clearInterval(Fadeinterval);
+        bodyVisible = true;
+        inProgress = false;
+    }
+}
+
+function fadeOutBody() {
+    inProgress = true;
+    console.log("fading out");
+
+    if (opacitysetting > 0) {
+        opacitysetting -= (1 / FadeTotalTime);
+        for (var i = 0; i < dissapearingActs.length; i++) {
+            document.getElementById(dissapearingActs[i]).style.opacity = opacitysetting;
+        }
+        console.log(opacitysetting);
+        console.log(1 / FadeTotalTime);
+    } else {
+        clearInterval(Fadeinterval);
+        bodyVisible = false;
+        document.getElementById("backsplash").style.zIndex = 10;
+        inProgress = false;
+    }
+}
+
+function fadeBody() {
+    FadeTotalTime = 800;
+    if (!inProgress) {
+        console.log("clicked");
+        if (bodyVisible) {
+            console.log("body visible");
+            Fadeinterval = setInterval(fadeOutBody, Fadetime);
+        } else {
+            console.log("Body gone");
+            Fadeinterval = setInterval(fadeInBody, Fadetime);
+        }
+    } else {
+        console.log("busy");
+    }
+}
+
+
+var notMovingTimer;
+var timeoutTime = 10000;
+var Moving = false;
+var needToResume = false;
+var randomizeTriangles;
+var randomizeTime = 100;
+
+function AFK() {
+    console.log("got here");
+    needToResume = true;
+    FadeTotalTime = 5000;
+    clearInterval(Fadeinterval);
+    Fadeinterval = setInterval(fadeOutBody, Fadetime);
+    randomizeTriangles = setInterval(randomcolorTriangles, randomizeTime)
+}
+
+function timeoutScreen() {
+    if (needToResume) {
+        FadeTotalTime = 300;
+        clearInterval(Fadeinterval);
+        Fadeinterval = setInterval(fadeInBody, Fadetime);
+        needToResume = false;
+        clearInterval(randomizeTriangles);
+    }
+    console.log("cleared");
+    clearTimeout(notMovingTimer);
+    notMovingTimer = setTimeout(AFK, timeoutTime);
+}
+
+function randomcolorTriangles() {
+    var randomselector = Math.floor(Math.random() * totalTriangles);
+    var triangle = document.getElementById("triangle" + (randomselector - 1));
+    triangle.removeAttribute("fill");
+    triangle.setAttribute("fill", colors[Math.floor(Math.random() * colors.length)]);
+}
+
+/*
+
+
+
+
+*/
