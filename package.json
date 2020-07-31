@@ -1,0 +1,42 @@
+{
+    "name": "personalwebpage",
+    "version": "1.0.0",
+    "description": "Personal Webpage",
+    "main": "Index.js",
+    "type": "module",
+    "scripts": {
+        "start": "node ./src/Index.js",
+        "lint": "eslint",
+        "test": "jest"
+    },
+    "author": "Ethan",
+    "license": "ISC",
+    "devDependencies": {
+        "eslint": "^7.5.0",
+        "eslint-config-google": "^0.14.0",
+        "eslint-plugin-vue": "^6.2.2",
+        "jest": "^26.1.0"
+    },
+    "dependencies": {
+        "express": "^4.17.1",
+        "vue": "^2.6.11"
+    },
+    "eslintConfig": {
+        "env": {
+            "browser": true,
+            "commonjs": true,
+            "es2020": true
+        },
+        "extends": [
+            "plugin:vue/essential",
+            "google"
+        ],
+        "parserOptions": {
+            "ecmaVersion": 11
+        },
+        "plugins": [
+            "vue"
+        ],
+        "rules": {}
+    }
+}

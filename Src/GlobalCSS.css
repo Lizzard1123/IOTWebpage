@@ -1,0 +1,67 @@
+#backsplash {
+    z-index: -1;
+    background-color: rgb(17, 80, 131);
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0%;
+    top: 0%;
+    cursor: none;
+}
+
+#body {
+    z-index: 0;
+    width: 50%;
+    height: 82%;
+    position: absolute;
+    left: 25%;
+    top: 13%;
+    background-color: #04628a;
+}
+
+#header {
+    z-index: 1;
+    background-color: rgb(85, 153, 255);
+    width: 100%;
+    height: 8%;
+    position: absolute;
+    left: 0%;
+    top: 0%;
+}
+
+#scrollbar {
+    z-index: 1;
+    background-color: #4175c4;
+    width: 100%;
+    height: 5%;
+    position: absolute;
+    left: 0%;
+    top: 8%;
+    border-bottom: 3px solid black;
+    border-top: 3px solid black;
+}
+
+#footer {
+    z-index: 3;
+    background-color: rgb(85, 96, 255);
+    width: 55%;
+    height: 5%;
+    position: absolute;
+    left: 22.5%;
+    bottom: 0%;
+    border-top: 3px solid rgb(0, 0, 0);
+    border-left: 3px solid rgb(0, 0, 0);
+    border-right: 3px solid rgb(0, 0, 0);
+    border-radius: 40px 40px 0px 0px;
+}
+
+svg {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+}
+
+#titleBox {
+    position: absolute;
+}
