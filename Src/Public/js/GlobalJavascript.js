@@ -47,13 +47,11 @@ function CreateTriangle(name, stringOfPoints) {
 }
 
 function makeTriangleRows(list) {
-    console.log(list);
     var currentTriangle = 0;
     var numberofrows = (actualhigh - 2) / 2;
     var numberofsections = numberwide - 1;
     for (var t = 0; t < numberofrows + 1; t++) {
         var begstringOfPoints = pointsToString(list[t * 2][0], list[t * 2 + 1][0], list[t * 2 + 2][0]);
-        console.log(t);
         currentTriangle++;
         var begtriangleName = "triangle" + currentTriangle;
         CreateTriangle(begtriangleName, begstringOfPoints);
@@ -86,7 +84,6 @@ function makeTriangleRows(list) {
         }
 
     }
-    console.log("did it?");
 }
 var randomxchangelimit = 30;
 var randomychangelimit = 30;
@@ -156,15 +153,12 @@ var inProgress = false;
 
 function fadeInBody() {
     inProgress = true;
-    console.log("fading in");
     document.getElementById("backsplash").style.zIndex = -1;
     if (opacitysetting < 1) {
         opacitysetting += (1 / FadeTotalTime);
         for (var i = 0; i < dissapearingActs.length; i++) {
             document.getElementById(dissapearingActs[i]).style.opacity = opacitysetting;
         }
-        console.log(opacitysetting);
-        console.log(1 / FadeTotalTime);
     } else {
         clearInterval(Fadeinterval);
         bodyVisible = true;
@@ -174,15 +168,12 @@ function fadeInBody() {
 
 function fadeOutBody() {
     inProgress = true;
-    console.log("fading out");
 
     if (opacitysetting > 0) {
         opacitysetting -= (1 / FadeTotalTime);
         for (var i = 0; i < dissapearingActs.length; i++) {
             document.getElementById(dissapearingActs[i]).style.opacity = opacitysetting;
         }
-        console.log(opacitysetting);
-        console.log(1 / FadeTotalTime);
     } else {
         clearInterval(Fadeinterval);
         bodyVisible = false;
@@ -194,17 +185,12 @@ function fadeOutBody() {
 function fadeBody() {
     FadeTotalTime = 800;
     if (!inProgress) {
-        console.log("clicked");
         if (bodyVisible) {
-            console.log("body visible");
             Fadeinterval = setInterval(fadeOutBody, Fadetime);
         } else {
-            console.log("Body gone");
             Fadeinterval = setInterval(fadeInBody, Fadetime);
         }
-    } else {
-        console.log("busy");
-    }
+    } else {}
 }
 
 
@@ -216,7 +202,6 @@ var randomizeTriangles;
 var randomizeTime = 100;
 
 function AFK() {
-    console.log("got here");
     needToResume = true;
     FadeTotalTime = 5000;
     clearInterval(Fadeinterval);
@@ -232,7 +217,6 @@ function timeoutScreen() {
         needToResume = false;
         clearInterval(randomizeTriangles);
     }
-    console.log("cleared");
     clearTimeout(notMovingTimer);
     notMovingTimer = setTimeout(AFK, timeoutTime);
 }
