@@ -2,7 +2,7 @@
     z-index: -1;
     background-color: rgb(17, 80, 131);
     width: 100%;
-    height: 100%;
+    height: 180%;
     position: absolute;
     left: 0%;
     top: 0%;
@@ -12,7 +12,8 @@
 #body {
     z-index: 0;
     width: 50%;
-    height: 82%;
+    height: 165%;
+    /*82*/
     position: absolute;
     left: 25%;
     top: 13%;
@@ -24,7 +25,7 @@
     background-color: rgb(85, 153, 255);
     width: 100%;
     height: 8%;
-    position: absolute;
+    position: fixed;
     left: 0%;
     top: 0%;
 }
@@ -34,7 +35,7 @@
     background-color: #4175c4;
     width: 100%;
     height: 5%;
-    position: absolute;
+    position: fixed;
     left: 0%;
     top: 8%;
     border-bottom: 3px solid black;
@@ -46,7 +47,7 @@
     background-color: rgb(85, 96, 255);
     width: 55%;
     height: 5%;
-    position: absolute;
+    position: fixed;
     left: 22.5%;
     bottom: 0%;
     border-top: 3px solid rgb(0, 0, 0);
@@ -64,4 +65,14 @@ svg {
 
 #titleBox {
     position: absolute;
+}
+
+#footerTable {
+    width: 100%;
+    border: 3px solid black;
+}
+
+#profilename {
+    position: relative;
+    top: -150%;
 }
