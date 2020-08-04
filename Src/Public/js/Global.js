@@ -48,7 +48,7 @@ function Move(upwards) {
         count++;
     }
 }
-
+//clicked on
 function moveBottom() {
     if (!inProgress) {
         if (!isshowing) {
