@@ -3,6 +3,7 @@ import express from 'express'
 import path from 'path'
 import bodyParser from 'body-parser'
 
+const apiKey = '46090bba-0f08-4505-bb94-0a945b51a614';
 const __dirname = path.resolve();
 const port = 3000;
 const app = express();

@@ -1,78 +1,115 @@
-#backsplash {
-    z-index: -1;
-    background-color: rgb(17, 80, 131);
-    width: 100%;
-    height: 180%;
-    position: absolute;
-    left: 0%;
-    top: 0%;
-    cursor: none;
-}
-
-#body {
-    z-index: 0;
-    width: 50%;
-    height: 165%;
-    /*82*/
-    position: absolute;
-    left: 25%;
-    top: 13%;
-    background-color: #04628a;
-}
-
-#header {
-    z-index: 1;
-    background-color: rgb(85, 153, 255);
-    width: 100%;
-    height: 8%;
-    position: fixed;
-    left: 0%;
-    top: 0%;
-}
-
-#scrollbar {
-    z-index: 1;
-    background-color: #4175c4;
-    width: 100%;
-    height: 5%;
-    position: fixed;
-    left: 0%;
-    top: 8%;
-    border-bottom: 3px solid black;
-    border-top: 3px solid black;
-}
-
-#footer {
-    z-index: 3;
-    background-color: rgb(85, 96, 255);
-    width: 55%;
-    height: 5%;
-    position: fixed;
-    left: 22.5%;
-    bottom: 0%;
-    border-top: 3px solid rgb(0, 0, 0);
-    border-left: 3px solid rgb(0, 0, 0);
-    border-right: 3px solid rgb(0, 0, 0);
-    border-radius: 40px 40px 0px 0px;
-}
-
-svg {
-    position: absolute;
-    height: 100%;
-    width: 100%;
-    overflow: hidden;
-}
-
-#titleBox {
-    position: absolute;
-}
-
-#footerTable {
-    width: 100%;
-    border: 3px solid black;
-}
-
-#profilename {
-    position: relative;
-    top: -150%;
-}
+    #backsplash {
+        z-index: -1;
+        background-color: rgb(17, 80, 131);
+        width: 100%;
+        height: 180%;
+        position: absolute;
+        left: 0%;
+        top: 0%;
+        cursor: none;
+    }
+    
+    #body {
+        z-index: 0;
+        width: 50%;
+        height: 167%;
+        /*82*/
+        position: absolute;
+        left: 25%;
+        top: 13%;
+        background-color: #04628a;
+    }
+    
+    #header {
+        z-index: 1;
+        background-color: rgb(85, 153, 255);
+        width: 100%;
+        height: 8%;
+        position: fixed;
+        left: 0%;
+        top: 0%;
+    }
+    
+    #scrollbar {
+        z-index: 1;
+        background-color: #4175c4;
+        width: 100%;
+        height: 5%;
+        position: fixed;
+        left: 0%;
+        top: 8%;
+        border-bottom: 3px solid black;
+        border-top: 3px solid black;
+    }
+    
+    #footer {
+        z-index: 3;
+        background-color: rgb(85, 96, 255);
+        width: 55%;
+        height: 5.5%;
+        position: fixed;
+        left: 22.5%;
+        border-top: 3px solid rgb(0, 0, 0);
+        border-left: 3px solid rgb(0, 0, 0);
+        border-right: 3px solid rgb(0, 0, 0);
+        border-radius: 40px 40px 0px 0px;
+    }
+    
+    svg {
+        position: absolute;
+        height: 100%;
+        width: 100%;
+        overflow: hidden;
+    }
+    
+    #titleBox {
+        position: absolute;
+    }
+    
+    #footerTable {
+        position: relative;
+        top: -40%;
+        width: 100%;
+        /*border: 3px solid black;*/
+    }
+    
+    #Weather {
+        z-index: 3;
+        background-color: rgb(85, 96, 255);
+        width: 55%;
+        height: 40%;
+        position: fixed;
+        left: 22.5%;
+        border-left: 3px solid rgb(0, 0, 0);
+        border-right: 3px solid rgb(0, 0, 0);
+    }
+    
+    #tag {
+        z-index: 3;
+        background-color: rgb(119, 121, 156);
+        width: 5%;
+        height: 2.5%;
+        position: fixed;
+        left: 47.5%;
+        border-top: 3px solid rgb(0, 0, 0);
+        border-left: 3px solid rgb(0, 0, 0);
+        border-right: 3px solid rgb(0, 0, 0);
+        border-radius: 60px 60px 0px 0px;
+    }
+    
+    #tag-triangle {
+        z-index: 3;
+        width: 5%;
+        height: 0px;
+        position: fixed;
+        left: 49.5%;
+        width: 0;
+        border-left: 8px solid transparent;
+        border-right: 8px solid transparent;
+        border-top: 8px solid rgb(0, 0, 0);
+    }
+    
+    #openweathermap-widget-21 {
+        position: absolute;
+        left: 3.5%;
+    }
