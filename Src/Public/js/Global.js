@@ -1,5 +1,5 @@
 //things that move
-var movings = ["Weather", "tag", "tag-triangle", "footer"];
+var movings = ["Weather", "tag", "tag_triangle_one", "tag_triangle_two", "footer"];
 var count = 0;
 //% per incriment
 var incriment = .25;
@@ -11,6 +11,9 @@ var done = target / incriment;
 var delay = 5;
 var isshowing = false;
 var inProgress = false;
+//tag objects
+var tagtriangleone = document.getElementById("tag_triangle_one");
+var tagtriangletwo = document.getElementById("tag_triangle_two");
 
 function Move(upwards) {
     if (count == done) {
@@ -18,8 +21,12 @@ function Move(upwards) {
         count = 0;
         if (upwards) {
             isshowing = true;
+            tagtriangleone.style.visibility = 'hidden';
+            tagtriangletwo.style.visibility = 'visible';
         } else {
             isshowing = false;
+            tagtriangleone.style.visibility = 'visible';
+            tagtriangletwo.style.visibility = 'hidden';
         }
         inProgress = false;
         clearInterval(movingtimer);
@@ -59,4 +66,8 @@ function moveBottom() {
             movingtimer = setInterval(Move, delay, false);
         }
     }
-}
+} //nice
+
+/*
+SCROLLBAR
+*/

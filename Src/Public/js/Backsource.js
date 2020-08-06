@@ -57,6 +57,7 @@ function CreateTriangle(name, stringOfPoints) {
     mypolygon.setAttribute("fill", colors[Math.floor(Math.random() * colors.length)]);
     mypolygon.setAttribute("onmouseover", "hoverchange(this)");
     mypolygon.setAttribute("onclick", "fadeBody()");
+    mypolygon.setAttribute("class", "back-triangles");
     totalTriangles++;
 }
 
@@ -66,7 +67,7 @@ function CreateTriangle(name, stringOfPoints) {
 function makeTriangleRows(list) {
     var currentTriangle = 0;
     var numberofrows = (((actualhigh + heightBuffer) + 3 - (actualhigh + heightBuffer) % 3) / 3);
-    var numberofsections = numberwide - 1 + widthBuffer;
+    var numberofsections = numberwide - 1 + widthBuffer; //nice
     for (var t = 0; t < numberofrows + 1; t++) {
         var begstringOfPoints = pointsToString(list[t * 2][0], list[t * 2 + 1][0], list[t * 2 + 2][0]);
         currentTriangle++;
@@ -209,7 +210,7 @@ var Fadeinterval;
 var Fadetime = 1;
 var FadeTotalTime = 800;
 var bodyVisible = true;
-var dissapearingActs = ["header", "scrollbar", "body", "footer", "tag", "tag-triangle", "Weather"];
+var dissapearingActs = ["header", "scrollbar", "body", "footer", "tag", "Weather"];
 var opacitysetting = 1;
 var inProgress = false;
 
