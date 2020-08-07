@@ -28,6 +28,7 @@
     position: fixed;
     left: 0%;
     top: 0%;
+    border-bottom: 3px solid black;
 }
 
 #titleBox {
@@ -35,7 +36,6 @@
 }
 
 .scrollbar {
-    z-index: 2;
     background-color: #4175c4;
     height: 5%;
     position: fixed;
@@ -44,43 +44,51 @@
 }
 
 #scrollbar {
+    z-index: 1;
     left: 0%;
     width: 100%;
 }
 
 #scrollbar_left {
+    z-index: 2;
     left: 0%;
-    width: 25%;
+    width: 24.75%;
     position: fixed;
+    border-right: 3px solid black;
 }
 
 #scrollbar_middle {
-    left: 25%;
-    width: 50%;
+    z-index: 1;
+    left: 24.75%;
+    width: 50.05%;
     position: fixed;
     top: 8%;
+    border-left: 3px solid black;
+    border-right: 3px solid black;
 }
 
 #scrollbar_right {
+    z-index: 2;
     right: 0%;
-    width: 25%;
+    width: 24.75%;
     position: fixed;
+    border-left: 3px solid black;
 }
 
 .scrollbarcontent {
     z-index: 0;
     width: 25%;
-    background-color: rgb(85, 153, 255);
+    background-color: #034e96;
     position: fixed;
 }
 
 #leftscrollbarcontent {
-    height: 56%;
+    height: 55.5%;
     left: 0%;
 }
 
 #rightscrollbarcontent {
-    height: 41%;
+    height: 40.5%;
     right: 0%;
 }
 
@@ -125,38 +133,6 @@ svg {
     left: 22.5%;
     border-left: 3px solid rgb(0, 0, 0);
     border-right: 3px solid rgb(0, 0, 0);
-}
-
-#tag {
-    z-index: 4;
-    background-color: rgb(119, 121, 156);
-    width: 5%;
-    height: 2.5%;
-    position: fixed;
-    left: 47.5%;
-    border-top: 3px solid rgb(0, 0, 0);
-    border-left: 3px solid rgb(0, 0, 0);
-    border-right: 3px solid rgb(0, 0, 0);
-    border-radius: 60px 60px 0px 0px;
-}
-
-.tag_triangle {
-    z-index: 4;
-    width: 5%;
-    height: 0px;
-    position: fixed;
-    left: 49.5%;
-    width: 0;
-    border-left: 8px solid transparent;
-    border-right: 8px solid transparent;
-}
-
-#tag_triangle_one {
-    border-bottom: 8px solid rgb(0, 0, 0);
-}
-
-#tag_triangle_two {
-    border-top: 8px solid rgb(0, 0, 0);
 }
 
 #openweathermap-widget-21 {
