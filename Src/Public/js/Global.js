@@ -1,38 +1,43 @@
 //things that move
-var movings = ["Weather", "tag", "tag_triangle_one", "tag_triangle_two", "footer"];
-var count = 0;
-//% per incriment
-var incriment = .25;
-var movingtimer;
+var bottomcontents = ["Weather", "footer"];
+var leftcontents = ["scrollbar_left", "leftscrollbarcontent"];
+var rightcontents = ["scrollbar_right", "rightscrollbarcontent"];
+//timers
+var movingtimerbottom;
+var movingtimerleft;
+var movingtimerright;
 // % to move up
-var target = 37;
-var done = target / incriment;
+var bottomtarget = 37;
+var lefttarget = 50;
+var righttarget = 35;
+//status vars
+var bottomisshowing = false;
+var bottominProgress = false;
+var leftisshowing = true;
+var leftinProgress = false;
+var rightisshowing = true;
+var rightinProgress = false;
+//global
+var count = 0;
 // delay inbetween each incriment
 var delay = 5;
-var isshowing = false;
-var inProgress = false;
-//tag objects
-var tagtriangleone = document.getElementById("tag_triangle_one");
-var tagtriangletwo = document.getElementById("tag_triangle_two");
+//% per incriment
+var incriment = .25;
 
-function Move(upwards) {
+function Move(upwards, name, contents, target) {
+    var done = target / incriment;
     if (count == done) {
-        console.log("upward done");
         count = 0;
         if (upwards) {
-            isshowing = true;
-            tagtriangleone.style.visibility = 'hidden';
-            tagtriangletwo.style.visibility = 'visible';
+            eval(`${name}isshowing = true;`);
         } else {
-            isshowing = false;
-            tagtriangleone.style.visibility = 'visible';
-            tagtriangletwo.style.visibility = 'hidden';
+            eval(`${name}isshowing = false;`);
         }
-        inProgress = false;
-        clearInterval(movingtimer);
+        eval(`${name}inProgress = false;`);
+        eval(`clearInterval(movingtimer${name});`);
     } else {
-        for (var i = 0; i < movings.length; i++) {
-            var obj = document.getElementById(movings[i]);
+        for (var i = 0; i < contents.length; i++) {
+            var obj = document.getElementById(contents[i]);
             var bottomnumber = (obj.style.bottom).split("");
             bottomnumber.pop();
             var newval;
@@ -50,23 +55,26 @@ function Move(upwards) {
                     newval = (parseFloat(bottomnumber.join("")) - incriment);
                 }
             }
-            obj.style.bottom = `${newval}%`;
+            obj.style.bottom = `${ newval }%`;
         }
         count++;
     }
 }
 //clicked on
-function moveBottom() {
-    if (!inProgress) {
-        if (!isshowing) {
-            inProgress = true;
-            movingtimer = setInterval(Move, delay, true);
-        } else {
-            inProgress = true;
-            movingtimer = setInterval(Move, delay, false);
+function moveBottom(name) {
+    eval(`
+        if (!bottominProgress && !leftinProgress && !rightinProgress) {
+            if (!${name}isshowing) {
+                ${name}inProgress = true;
+                movingtimer${name} = setInterval(Move, delay, true, name, ${name}contents, ${name}target);
+            } else {
+                ${name}inProgress = true;
+                movingtimer${name} = setInterval(Move, delay, false, name, ${name}contents, ${name}target);
+            }
         }
-    }
-} //nice
+    `);
+}
+//nice
 
 /*
 SCROLLBAR

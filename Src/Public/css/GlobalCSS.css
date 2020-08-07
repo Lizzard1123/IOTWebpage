@@ -9,24 +9,15 @@
     cursor: none;
 }
 
-
-/*
-    .back-triangles {
-        stroke: black;
-        stroke-width: .75;
-    }
-    */
-
 #body {
     z-index: 0;
     width: 50%;
-    height: 167%;
+    height: 166.25%;
     /*82*/
     position: absolute;
     left: 25%;
-    top: 13%;
-    border-left: 3px solid rgb(0, 0, 0);
-    border-right: 3px solid rgb(0, 0, 0);
+    top: 13.75%;
+    outline: 3px solid rgb(0, 0, 0);
 }
 
 #header {
@@ -39,16 +30,58 @@
     top: 0%;
 }
 
-#scrollbar {
-    z-index: 1;
+#titleBox {
+    left: 45%;
+}
+
+.scrollbar {
+    z-index: 2;
     background-color: #4175c4;
-    width: 100%;
     height: 5%;
     position: fixed;
-    left: 0%;
-    top: 8%;
     border-bottom: 3px solid black;
     border-top: 3px solid black;
+}
+
+#scrollbar {
+    left: 0%;
+    width: 100%;
+}
+
+#scrollbar_left {
+    left: 0%;
+    width: 25%;
+    position: fixed;
+}
+
+#scrollbar_middle {
+    left: 25%;
+    width: 50%;
+    position: fixed;
+    top: 8%;
+}
+
+#scrollbar_right {
+    right: 0%;
+    width: 25%;
+    position: fixed;
+}
+
+.scrollbarcontent {
+    z-index: 0;
+    width: 25%;
+    background-color: rgb(85, 153, 255);
+    position: fixed;
+}
+
+#leftscrollbarcontent {
+    height: 56%;
+    left: 0%;
+}
+
+#rightscrollbarcontent {
+    height: 41%;
+    right: 0%;
 }
 
 #footer {

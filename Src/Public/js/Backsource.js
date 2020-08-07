@@ -210,7 +210,7 @@ var Fadeinterval;
 var Fadetime = 1;
 var FadeTotalTime = 800;
 var bodyVisible = true;
-var dissapearingActs = ["header", "scrollbar", "body", "footer", "tag", "Weather"];
+var dissapearingActs = ["header", "scrollbar", "body", "footer", "Weather"];
 var opacitysetting = 1;
 var inProgress = false;
 
