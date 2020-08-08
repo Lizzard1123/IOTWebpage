@@ -9,6 +9,23 @@
     cursor: none;
 }
 
+::-webkit-scrollbar {
+    width: 16px;
+}
+
+ ::-webkit-scrollbar-track {
+    background: rgb(0, 90, 150);
+}
+
+ ::-webkit-scrollbar-thumb {
+    background: rgb(14, 0, 136);
+    border-radius: 8px;
+}
+
+ ::-webkit-scrollbar-thumb:hover {
+    background: rgb(33, 1, 121);
+}
+
 #body {
     z-index: 0;
     width: 50%;
