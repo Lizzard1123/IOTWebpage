@@ -23,6 +23,7 @@ var count = 0;
 var delay = 5;
 //% per incriment
 var incriment = .25;
+var functionQueue = [];
 
 function Move(upwards, name, contents, target) {
     var done = target / incriment;
@@ -35,6 +36,7 @@ function Move(upwards, name, contents, target) {
         }
         eval(`${name}inProgress = false;`);
         eval(`clearInterval(movingtimer${name});`);
+        eval(functionQueue.pop());
     } else {
         for (var i = 0; i < contents.length; i++) {
             var obj = document.getElementById(contents[i]);
@@ -60,8 +62,10 @@ function Move(upwards, name, contents, target) {
         count++;
     }
 }
+
 //clicked on
 function moveBottom(name) {
+
     eval(`
         if (!bottominProgress && !leftinProgress && !rightinProgress) {
             if (!${name}isshowing) {
@@ -71,6 +75,8 @@ function moveBottom(name) {
                 ${name}inProgress = true;
                 movingtimer${name} = setInterval(Move, delay, false, name, ${name}contents, ${name}target);
             }
+        } else {
+            functionQueue.push("moveBottom(\'${name}\');");
         }
     `);
 }
