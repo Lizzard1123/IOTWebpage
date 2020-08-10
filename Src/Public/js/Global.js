@@ -9,7 +9,7 @@ var movingtimerright;
 // % to move up
 var bottomtarget = 37;
 var lefttarget = 50;
-var righttarget = 35;
+var righttarget = 40;
 //status vars
 var bottomisshowing = false;
 var bottominProgress = false;

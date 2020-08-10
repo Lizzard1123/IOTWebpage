@@ -3,10 +3,11 @@
 
 <head>
     <link rel="stylesheet" type="text/css" href="static/css/GlobalCSS.css">
+    <link rel="stylesheet" type="text/css" href="static/css/options.css">
     <link rel="shortcut icon" href="static/img/favicon.png" />
 </head>
 
-<body onmousemove="timeoutScreen()">
+<body onmousemove="timeoutScreen()" onload="loadsettings()">
     <div id="backsplash">
         <svg id="parent"></svg>
     </div>
@@ -24,34 +25,100 @@
         <div class="scrollbarcontent" id="rightscrollbarcontent" style="bottom: 86%;">
             <div class="contentcollum" style="left:0%">
                 <div>
-                    <label class="switch">
-                        <input type="checkbox" name="one">
-                        <span class="slider round"></span><br>
-                        <label for="one">lorem ipsum</label>
-                    </label>
+                    <div class="button b2 button-13" id="button_one">
+                        <input type="checkbox" class="checkbox" name="button_one" onchange="setsettings(this)">
+                        <div class="knobs">
+                            <span></span>
+                        </div>
+                        <div class="layer"></div>
+                    </div>
+                    <label for="button_one"><b>Timeout Screen</b></label>
                 </div>
-                <div></div>
-                <div></div>
+                <div>
+                    <div class="button b2 button-13" id="button_two">
+                        <input type="checkbox" class="checkbox" name="button_two" onchange="setsettings(this)">
+                        <div class="knobs">
+                            <span></span>
+                        </div>
+                        <div class="layer"></div>
+
+                    </div>
+                    <label for="button_two"><b>Hello</b></label>
+                </div>
+                <div>
+                    <div class="button b2 button-13" id="button_three">
+                        <input type="checkbox" class="checkbox" name="button_three" onchange="setsettings(this)">
+                        <div class="knobs">
+                            <span></span>
+                        </div>
+                        <div class="layer"></div>
+                    </div>
+                    <label for="button_three"><b>Hello</b></label>
+                </div>
             </div>
             <div class="contentcollum" style="left:33.333%">
-                <div><label class="switch">
-                    <input type="checkbox" name="one">
-                    <span class="slider round"></span><br>
-                    <label for="one">lorem ipsum</label>
-                    </label>
+                <div>
+                    <div class="button b2 button-13" id="button_four">
+                        <input type="checkbox" class="checkbox" name="button_four" onchange="setsettings(this)">
+                        <div class="knobs">
+                            <span></span>
+                        </div>
+                        <div class="layer"></div>
+                    </div>
+                    <label for="button_four"><b>Click Fade</b></label>
                 </div>
-                <div></div>
-                <div></div>
+                <div>
+                    <div class="button b2 button-13" id="button_five">
+                        <input type="checkbox" class="checkbox" name="button_five" onchange="setsettings(this)">
+                        <div class="knobs">
+                            <span></span>
+                        </div>
+                        <div class="layer"></div>
+                    </div>
+                    <label for="button_five"><b>Hello</b></label>
+                </div>
+                <div>
+                    <div class="button b2 button-13" id="button_six">
+                        <input type="checkbox" class="checkbox" name="button_six" onchange="setsettings(this)">
+                        <div class="knobs">
+                            <span></span>
+                        </div>
+                        <div class="layer"></div>
+                    </div>
+                    <label for="button_six"><b>Hello</b></label>
+                </div>
             </div>
             <div class="contentcollum" style="left:66.666%">
-                <div><label class="switch">
-                    <input type="checkbox" name="one">
-                    <span class="slider round"></span><br>
-                    <label for="one">lorem ipsum</label>
-                    </label>
+                <div>
+                    <div class="button b2 button-13" id="button_seven">
+                        <input type="checkbox" class="checkbox" name="button_seven" onchange="setsettings(this)">
+                        <div class="knobs">
+                            <span></span>
+                        </div>
+                        <div class="layer"></div>
+                    </div>
+                    <label for="button_seven"><b>Triangle Change</b></label>
                 </div>
-                <div></div>
-                <div></div>
+                <div>
+                    <div class="button b2 button-13" id="button_eight">
+                        <input type="checkbox" class="checkbox" name="button_eight" onchange="setsettings(this)">
+                        <div class="knobs">
+                            <span></span>
+                        </div>
+                        <div class="layer"></div>
+                    </div>
+                    <label for="button_eight"><b>Hello</b></label>
+                </div>
+                <div>
+                    <div class="button b2 button-13" id="button_nine">
+                        <input type="checkbox" class="checkbox" name="button_nine" onchange="setsettings(this)">
+                        <div class="knobs">
+                            <span></span>
+                        </div>
+                        <div class="layer"></div>
+                    </div>
+                    <label for="button_nine"><b>Hello</b></label>
+                </div>
             </div>
         </div>
         <div class="scrollbar" id="scrollbar_right" onclick=" moveBottom('right') " style="bottom: 86%;">
@@ -95,6 +162,7 @@
         </script>
         <script src="static/js/Global.js"></script>
         <script src="static/js/backSource.js"></script>
+        <script src="static/js/options.js"></script>
     </div>
 </body>
 
