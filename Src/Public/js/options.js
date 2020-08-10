@@ -11,6 +11,17 @@ var numbers = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', '
 var custom = localStorage.getItem("custom").split(",");
 var normal = [true, true, true, false, true, true, false, true, true];
 
+function getinfo(number) {
+    var numbertoreturn = numbers.indexOf(number);
+    console.log(`returned: ${custom[numbertoreturn]}`)
+    if (custom[numbertoreturn] == 'false') {
+        return false;
+    } else {
+        return true;
+    }
+
+}
+
 function addtoall() {
     for (var i = 0; i < 9; i++) {
         eval(`button_${numbers[i]}[0].setAttribute("onchange", "setsettings(this)");`);
@@ -24,8 +35,28 @@ function defultsettings() {
         }
     }
 }
+var artificalmove;
+
+function resetPage() {
+    if (getinfo('one')) {
+        document.getElementById("pagebody").setAttribute("onmousemove", "timeoutScreen()");
+    } else {
+        if (custom[1] == "true") {
+            button_two[0].click();
+        }
+        clearTimeout(notMovingTimer);
+        document.getElementById("pagebody").removeAttribute("onmousemove");
+    }
+    if (getinfo("seven")) {
+        clearInterval(randomizeTriangles);
+        artificalmove = setInterval(randomcolorTriangles, randomizeTime);
+    } else {
+        clearInterval(artificalmove);
+    }
+}
 
 function loadsettings() {
+    //getsettings
     if (custom == null) {
         defultsettings();
     } else {
@@ -36,6 +67,8 @@ function loadsettings() {
         }
     }
     addtoall();
+    resetPage();
+
 }
 
 function setsettings(button) {
@@ -54,4 +87,5 @@ function setsettings(button) {
     }
     localStorage.setItem("custom", newvarr);
     custom = localStorage.getItem("custom").split(",");
+    resetPage();
 }
