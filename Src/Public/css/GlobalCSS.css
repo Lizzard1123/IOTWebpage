@@ -33,7 +33,7 @@
     /*82*/
     position: absolute;
     left: 25%;
-    top: 13.75%;
+    top: calc(13% + 6px);
     outline: 3px solid rgb(0, 0, 0);
 }
 
@@ -48,7 +48,8 @@
 }
 
 #titleBox {
-    left: 45%;
+    text-align: center;
+    width: 100%;
 }
 
 .scrollbar {
@@ -63,12 +64,13 @@
     z-index: 1;
     left: 0%;
     width: 100%;
+    top: calc(8% + 3px);
 }
 
 #scrollbar_left {
     z-index: 2;
     left: 0%;
-    width: 24.75%;
+    width: calc(25% - 3px);
     position: fixed;
     border-right: 3px solid black;
 }
@@ -80,25 +82,24 @@
 
 #scrollbar_middle {
     z-index: 1;
-    left: 24.75%;
-    width: 50.05%;
+    left: calc(25% - 3px);
+    width: 50%;
     position: fixed;
-    top: 8%;
-    border-left: 3px solid black;
-    border-right: 3px solid black;
+    bottom: 86%;
+    border: 3px solid black;
 }
 
 #scrollbar_right {
     z-index: 2;
     right: 0%;
-    width: 24.75%;
+    width: calc(25% - 3px);
     position: fixed;
     border-left: 3px solid black;
 }
 
 .scrollbarcontent {
     z-index: 0;
-    width: 25%;
+    width: calc(25% - 3px);
     background-image: linear-gradient(#A7CDD6, #5aa5eb);
     position: fixed;
 }

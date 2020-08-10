@@ -9,7 +9,7 @@ var button_eight = document.getElementsByName("button_eight");
 var button_nine = document.getElementsByName("button_nine");
 var numbers = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'];
 var custom = localStorage.getItem("custom").split(",");
-var normal = [true, true, true, false, true, true, false, true, true];
+var normal = [true, true, true, true, true, true, false, true, true];
 
 function getinfo(number) {
     var numbertoreturn = numbers.indexOf(number);
