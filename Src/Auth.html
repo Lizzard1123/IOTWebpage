@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" type="text/css" href="static/css/Auth.css">
+    <link rel="stylesheet" type="text/css" href="static/css/options.css">
+    <link rel="shortcut icon" href="static/img/favicon.png" />
+</head>
+
+<body onload="loadsettings(false)" id="pagebody">
+    <div id="contentbody">
+        <div id="body"></div>
+        <div id="scrollbar">
+            <div id="cover">
+                <div class="scrollbarcontent" id="rightscrollbarcontent" style="bottom: 48.5vh;">
+                    <div class="contentcollum" style="left:0%">
+                        <div>
+                            <div class="button b2 button-13" id="button_one">
+                                <input type="checkbox" class="checkbox" name="button_one">
+                                <div class="knobs">
+                                    <span></span>
+                                </div>
+                                <div class="layer"></div>
+                            </div>
+                            <label for="button_one"><b>Timeout Screen</b></label>
+                        </div>
+                        <div>
+                            <div class="button b2 button-13" id="button_two">
+                                <input type="checkbox" class="checkbox" name="button_two">
+                                <div class="knobs">
+                                    <span></span>
+                                </div>
+                                <div class="layer"></div>
+
+                            </div>
+                            <label for="button_two"><b>Auto Randomize</b></label>
+                        </div>
+                        <div>
+                            <div class="button b2 button-13" id="button_three">
+                                <input type="checkbox" class="checkbox" name="button_three">
+                                <div class="knobs">
+                                    <span></span>
+                                </div>
+                                <div class="layer"></div>
+                            </div>
+                            <label for="button_three"><b>Hello</b></label>
+                        </div>
+                    </div>
+                    <div class="contentcollum" style="left:33.333%">
+                        <div>
+                            <div class="button b2 button-13" id="button_four">
+                                <input type="checkbox" class="checkbox" name="button_four">
+                                <div class="knobs">
+                                    <span></span>
+                                </div>
+                                <div class="layer"></div>
+                            </div>
+                            <label for="button_four"><b>Click Fade</b></label>
+                        </div>
+                        <div>
+                            <div class="button b2 button-13" id="button_five">
+                                <input type="checkbox" class="checkbox" name="button_five">
+                                <div class="knobs">
+                                    <span></span>
+                                </div>
+                                <div class="layer"></div>
+                            </div>
+                            <label for="button_five"><b>Hello</b></label>
+                        </div>
+                        <div>
+                            <div class="button b2 button-13" id="button_six">
+                                <input type="checkbox" class="checkbox" name="button_six">
+                                <div class="knobs">
+                                    <span></span>
+                                </div>
+                                <div class="layer"></div>
+                            </div>
+                            <label for="button_six"><b>Hello</b></label>
+                        </div>
+                    </div>
+                    <div class="contentcollum" style="left:66.666%">
+                        <div>
+                            <div class="button b2 button-13" id="button_seven">
+                                <input type="checkbox" class="checkbox" name="button_seven">
+                                <div class="knobs">
+                                    <span></span>
+                                </div>
+                                <div class="layer"></div>
+                            </div>
+                            <label for="button_seven"><b>Triangle Change</b></label>
+                        </div>
+                        <div>
+                            <div class="button b2 button-13" id="button_eight">
+                                <input type="checkbox" class="checkbox" name="button_eight">
+                                <div class="knobs">
+                                    <span></span>
+                                </div>
+                                <div class="layer"></div>
+                            </div>
+                            <label for="button_eight"><b>Hello</b></label>
+                        </div>
+                        <div>
+                            <div class="button b2 button-13" id="button_nine">
+                                <input type="checkbox" class="checkbox" name="button_nine">
+                                <div class="knobs">
+                                    <span></span>
+                                </div>
+                                <div class="layer"></div>
+                            </div>
+                            <label for="button_nine"><b>Hello</b></label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="scrollbar" id="scrollbar_right" onclick=" moveBottom('right') " style="bottom: 74%;">
+            </div>
+        </div>
+
+    </div>
+    <div id="backsplash">
+        <svg id="parent"></svg>
+    </div>
+
+    <script src="static/js/Global.js"></script>
+    <script src="static/js/backSource.js"></script>
+    <script>
+        // multiple of 3
+        var numberoftrianlgleshigh = 24;
+        //makes background
+        var randomizedList = randomizecoords(backpoints(width, height, numberoftrianlgleshigh));
+        //abstracted make all triangles
+        makeTriangleRows(randomizedList, numberoftrianlgleshigh);
+    </script>
+    <script src="static/js/options.js"></script>
+</body>
+
+</html>

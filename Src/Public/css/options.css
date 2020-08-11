@@ -102,3 +102,35 @@
     position: relative;
     top: 41px;
 }
+
+.switchpages {
+    z-index: -1;
+    height: 100%;
+    width: 20%;
+    position: absolute;
+    font-weight: bold;
+    text-align: center;
+    padding-top: 8px;
+}
+
+#switcherselector {
+    -webkit-appearance: none;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    border: none;
+}
+
+#switcherselector:focus {
+    outline: none;
+}
+
+#switcherselector::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 60px;
+    height: 30px;
+    background: transparent;
+    cursor: pointer;
+}

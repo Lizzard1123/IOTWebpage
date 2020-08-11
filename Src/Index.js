@@ -11,7 +11,7 @@ app.use(bodyParser.json());
 app.use('/static', express.static('public'));
 app.route('/')
     .get((req, res) => {
-        res.sendFile(path.join(__dirname, "Main.html"));
+        res.sendFile(path.join(__dirname, "Auth.html"));
     })
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));

@@ -3,7 +3,7 @@ var height = window.innerHeight;
 //how many triangles can be seen in a window
 var screenhigh = 16;
 //how many are required to fill entire page
-var actualhigh = 42;
+//var actualhigh = 42;
 //how many triangles go across
 var numberwide = 22;
 var triagnleWidth = width / numberwide;
@@ -14,12 +14,27 @@ var heightBuffer = 2;
 //set triangles back some
 var widthOffset = 1;
 var heightOffset = 1;
-//colors
-var colors = ["#34b4eb", "#1b8ebf", "#0b5b7d", "#34708a", "#134b63", "#359fcc", "#00acf5", "#0e52c7", "#357efc", "#2e7bff", "#0e7ead", "#40addb", "#1483b3", "#6bc6ed", "#44aedb", "#196f94", "#146fc9", "#4487c9", "#0575e3", "#298ff2", "#034e96", "#78b8f5", "#2289b5", "#23afeb", "#0373a3", "#06668f", "#0489c2", "#77a8f2", "#3882f2", "#1051b3", "#267ea3"];
+var colors = ["#34b4eb", "#1b8ebf", "#0b5b7d", "#34708a", "#134b63", "#359fcc", "#00acf5", "#0e52c7", "#357efc", "#2e7bff", "#0e7ead", "#40addb", "#1483b3", "#6bc6ed", "#44aedb", "#196f94", "#146fc9", "#4487c9", "#0575e3", "#298ff2", "#034e96", "#78b8f5", "#2289b5", "#23afeb", "#0373a3", "#06668f", "#0489c2", "#77a8f2", "#3882f2", "#1051b3", "#267ea3"]
+    //var colors = [];
+var coloroffset = 50;
+var numberofcolors = 35;
+
+function colorAlgogradient(r, g, b) {
+    var value = (r + g + b) / 3;
+    var newvalue = value + 2 * Math.random() * coloroffset - coloroffset;
+    var valueratio = newvalue / value;
+    return [r * valueratio, g * valueratio, b * valueratio];
+}
+/*
+for (var i = 0; i < numberofcolors; i++) {
+    colors.push(`rgb(${colorAlgogradient(41, 112, 133)})`);
+    //colors.push(`rgb(${ Math.floor(Math.random() * 255)}, ${ Math.floor(Math.random() * 255)}, ${ Math.floor(Math.random() * 255)})`);
+}
+*/
 var totalTriangles = 0;
 
 //created staggered rows of all coordindates for triangles
-function backpoints(width, height) {
+function backpoints(width, height, actualhigh) {
     var coords = [];
     var count = 0;
     for (var g = 0; g <= actualhigh + heightBuffer; g++) {
@@ -64,7 +79,7 @@ function CreateTriangle(name, stringOfPoints) {
 //var trianglepositions = [];
 
 //goes thtogh and takes the indexes of coordinates list to make a row of triangles
-function makeTriangleRows(list) {
+function makeTriangleRows(list, actualhigh) {
     var currentTriangle = 0;
     var numberofrows = (((actualhigh + heightBuffer) + 3 - (actualhigh + heightBuffer) % 3) / 3);
     var numberofsections = numberwide - 1 + widthBuffer; //nice
@@ -133,10 +148,6 @@ function randomizecoords(list) {
     }
     return newlist;
 }
-var randomizedList = randomizecoords(backpoints(width, height));
-
-//abstracted make all triangles
-makeTriangleRows(randomizedList);
 
 /*
 //variety of changes
@@ -220,7 +231,11 @@ function fadeInBody() {
     if (opacitysetting < 1) {
         opacitysetting += (1 / FadeTotalTime);
         for (var i = 0; i < dissapearingActs.length; i++) {
-            document.getElementById(dissapearingActs[i]).style.opacity = opacitysetting;
+            try {
+                document.getElementById(dissapearingActs[i]).style.opacity = opacitysetting;
+            } catch {
+                continue;
+            }
         }
     } else {
         clearInterval(Fadeinterval);
@@ -235,7 +250,11 @@ function fadeOutBody() {
     if (opacitysetting > 0) {
         opacitysetting -= (1 / FadeTotalTime);
         for (var i = 0; i < dissapearingActs.length; i++) {
-            document.getElementById(dissapearingActs[i]).style.opacity = opacitysetting;
+            try {
+                document.getElementById(dissapearingActs[i]).style.opacity = opacitysetting;
+            } catch {
+                continue;
+            }
         }
     } else {
         clearInterval(Fadeinterval);

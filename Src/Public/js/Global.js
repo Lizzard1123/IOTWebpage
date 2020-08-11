@@ -57,7 +57,7 @@ function Move(upwards, name, contents, target) {
                     newval = (parseFloat(bottomnumber.join("")) - incriment);
                 }
             }
-            obj.style.bottom = `${ newval }%`;
+            obj.style.bottom = `${ newval }vh`;
         }
         count++;
     }
@@ -65,7 +65,6 @@ function Move(upwards, name, contents, target) {
 
 //clicked on
 function moveBottom(name) {
-
     eval(`
         if (!bottominProgress && !leftinProgress && !rightinProgress) {
             if (!${name}isshowing) {

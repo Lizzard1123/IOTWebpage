@@ -11,6 +11,63 @@ var numbers = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', '
 var custom = localStorage.getItem("custom").split(",");
 var normal = [true, true, true, true, true, true, false, true, true];
 
+var slider = document.getElementById("switcherselector");
+var switches = document.getElementsByClassName("switchpages");
+var titles = ['content one', 'content two', 'Home', 'content four', 'content five'];
+var pagelink = ["content_1", "content_2", "Home", "content_4", "content_5"];
+var numberofpages = titles.length;
+var maxdivbox = 100 / numberofpages;
+
+function givetitles() {
+    for (var i = 0; i < numberofpages; i++) {
+        switches[i].innerHTML = titles[i];
+    }
+}
+
+function setintoplace() {
+    console.log('tried');
+    for (var i = 0; i < numberofpages; i++) {
+        switches[i].style.left = `${maxdivbox * i}%`;
+        givetitles();
+    }
+}
+
+function closesttomiddle() {
+    var closest = 100;
+    var indexnumber;
+    for (var i = 0; i < numberofpages; i++) {
+        var value = parseInt(switches[i].style.left) - 40;
+        console.log(value);
+        if (Math.abs(value) < closest) {
+            closest = Math.abs(value);
+            indexnumber = i;
+        }
+    }
+    console.log(indexnumber);
+    return indexnumber;
+}
+
+function updateslider() {
+    var value = slider.value - 50;
+    console.log(value);
+    for (var i = 0; i < numberofpages; i++) {
+        var newval = (i * maxdivbox) + value;
+        switches[i].style.left = `${newval}%`;
+    }
+}
+
+function updatesliderbar() {
+    slider.value = 50;
+    var targetmiddle = titles[closesttomiddle()];
+    while (titles[2] != targetmiddle) {
+        titles.unshift(titles.pop());
+        pagelink.unshift(pagelink.pop());
+    }
+    setintoplace();
+    document.getElementById("embeded").src = `static/html/${pagelink[2]}.html`;
+    document.getElementById("Title").innerHTML = titles[2];
+}
+
 function getinfo(number) {
     var numbertoreturn = numbers.indexOf(number);
     console.log(`returned: ${custom[numbertoreturn]}`)
@@ -55,7 +112,7 @@ function resetPage() {
     }
 }
 
-function loadsettings() {
+function loadsettings(titleset) {
     //getsettings
     if (custom == null) {
         defultsettings();
@@ -68,6 +125,9 @@ function loadsettings() {
     }
     addtoall();
     resetPage();
+    if (titleset) {
+        setintoplace();
+    }
 
 }
 

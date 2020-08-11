@@ -7,7 +7,7 @@
     <link rel="shortcut icon" href="static/img/favicon.png" />
 </head>
 
-<body onload="loadsettings()" id="pagebody">
+<body onload="loadsettings(true)" id="pagebody">
     <div id="backsplash">
         <svg id="parent"></svg>
     </div>
@@ -18,9 +18,15 @@
     </div>
     <div id="scrollbar">
         <div class="scrollbarcontent" id="leftscrollbarcontent" style="bottom: 86%;"></div>
-        <div class="scrollbar" id="scrollbar_left" onclick=" moveBottom('left') " style="bottom: 86%;">
+        <div class="scrollbar" id="scrollbar_left" onclick="moveBottom('left')" style="bottom: 86%;">
         </div>
         <div class="scrollbar" id="scrollbar_middle">
+            <input type="range" min="1" max="100" value="50" class="slider" id="switcherselector" oninput="updateslider()" onchange="updatesliderbar()">
+            <div class="switchpages" id="switchone"></div>
+            <div class="switchpages" id="switchtwo"></div>
+            <div class="switchpages" id="switchthree"></div>
+            <div class="switchpages" id="switchfour"></div>
+            <div class="switchpages" id="switchfive"></div>
         </div>
         <div class="scrollbarcontent" id="rightscrollbarcontent" style="bottom: 86%;">
             <div class="contentcollum" style="left:0%">
@@ -126,7 +132,7 @@
     </div>
 
     <div id="body">
-        <iframe src="static/html/content_1.html" scrolling="no">
+        <iframe src="static/html/Home.html" scrolling="no" id="embeded">
             
         </iframe>
     </div>
@@ -163,6 +169,14 @@
 
         <script src="static/js/Global.js"></script>
         <script src="static/js/backSource.js"></script>
+        <script>
+            //multiple of 3
+            var numberoftrianlgleshigh = 42;
+            //makes background
+            var randomizedList = randomizecoords(backpoints(width, height, numberoftrianlgleshigh));
+            //abstracted make all triangles
+            makeTriangleRows(randomizedList, numberoftrianlgleshigh);
+        </script>
         <script src="static/js/options.js"></script>
     </div>
 </body>
