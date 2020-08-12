@@ -2,6 +2,7 @@
 <html>
 
 <head>
+    <link href='https://fonts.googleapis.com/css?family=Archivo Black' rel='stylesheet'>
     <link rel="stylesheet" type="text/css" href="static/css/Auth.css">
     <link rel="stylesheet" type="text/css" href="static/css/options.css">
     <link rel="shortcut icon" href="static/img/favicon.png" />
@@ -9,9 +10,17 @@
 
 <body onload="loadsettings(false)" id="pagebody">
     <div id="contentbody">
-        <div id="body"></div>
+        <div id="body">
+            <div id="title">Login</div>
+            <form id="form" name="login" action="/login" method="POST">
+                <lable for="Name">Name</lable><br>
+                <input type="text" name="Name"><br>
+                <lable for="Password">Password</lable><br>
+                <input type="password" name="Password"><br>
+                <input type="submit"></form>
+        </div>
         <div id="scrollbar">
-            <div id="cover">
+            <div id="cover" style="z-index: 1;">
                 <div class="scrollbarcontent" id="rightscrollbarcontent" style="bottom: 48.5vh;">
                     <div class="contentcollum" style="left:0%">
                         <div>
@@ -112,7 +121,7 @@
                     </div>
                 </div>
             </div>
-            <div class="scrollbar" id="scrollbar_right" onclick=" moveBottom('right') " style="bottom: 74%;">
+            <div class="scrollbar" id="scrollbar_right" onclick="moveBottom('right')" style="bottom: 74%;">
             </div>
         </div>
 
