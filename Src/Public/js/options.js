@@ -64,7 +64,8 @@ function updatesliderbar() {
         pagelink.unshift(pagelink.pop());
     }
     setintoplace();
-    document.getElementById("embeded").src = `static/html/${pagelink[2]}.html`;
+
+    document.getElementById("embeded").src = `privatestatic/html/${pagelink[2]}.html`;
     document.getElementById("Title").innerHTML = titles[2];
 }
 
@@ -127,6 +128,8 @@ function loadsettings(titleset) {
     resetPage();
     if (titleset) {
         setintoplace();
+    } else {
+        switchsubmit();
     }
 
 }

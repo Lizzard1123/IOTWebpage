@@ -138,7 +138,7 @@ input[type="text"]:hover {
     transition: 0.25s;
 }
 
-input[type="submit"] {
+button[type="button"] {
     width: 20%;
     padding: 12px 20px;
     margin: 8px 0;
@@ -149,7 +149,7 @@ input[type="submit"] {
     font-family: 'Archivo Black';
 }
 
-input[type="submit"]:hover {
+button[type="button"]:hover {
     border: 3px solid #ccc;
     -webkit-transition: 0.25s;
     transition: 0.25s;

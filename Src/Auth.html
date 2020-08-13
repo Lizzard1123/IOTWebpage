@@ -3,9 +3,9 @@
 
 <head>
     <link href='https://fonts.googleapis.com/css?family=Archivo Black' rel='stylesheet'>
-    <link rel="stylesheet" type="text/css" href="static/css/Auth.css">
-    <link rel="stylesheet" type="text/css" href="static/css/options.css">
-    <link rel="shortcut icon" href="static/img/favicon.png" />
+    <link rel="stylesheet" type="text/css" href="publicstatic/css/Auth.css">
+    <link rel="stylesheet" type="text/css" href="publicstatic/css/options.css">
+    <link rel="shortcut icon" href="publicstatic/img/favicon.png" />
 </head>
 
 <body onload="loadsettings(false)" id="pagebody">
@@ -13,11 +13,13 @@
         <div id="body">
             <div id="title">Login</div>
             <form id="form" name="login" action="/login" method="POST">
-                <lable for="Name">Name</lable><br>
-                <input type="text" name="Name"><br>
-                <lable for="Password">Password</lable><br>
-                <input type="password" name="Password"><br>
-                <input type="submit"></form>
+                <lable for="Name" id="namelabel">Name</lable><br>
+                <input type="text" name="Name" id="Name"><br>
+                <lable for="Password" id="passwordlabel">Password</lable><br>
+                <input type="password" name="Password" id="Password"><br>
+                <h3 id="enablejs">Please Enable Javascript</h3>
+                <!--<button type="button" id="submitbutton" name="Submit" onlick="checkvalid()">Submit</button>-->
+            </form>
         </div>
         <div id="scrollbar">
             <div id="cover" style="z-index: 1;">
@@ -130,8 +132,9 @@
         <svg id="parent"></svg>
     </div>
 
-    <script src="static/js/Global.js"></script>
-    <script src="static/js/backSource.js"></script>
+    <script src="publicstatic/js/Global.js"></script>
+    <script src="publicstatic/js/backSource.js"></script>
+    <script src="publicstatic/js/validate.js"></script>
     <script>
         // multiple of 3
         var numberoftrianlgleshigh = 24;
@@ -140,7 +143,7 @@
         //abstracted make all triangles
         makeTriangleRows(randomizedList, numberoftrianlgleshigh);
     </script>
-    <script src="static/js/options.js"></script>
+    <script src="publicstatic/js/options.js"></script>
 </body>
 
 </html>

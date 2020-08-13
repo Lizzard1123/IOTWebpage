@@ -2,9 +2,9 @@
 <html>
 
 <head>
-    <link rel="stylesheet" type="text/css" href="static/css/GlobalCSS.css">
-    <link rel="stylesheet" type="text/css" href="static/css/options.css">
-    <link rel="shortcut icon" href="static/img/favicon.png" />
+    <link rel="stylesheet" type="text/css" href="publicstatic/css/GlobalCSS.css">
+    <link rel="stylesheet" type="text/css" href="publicstatic/css/options.css">
+    <link rel="shortcut icon" href="publicstatic/img/favicon.png" />
 </head>
 
 <body onload="loadsettings(true)" id="pagebody">
@@ -132,8 +132,7 @@
     </div>
 
     <div id="body">
-        <iframe src="static/html/Home.html" scrolling="no" id="embeded">
-            
+        <iframe src="privatestatic/html/Home.html" scrolling="no" id="embeded">
         </iframe>
     </div>
     <div id="footer" style="bottom:0%;" onclick=" moveBottom('bottom') ">
@@ -167,8 +166,8 @@
             })();
         </script>
 
-        <script src="static/js/Global.js"></script>
-        <script src="static/js/backSource.js"></script>
+        <script src="publicstatic/js/Global.js"></script>
+        <script src="publicstatic/js/backSource.js"></script>
         <script>
             //multiple of 3
             var numberoftrianlgleshigh = 42;
@@ -177,7 +176,7 @@
             //abstracted make all triangles
             makeTriangleRows(randomizedList, numberoftrianlgleshigh);
         </script>
-        <script src="static/js/options.js"></script>
+        <script src="publicstatic/js/options.js"></script>
     </div>
 </body>
 
