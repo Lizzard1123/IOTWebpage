@@ -14,9 +14,9 @@
             <div id="title">Login</div>
             <form id="form" name="login" action="/login" method="POST">
                 <lable for="Name" id="namelabel">Name</lable><br>
-                <input type="text" name="Name" id="Name"><br>
+                <input type="text" name="Name" id="Name" min="4" maxlength="25" required><br>
                 <lable for="Password" id="passwordlabel">Password</lable><br>
-                <input type="password" name="Password" id="Password"><br>
+                <input type="password" name="Password" id="Password" min="10" maxlength="35" required><br>
                 <h3 id="enablejs">Please Enable Javascript</h3>
                 <!--<button type="button" id="submitbutton" name="Submit" onlick="checkvalid()">Submit</button>-->
             </form>
@@ -131,7 +131,6 @@
     <div id="backsplash">
         <svg id="parent"></svg>
     </div>
-
     <script src="publicstatic/js/Global.js"></script>
     <script src="publicstatic/js/backSource.js"></script>
     <script src="publicstatic/js/validate.js"></script>

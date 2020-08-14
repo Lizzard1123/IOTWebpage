@@ -25,7 +25,6 @@ function givetitles() {
 }
 
 function setintoplace() {
-    console.log('tried');
     for (var i = 0; i < numberofpages; i++) {
         switches[i].style.left = `${maxdivbox * i}%`;
         givetitles();
@@ -37,19 +36,16 @@ function closesttomiddle() {
     var indexnumber;
     for (var i = 0; i < numberofpages; i++) {
         var value = parseInt(switches[i].style.left) - 40;
-        console.log(value);
         if (Math.abs(value) < closest) {
             closest = Math.abs(value);
             indexnumber = i;
         }
     }
-    console.log(indexnumber);
     return indexnumber;
 }
 
 function updateslider() {
     var value = slider.value - 50;
-    console.log(value);
     for (var i = 0; i < numberofpages; i++) {
         var newval = (i * maxdivbox) + value;
         switches[i].style.left = `${newval}%`;
@@ -71,7 +67,6 @@ function updatesliderbar() {
 
 function getinfo(number) {
     var numbertoreturn = numbers.indexOf(number);
-    console.log(`returned: ${custom[numbertoreturn]}`)
     if (custom[numbertoreturn] == 'false') {
         return false;
     } else {
@@ -151,4 +146,15 @@ function setsettings(button) {
     localStorage.setItem("custom", newvarr);
     custom = localStorage.getItem("custom").split(",");
     resetPage();
+}
+var customcookies = ['token'];
+
+function clearcookies() {
+    for (var i = 0; i < customcookies.length; i++) {
+        document.cookie = `${customcookies[i]}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+    }
+}
+
+function pageClose() {
+    clearcookies();
 }

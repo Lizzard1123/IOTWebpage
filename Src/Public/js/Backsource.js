@@ -294,7 +294,7 @@ function AFK() {
     FadeTotalTime = 5000;
     clearInterval(Fadeinterval);
     Fadeinterval = setInterval(fadeOutBody, Fadetime);
-    if (getinfo('two')) {
+    if (getinfo('two') && !getinfo('seven')) {
         randomizeTriangles = setInterval(randomcolorTriangles, randomizeTime);
     }
 

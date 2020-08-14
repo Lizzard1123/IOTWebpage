@@ -19,7 +19,6 @@ function changetext(string) {
     } else if (string == "name") {
         namelabel.innerHTML = "Invalid Characters Present";
     }
-    setTimeout(chnagebacktext, 5000);
 }
 
 function checkWhitelist(string) {
@@ -35,6 +34,17 @@ function checkWhitelist(string) {
     return false;
 }
 
+function defaultcheckvalid(obj, textobj) {
+    if (obj.validity.valueMissing) {
+        textobj.innerHTML = "Please Enter Something";
+        return false;
+    } else if (obj.value.length < 4) {
+        textobj.innerHTML = "Input Too Short";
+        return false;
+    }
+    return true;
+}
+
 function checkvalid() {
     var passwordinvalid = checkWhitelist(passwordinput.value);
     var nameinvalid = checkWhitelist(nameinput.value);
@@ -47,6 +57,9 @@ function checkvalid() {
     } else {
         form.submit();
     }
+    defaultcheckvalid(passwordinput, passwordlabel);
+    defaultcheckvalid(nameinput, namelabel);
+    setTimeout(chnagebacktext, 5000);
 }
 
 function switchsubmit() {
