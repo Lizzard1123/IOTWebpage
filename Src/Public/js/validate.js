@@ -4,6 +4,8 @@ var passwordinput = document.getElementById("Password");
 var whitelist = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 var namelabel = document.getElementById("namelabel");
 var passwordlabel = document.getElementById("passwordlabel");
+var title = document.getElementById("title");
+var message = document.getElementById("message");
 
 function chnagebacktext() {
     namelabel.innerHTML = "Name";
@@ -45,6 +47,35 @@ function defaultcheckvalid(obj, textobj) {
     return true;
 }
 
+function Ajaxsend() {
+    var logincheck = new XMLHttpRequest();
+    logincheck.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            console.log("doneeeee");
+            let obj = JSON.parse(this.responseText);
+            message.style.visibility = "visible";
+            form.style.visibility = "hidden";
+            title.style.visibility = "hidden";
+            if (obj.message == "redirect") {
+                message.innerHTML = "Authorized";
+                setTimeout(() => { window.location.href = obj.newpage }, 500);
+            } else if (obj.message == "error") {
+                message.style.color = "red";
+                message.innerHTML = "Error";
+                setTimeout(() => {
+                    message.style.visibility = "hidden";
+                    message.style.color = "green";
+                    title.style.visibility = "visible";
+                    form.style.visibility = "visible";
+                }, 500);
+            }
+        }
+    };
+    logincheck.open("POST", "/login", true);
+    logincheck.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+    logincheck.send(`Name=${nameinput.value}&Password=${passwordinput.value}`);
+}
+
 function checkvalid() {
     var passwordinvalid = checkWhitelist(passwordinput.value);
     var nameinvalid = checkWhitelist(nameinput.value);
@@ -55,7 +86,7 @@ function checkvalid() {
     } else if (nameinvalid) {
         changetext("name");
     } else {
-        form.submit();
+        Ajaxsend();
     }
     defaultcheckvalid(passwordinput, passwordlabel);
     defaultcheckvalid(nameinput, namelabel);

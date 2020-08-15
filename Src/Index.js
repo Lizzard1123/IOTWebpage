@@ -25,7 +25,7 @@ app.use('/publicstatic', express.static('public'));
 function error(res, err = "default") {
     console.log("error message lolzies fuck you");
     console.log(err);
-    res.sendStatus(401).end();
+    return res.sendStatus(401).end();
 }
 //userinfo
 
@@ -74,7 +74,6 @@ app.post('/login', (req, res, next) => {
                     //no file found/error reading json file
                     console.log("read err no file present");
                     error(res, err);
-                    return;
                 }
                 //there is a file for user parse it
                 let filedata = JSON.parse(data);
@@ -85,7 +84,6 @@ app.post('/login', (req, res, next) => {
                         //general error with bcrpyt
                         console.log("bcrypt error");
                         error(res, err);
-                        return;
                     }
                     //result is true if password is the same
                     if (result) {
@@ -95,7 +93,7 @@ app.post('/login', (req, res, next) => {
                         const token = jwt.sign({
                                 securitylevel: "admin"
                             }, secretkey, {
-                                expiresIn: "1h"
+                                expiresIn: "30min"
                             })
                             //set authorization cookie with jwt
                         res.cookie("token", token, {
@@ -103,14 +101,19 @@ app.post('/login', (req, res, next) => {
                             //30 min
                             maxAge: 1800000
                         });
-                        //redirect to home page
-                        res.redirect(302, '/home');
+                        //ajax redirect
                         console.log("redirected");
+                        return res.json({
+                            message: "redirect",
+                            newpage: "/home"
+                        });
+
                     } else {
                         //incorrect password
                         console.log("not right");
-                        error(res, err);
-                        return;
+                        return res.json({
+                            message: "error"
+                        });
                     }
                 })
             });
@@ -118,8 +121,7 @@ app.post('/login', (req, res, next) => {
             //error up above in some statement
             console.log("other fuckin error");
             console.log(errror);
-            error(errror, res);
-            return;
+            error(res, err);
         } finally {
             //ends main segment
             next();
