@@ -1,4 +1,4 @@
-/*import fs from 'fs'
+/*
 import express from 'express'
 import path from 'path'
 import bodyParser from 'body-parser'
@@ -6,7 +6,7 @@ const __dirname = path.resolve();
 const port = 3000;
 const app = express();
 app.use(bodyParser.json());
-*/
+
 const apiKey = '7b680d37f077e26a7117832bf236f2a8';
 const lat = 33.3168;
 const lon = -84.4406;
@@ -31,4 +31,13 @@ ${lon}&exclude={}&appid=${apiKey}`, (response) => {
 
 }).on("error", (error) => {
     console.log("Error: " + error.message);
-});
+});*/
+import path from 'path';
+import fs from 'fs';
+async function print(path) {
+    const dir = await fs.promises.opendir(path);
+    for await (const dirent of dir) {
+        console.log(dirent.name);
+    }
+}
+print(path.resolve()).catch(console.error);

@@ -8,9 +8,8 @@ var button_seven = document.getElementsByName("button_seven");
 var button_eight = document.getElementsByName("button_eight");
 var button_nine = document.getElementsByName("button_nine");
 var numbers = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'];
-var custom = localStorage.getItem("custom").split(",");
-var normal = [true, true, true, true, true, true, false, true, true];
-
+var custom;
+var normal = ["true", "true", "true", "true", "true", "true", "false", "true", "true"];
 var slider = document.getElementById("switcherselector");
 var switches = document.getElementsByClassName("switchpages");
 var titles = ['content one', 'content two', 'Home', 'content four', 'content five'];
@@ -82,8 +81,9 @@ function addtoall() {
 }
 
 function defultsettings() {
+    custom = normal;
     for (var i = 0; i < 9; i++) {
-        if (normal[i] == "false") {
+        if (custom[i] == "false") {
             eval(`button_${numbers[i]}[0].click();`);
         }
     }
@@ -109,24 +109,26 @@ function resetPage() {
 }
 
 function loadsettings(titleset) {
-    //getsettings
-    if (custom == null) {
-        defultsettings();
-    } else {
-        for (var i = 0; i < 9; i++) {
-            if (custom[i] == 'false') {
-                eval(`button_${numbers[i]}[0].click();`);
+    try {
+        custom = localStorage.getItem("custom").split(",");
+    } catch { console.log("going defauult"); } finally {
+        if (custom == undefined) {
+            defultsettings();
+        } else {
+            for (var i = 0; i < 9; i++) {
+                if (custom[i] == 'false') {
+                    eval(`button_${numbers[i]}[0].click();`);
+                }
             }
         }
+        addtoall();
+        resetPage();
+        if (titleset) {
+            setintoplace();
+        } else {
+            switchsubmit();
+        }
     }
-    addtoall();
-    resetPage();
-    if (titleset) {
-        setintoplace();
-    } else {
-        switchsubmit();
-    }
-
 }
 
 function setsettings(button) {

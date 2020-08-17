@@ -6,14 +6,12 @@ import validator from 'validator';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import cookieParser from 'cookie-parser';
+import { record } from './Private/js/logs.js';
 
-const apiKey = '46090bba-0f08-4505-bb94-0a945b51a614';
 const __dirname = path.resolve();
 const port = 3000;
 const app = express();
-
-const secretkey = "10202004";
-const whitelist = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+const Keys = JSON.parse(fs.readFileSync('./Private/codes.json', "utf8"));
 
 app.use(cookieParser());
 app.use(bodyParser.json());
@@ -22,9 +20,10 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/privatestatic', [(err, req, res, next) => { Auth(req, res, next) }, express.static('Private')]);
 app.use('/publicstatic', express.static('public'));
 
-function error(res, err = "default") {
+function error(res, errorthing = "default") {
     console.log("error message lolzies fuck you");
-    console.log(err);
+    console.log(errorthing);
+    record("Error", errorthing, 2);
     return res.sendStatus(401).end();
 }
 //userinfo
@@ -34,10 +33,11 @@ function error(res, err = "default") {
 function Auth(req, res, next) {
     console.log("Authenticating");
     try {
-        let decoded = jwt.verify(req.cookies.token, secretkey);
+        let decoded = jwt.verify(req.cookies.token, Keys.secretkey);
         req.userData = decoded;
         next();
     } catch (err) {
+        record("Failed Auth ip", req.connection.remoteAddress, 3);
         res.redirect(302, '/login');
     }
 
@@ -45,10 +45,12 @@ function Auth(req, res, next) {
 //get login page
 app.get('/login', (req, res) => {
     console.log("login path freebie");
+    record("Gave login page to", req.connection.remoteAddress, 3);
     res.sendFile(path.join(__dirname, "Auth.html"));
 });
 
 app.get('/home', (req, res, next) => { Auth(req, res, next) }, (req, res) => {
+    record("Gave login page to", `${req.connection.remoteAddress} as ${res.userData}`, 4);
     console.log("home path auth");
     res.sendFile(path.join(__dirname, "Main.html"));
 });
@@ -57,7 +59,8 @@ app.post('/login', (req, res, next) => {
         console.log("Authenticating with whitelist");
         //request to login
         //check validity again through whitelist
-        if (!validator.isWhitelisted(req.body.Password, whitelist)) {
+        if (!validator.isWhitelisted(req.body.Password, Keys.whitelist)) {
+            record("Invalid Characters on backend from", req.connection.remoteAddress, 5);
             console.log("invalid characters");
             error(res, "validator");
         } else {
@@ -88,11 +91,12 @@ app.post('/login', (req, res, next) => {
                     //result is true if password is the same
                     if (result) {
                         //same password
+                        record("logging in", req.connection.remoteAddress, 3);
                         console.log("Bcrtpy same password");
                         //create jwt
                         const token = jwt.sign({
                                 securitylevel: "admin"
-                            }, secretkey, {
+                            }, Keys.secretkey, {
                                 expiresIn: "30min"
                             })
                             //set authorization cookie with jwt
@@ -110,6 +114,8 @@ app.post('/login', (req, res, next) => {
 
                     } else {
                         //incorrect password
+                        record("Failed login from", req.connection.remoteAddress, 3);
+                        record("password attempt", req.body.Password, 3);
                         console.log("not right");
                         return res.json({
                             message: "error"
