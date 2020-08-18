@@ -26,7 +26,10 @@ async function updatecurrentdir() {
     for await (const dirent of dir) {
         newdir.push(dirent.name);
     }
+    console.log("this");
+
     currentdir = newdir;
+    console.log(currentdir);
 }
 
 function createDay() {
@@ -49,9 +52,10 @@ export function record(qtype, string, level) {
     fs.readFile(currenttitle, 'utf-8', (err, data) => {
         if (err) {
             console.log(err);
-            console.log("record failed");
+            console.log("record really failed");
             return false;
         }
+        console.log(currenttitle);
         let obj = JSON.parse(data);
         let content = {};
         content[qtype] = `${level}_${time}_${string}`;

@@ -140,4 +140,32 @@ app.post('/login', (req, res, next) => {
     }
 );
 
+//keep timers
+app.post('/timer', (req, res, next) => { Auth(req, res, next) }, (req, res) => {
+    const timerpath = path.join(__dirname, "Private\\timers.json");
+    fs.writeFile(timerpath, JSON.stringify(req.body), (err) => {
+        if (err) {
+            console.log(err);
+            console.log("timer set failed");
+            return false;
+        }
+        console.log('should work');
+        return res.send('done');
+    });
+});
+app.get('/timer', (req, res, next) => { Auth(req, res, next) }, (req, res) => {
+    const timerpath = path.join(__dirname, "Private\\timers.json");
+    fs.readFile(timerpath, (err, data) => {
+        if (err) {
+            console.log(err);
+            console.log("timer get failed");
+            return false;
+        }
+        console.log('sent');
+        console.log(JSON.parse(data));
+        return res.json(JSON.parse(data));
+    });
+});
+
+
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
