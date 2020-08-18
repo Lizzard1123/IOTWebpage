@@ -3,8 +3,18 @@ import ns from 'node-schedule';
 import path from 'path';
 
 var currentdir = [];
-const d = new Date();
-var title = `${d.getMonth()}${d.getDay()}${d.getFullYear()}`;
+var d = new Date();
+var month = d.getMonth();
+var month_actual = month + 1;
+if (month_actual < 10) {
+    month_actual = "0" + month_actual;
+}
+
+var day_val = d.getDate();
+if (day_val < 10) {
+    day_val = "0" + day_val;
+}
+var title = `${month_actual}${day_val}${d.getFullYear()}`;
 var time = `${d.getHours()}${d.getMinutes()}${d.getSeconds()}`;
 const logspath = "C:\\Users\\ethan_lbv4wic\\Desktop\\PersonalWebpage\\Src\\Private\\logs";
 const currenttitle = `${logspath}\\${title}.json`;
@@ -46,7 +56,6 @@ export function record(qtype, string, level) {
         let content = {};
         content[qtype] = `${level}_${time}_${string}`;
         obj.logs.push(content);
-        console.log(obj);
         fs.writeFile(currenttitle, JSON.stringify(obj), (err) => {
             if (err) {
                 console.log("errrorooeore");

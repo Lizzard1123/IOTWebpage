@@ -12,8 +12,8 @@ var custom;
 var normal = ["true", "true", "true", "true", "true", "true", "false", "true", "true"];
 var slider = document.getElementById("switcherselector");
 var switches = document.getElementsByClassName("switchpages");
-var titles = ['content one', 'content two', 'Home', 'content four', 'content five'];
-var pagelink = ["content_1", "content_2", "Home", "content_4", "content_5"];
+var titles = ['content one', 'content two', 'Home', 'content four', 'TODO'];
+var pagelink = ["content_1", "content_2", "Home", "content_4", "ToDo"];
 var numberofpages = titles.length;
 var maxdivbox = 100 / numberofpages;
 
