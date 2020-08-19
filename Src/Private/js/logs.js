@@ -16,7 +16,7 @@ if (day_val < 10) {
 }
 var title = `${month_actual}${day_val}${d.getFullYear()}`;
 var time = `${d.getHours()}${d.getMinutes()}${d.getSeconds()}`;
-const logspath = "C:\\Users\\ethan_lbv4wic\\Desktop\\PersonalWebpage\\Src\\Private\\logs";
+const logspath = "C:\\Users\\ethan_lbv4wic\\Desktop\\IOTwebpage\\Src\\Private\\logs";
 const currenttitle = `${logspath}\\${title}.json`;
 
 async function updatecurrentdir() {
@@ -53,6 +53,7 @@ export function record(qtype, string, level) {
         if (err) {
             console.log(err);
             console.log("record really failed");
+            createDay();
             return false;
         }
         console.log(currenttitle);

@@ -34,7 +34,7 @@ function Auth(req, res, next) {
     console.log("Authenticating");
     try {
         let decoded = jwt.verify(req.cookies.token, Keys.secretkey);
-        req.userData = decoded;
+        req.params.userData = decoded;
         next();
     } catch (err) {
         record("Failed Auth ip", req.connection.remoteAddress, 3);
@@ -82,7 +82,7 @@ app.post('/login', (req, res, next) => {
                 let filedata = JSON.parse(data);
                 console.log(`user: ${filedata}`);
                 //engrypt and compare paswword and check with user file
-                bcrypt.compare(req.body.Password, filedata.password, (err, result) => {
+                bcrypt.compare(req.body.Password, filedata.Private.password, (err, result) => {
                     if (err) {
                         //general error with bcrpyt
                         console.log("bcrypt error");
@@ -95,7 +95,8 @@ app.post('/login', (req, res, next) => {
                         console.log("Bcrtpy same password");
                         //create jwt
                         const token = jwt.sign({
-                                securitylevel: "admin"
+                                securitylevel: "admin",
+                                name: req.body.Name
                             }, Keys.secretkey, {
                                 expiresIn: "30min"
                             })
@@ -166,6 +167,24 @@ app.get('/timer', (req, res, next) => { Auth(req, res, next) }, (req, res) => {
         return res.json(JSON.parse(data));
     });
 });
+
+app.get('/userinfo', (req, res, next) => { Auth(req, res, next) }, (req, res) => {
+    console.log(req.params.userData);
+    const timerpath = path.join(__dirname, `users\\${req.params.userData.name}.json`);
+    fs.readFile(timerpath, (err, data) => {
+        if (err) {
+            console.log(err);
+            console.log("user get failed");
+            return false;
+        }
+        console.log('user sent');
+        console.log(JSON.parse(data));
+        let obj = JSON.parse(data);
+        console.log(obj.Public)
+        return res.json(obj.Public);
+    });
+});
+
 
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));

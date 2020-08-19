@@ -1,0 +1,13 @@
+body {
+    background-image: linear-gradient(#094985, #2991a8, #094985);
+}
+
+#bodytitle {
+    position: absolute;
+    width: 100%;
+    vertical-align: middle;
+    text-align: center;
+    font-size: 2.5em;
+    font-weight: bold;
+    font-family: 'Archivo Black';
+}

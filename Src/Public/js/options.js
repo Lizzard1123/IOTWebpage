@@ -108,6 +108,28 @@ function resetPage() {
     }
 }
 
+var userinfo = {};
+
+function updatepageuser() {
+    console.log(userinfo);
+    document.getElementById('profilename').innerHTML = `Signed in as: ${userinfo.name}`;
+}
+
+function getuserinfo() {
+    var getuserinforeq = new XMLHttpRequest();
+    getuserinforeq.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            let res = JSON.parse(this.responseText);
+            userinfo = res;
+            updatepageuser();
+        }
+    };
+    getuserinforeq.open("GET", "/userinfo", true);
+    getuserinforeq.setRequestHeader('Content-type', 'application/json');
+    getuserinforeq.send();
+}
+
+
 function loadsettings(titleset) {
     try {
         custom = localStorage.getItem("custom").split(",");
@@ -123,6 +145,7 @@ function loadsettings(titleset) {
         }
         addtoall();
         resetPage();
+        getuserinfo();
         if (titleset) {
             setintoplace();
         } else {
@@ -157,6 +180,9 @@ function clearcookies() {
     }
 }
 
-function pageClose() {
+function pageClose(reload) {
     clearcookies();
+    if (reload) {
+        location.reload();
+    }
 }

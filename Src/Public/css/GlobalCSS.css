@@ -183,3 +183,12 @@ iframe {
     height: calc(33.33% - 10px);
     width: 100%;
 }
+
+#logout {
+    width: 5%;
+    height: 100%;
+    position: absolute;
+    right: 1%;
+    top: 0%;
+    z-index: 2;
+}

@@ -1,4 +1,8 @@
 {
-    "name": "Ethan",
-    "password": "$2b$12$51rQM/a4IsM6.xIz6pmtX.twRW5Xerxwl3ezUYfr.nkPJR6SN9vSy"
+    "Public": {
+        "name": "Ethan"
+    },
+    "Private": {
+        "password": "$2b$12$51rQM/a4IsM6.xIz6pmtX.twRW5Xerxwl3ezUYfr.nkPJR6SN9vSy"
+    }
 }
