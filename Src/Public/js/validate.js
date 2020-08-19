@@ -36,6 +36,10 @@ function checkWhitelist(string) {
     return false;
 }
 
+function valider(obj) {
+    console.log("hell");
+}
+
 function defaultcheckvalid(obj, textobj) {
     if (obj.validity.valueMissing) {
         textobj.innerHTML = "Please Enter Something";

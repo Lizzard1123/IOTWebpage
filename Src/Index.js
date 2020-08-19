@@ -143,16 +143,24 @@ app.post('/login', (req, res, next) => {
 
 //keep timers
 app.post('/timer', (req, res, next) => { Auth(req, res, next) }, (req, res) => {
-    const timerpath = path.join(__dirname, "Private\\timers.json");
-    fs.writeFile(timerpath, JSON.stringify(req.body), (err) => {
-        if (err) {
-            console.log(err);
-            console.log("timer set failed");
-            return false;
-        }
-        console.log('should work');
-        return res.send('done');
-    });
+    let keysarray = Object.keys(req.body);
+    let lastkeyarrayval = req.body[keysarray[(keysarray.length - 1)]][2];
+    if (!validator.isWhitelisted(lastkeyarrayval, Keys.whitelist)) {
+        record("Invalid Characters on backend from", req.connection.remoteAddress, 5);
+        console.log("invalid character in timer post");
+        error(res, "validator for timer post");
+    } else {
+        const timerpath = path.join(__dirname, "Private\\timers.json");
+        fs.writeFile(timerpath, JSON.stringify(req.body), (err) => {
+            if (err) {
+                console.log(err);
+                console.log("timer set failed");
+                return false;
+            }
+            console.log('should work');
+            return res.send('done');
+        });
+    }
 });
 app.get('/timer', (req, res, next) => { Auth(req, res, next) }, (req, res) => {
     const timerpath = path.join(__dirname, "Private\\timers.json");

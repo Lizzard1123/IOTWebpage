@@ -101,6 +101,12 @@ function enableedit(obj) {
         time.disabled = false;
     } else {
         //setintoplace
+        if (checkWhitelist(text.value)) {
+            text.value = "Invalid Character";
+            text.disabled = true;
+            time.disabled = true;
+            return;
+        }
         setbackground(obj.parentElement, Date.now(), new Date(time.value.replace('-', '/')));
         currenttaskobj[obj.parentElement.id] = [Date.now(), new Date(time.value.replace('-', '/')), text.value];
         obj.style.backgroundColor = "darkgrey";
