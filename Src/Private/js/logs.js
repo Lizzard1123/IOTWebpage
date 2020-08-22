@@ -1,7 +1,7 @@
 import fs from 'fs';
 import ns from 'node-schedule';
 import path from 'path';
-
+const keeplogsfor = 7;
 var currentdir = [];
 var d = new Date();
 var month = d.getMonth();
@@ -16,8 +16,8 @@ if (day_val < 10) {
 }
 var title = `${month_actual}${day_val}${d.getFullYear()}`;
 var time = `${d.getHours()}${d.getMinutes()}${d.getSeconds()}`;
-const logspath = "C:\\Users\\ethan_lbv4wic\\Desktop\\IOTwebpage\\Src\\Private\\logs";
-const currenttitle = `${logspath}\\${title}.json`;
+var logspath;
+//"C:\\Users\\ethan_lbv4wic\\Desktop\\IOTwebpage\\Src\\Private\\logs";
 
 async function updatecurrentdir() {
     console.log("Updating Dir");
@@ -30,12 +30,13 @@ async function updatecurrentdir() {
 
     currentdir = newdir;
     console.log(currentdir);
+    return newdir;
 }
 
 function createDay() {
     console.log("Creating Day");
     if (currentdir.indexOf(title) == -1) {
-        fs.writeFile(currenttitle, JSON.stringify({
+        fs.writeFile(`${logspath}\\${title}.json`, JSON.stringify({
             created_on: title,
             logs: []
         }), err => {
@@ -49,19 +50,18 @@ function createDay() {
 }
 export function record(qtype, string, level) {
     console.log("Recording");
-    fs.readFile(currenttitle, 'utf-8', (err, data) => {
+    fs.readFile(`${logspath}\\${title}.json`, 'utf-8', (err, data) => {
         if (err) {
             console.log(err);
             console.log("record really failed");
-            createDay();
             return false;
         }
-        console.log(currenttitle);
+        console.log(`${logspath}\\${title}.json`);
         let obj = JSON.parse(data);
         let content = {};
         content[qtype] = `${level}_${time}_${string}`;
         obj.logs.push(content);
-        fs.writeFile(currenttitle, JSON.stringify(obj), (err) => {
+        fs.writeFile(`${logspath}\\${title}.json`, JSON.stringify(obj), (err) => {
             if (err) {
                 console.log("errrorooeore");
                 console.log(err);
@@ -72,17 +72,18 @@ export function record(qtype, string, level) {
     })
 }
 
-//jobs
-const keeplogsfor = 7;
-//create new day/ delete end
-//every day at 1 am
-var newday = ns.scheduleJob('0 0 * * *', () => {
-    console.log("Daily update");
-    createDay();
+export function CheckDaily(paththing) {
+    logspath = path.join(paththing, "Private", "Logs");
+    console.log("checking daily");
     updatecurrentdir();
-    if (currentdir.length >= keeplogsfor - 1) {
-        fs.unlink(`"C:\\Users\\ethan_lbv4wic\\Desktop\\PersonalWebpage\\Src\\Private\\logs\\${currentdir[0]}"`);
+    let testcase = `${title}.json`;
+    if (currentdir.includes(testcase) == -1) {
+        console.log(`${title}.json`);
+        console.log("creating day");
+        createDay();
     }
-    // updatecurrentdir();
-});
-console.log("should be good");
+    if (currentdir.length >= keeplogsfor - 1) {
+        console.log("deleating day");
+        fs.unlink(`${logspath}${currentdir[0]}`);
+    }
+}

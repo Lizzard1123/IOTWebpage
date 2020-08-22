@@ -145,10 +145,13 @@ function loadsettings(titleset) {
         }
         addtoall();
         resetPage();
-        getuserinfo();
         if (titleset) {
+            //home
+            getuserinfo();
             setintoplace();
         } else {
+            //auth
+
             switchsubmit();
         }
     }

@@ -119,6 +119,7 @@ function sendtobackend() {
     var timerlogs = new XMLHttpRequest();
     timerlogs.open("POST", "/timer", true);
     timerlogs.setRequestHeader('Content-type', 'application/json');
+    console.log(currenttaskobj);
     timerlogs.send(JSON.stringify(currenttaskobj));
 }
 
@@ -126,6 +127,14 @@ function recivefrombackend() {
     var gettimerlogs = new XMLHttpRequest();
     gettimerlogs.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
+            /*
+            if (typeof this.responseText == "string") {
+                console.log("helloweithrwr");
+                console.log(this.responseText);
+                window.location.href = this.responseText;
+                return;
+            }
+            */
             let res = JSON.parse(this.responseText);
             currenttaskobj = res;
             updatepagetimers();

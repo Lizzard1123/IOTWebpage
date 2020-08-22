@@ -7,11 +7,15 @@ import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import cookieParser from 'cookie-parser';
 import { record } from './Private/js/logs.js';
+import { CheckDaily } from './Private/js/logs.js';
+
 
 const __dirname = path.resolve();
 const port = 3000;
 const app = express();
 const Keys = JSON.parse(fs.readFileSync('./Private/codes.json', "utf8"));
+
+CheckDaily(__dirname);
 
 app.use(cookieParser());
 app.use(bodyParser.json());
@@ -38,7 +42,15 @@ function Auth(req, res, next) {
         next();
     } catch (err) {
         record("Failed Auth ip", req.connection.remoteAddress, 3);
-        res.redirect(302, '/login');
+        var isAjaxRequest = req.xhr;
+        console.log(isAjaxRequest);
+        if (isAjaxRequest) {
+            console.log("tsednw");
+            res.send("\/login").end();
+        } else {
+            res.redirect(302, '/login');
+        }
+
     }
 
 }
@@ -50,7 +62,7 @@ app.get('/login', (req, res) => {
 });
 
 app.get('/home', (req, res, next) => { Auth(req, res, next) }, (req, res) => {
-    record("Gave login page to", `${req.connection.remoteAddress} as ${res.userData}`, 4);
+    record("Gave login page to", `${req.connection.remoteAddress} as ${req.params.userData.name}`, 4);
     console.log("home path auth");
     res.sendFile(path.join(__dirname, "Main.html"));
 });
@@ -144,12 +156,18 @@ app.post('/login', (req, res, next) => {
 //keep timers
 app.post('/timer', (req, res, next) => { Auth(req, res, next) }, (req, res) => {
     let keysarray = Object.keys(req.body);
-    let lastkeyarrayval = req.body[keysarray[(keysarray.length - 1)]][2];
-    if (!validator.isWhitelisted(lastkeyarrayval, Keys.whitelist)) {
-        record("Invalid Characters on backend from", req.connection.remoteAddress, 5);
-        console.log("invalid character in timer post");
-        error(res, "validator for timer post");
-    } else {
+    let lastkeyarrayval;
+    try {
+        lastkeyarrayval = req.body[keysarray[(keysarray.length - 1)]][2];
+        if (!validator.isWhitelisted(lastkeyarrayval, Keys.whitelist)) {
+            record("Invalid Characters on backend from", req.connection.remoteAddress, 5);
+            console.log("invalid character in timer post");
+            error(res, "validator for timer post");
+            return;
+        }
+    } catch {
+        lastkeyarrayval = {};
+    } finally {
         const timerpath = path.join(__dirname, "Private\\timers.json");
         fs.writeFile(timerpath, JSON.stringify(req.body), (err) => {
             if (err) {
