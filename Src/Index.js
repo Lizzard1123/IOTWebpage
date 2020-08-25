@@ -42,11 +42,11 @@ function Auth(req, res, next) {
         next();
     } catch (err) {
         record("Failed Auth ip", req.connection.remoteAddress, 3);
-        var isAjaxRequest = req.xhr;
+        var isAjaxRequest = req.header.type == "ajax";
         console.log(isAjaxRequest);
         if (isAjaxRequest) {
             console.log("tsednw");
-            res.send("\/login").end();
+            res.send("/login").end();
         } else {
             res.redirect(302, '/login');
         }

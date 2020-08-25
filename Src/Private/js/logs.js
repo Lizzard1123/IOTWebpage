@@ -2,7 +2,6 @@ import fs from 'fs';
 import ns from 'node-schedule';
 import path from 'path';
 const keeplogsfor = 7;
-var currentdir = [];
 var d = new Date();
 var month = d.getMonth();
 var month_actual = month + 1;
@@ -27,26 +26,22 @@ async function updatecurrentdir() {
         newdir.push(dirent.name);
     }
     console.log("this");
-
-    currentdir = newdir;
-    console.log(currentdir);
     return newdir;
 }
 
+
 function createDay() {
     console.log("Creating Day");
-    if (currentdir.indexOf(title) == -1) {
-        fs.writeFile(`${logspath}\\${title}.json`, JSON.stringify({
-            created_on: title,
-            logs: []
-        }), err => {
-            if (err) {
-                console.log(err);
-                return;
-            }
-            console.log("Done writing"); // Success 
-        });
-    }
+    fs.writeFile(`${logspath}\\${title}.json`, JSON.stringify({
+        created_on: title,
+        logs: []
+    }), err => {
+        if (err) {
+            console.log(err);
+            return;
+        }
+        console.log("Done writing"); // Success 
+    });
 }
 export function record(qtype, string, level) {
     console.log("Recording");
@@ -72,18 +67,26 @@ export function record(qtype, string, level) {
     })
 }
 
-export function CheckDaily(paththing) {
+export async function CheckDaily(paththing) {
     logspath = path.join(paththing, "Private", "Logs");
     console.log("checking daily");
-    updatecurrentdir();
+    let currentdir = await updatecurrentdir();
     let testcase = `${title}.json`;
-    if (currentdir.includes(testcase) == -1) {
+    console.log("dirrrrrrrrrr");
+    console.log(currentdir);
+    console.log(testcase);
+    console.log("hello");
+    console.log(currentdir.includes(testcase));
+    if (!currentdir.includes(testcase)) {
         console.log(`${title}.json`);
         console.log("creating day");
         createDay();
     }
     if (currentdir.length >= keeplogsfor - 1) {
         console.log("deleating day");
-        fs.unlink(`${logspath}${currentdir[0]}`);
+        fs.unlink(`${logspath}/${currentdir[0]}`, (err) => {
+            console.log("removed file");
+            console.log(err);
+        });
     }
 }

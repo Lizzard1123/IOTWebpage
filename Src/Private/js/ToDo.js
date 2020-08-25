@@ -119,6 +119,7 @@ function sendtobackend() {
     var timerlogs = new XMLHttpRequest();
     timerlogs.open("POST", "/timer", true);
     timerlogs.setRequestHeader('Content-type', 'application/json');
+    timerlogs.setRequestHeader("type", "ajax");
     console.log(currenttaskobj);
     timerlogs.send(JSON.stringify(currenttaskobj));
 }
@@ -131,10 +132,11 @@ function recivefrombackend() {
             if (typeof this.responseText == "string") {
                 console.log("helloweithrwr");
                 console.log(this.responseText);
-                window.location.href = this.responseText;
+                window.top.location.href = this.responseText;
                 return;
             }
-            */
+*/
+            console.log(typeof this.responseText);
             let res = JSON.parse(this.responseText);
             currenttaskobj = res;
             updatepagetimers();
@@ -142,6 +144,7 @@ function recivefrombackend() {
     };
     gettimerlogs.open("GET", "/timer", true);
     gettimerlogs.setRequestHeader('Content-type', 'application/json');
+    gettimerlogs.setRequestHeader("type", "ajax");
     gettimerlogs.send();
 }
 
