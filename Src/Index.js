@@ -1,4 +1,4 @@
-import fs from 'fs'
+import fs from 'fs';
 import express from 'express';
 import path from 'path';
 import bodyParser from 'body-parser';
@@ -206,7 +206,7 @@ app.get('/userinfo', (req, res, next) => { Auth(req, res, next) }, (req, res) =>
         console.log('user sent');
         console.log(JSON.parse(data));
         let obj = JSON.parse(data);
-        console.log(obj.Public)
+        console.log(obj.Public);
         return res.json(obj.Public);
     });
 });
