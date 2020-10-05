@@ -1,20 +1,20 @@
 // eslint-disable-next-line no-unused-vars
-const buttonOne = document.getElementsByName('button_one');
-const buttonTwo = document.getElementsByName('button_two');
+const buttonOne = document.getElementsByName('buttonOne');
+const buttonTwo = document.getElementsByName('buttonTwo');
 // eslint-disable-next-line no-unused-vars
-const buttonThree = document.getElementsByName('button_three');
+const buttonThree = document.getElementsByName('buttonThree');
 // eslint-disable-next-line no-unused-vars
-const buttonFour = document.getElementsByName('button_four');
+const buttonFour = document.getElementsByName('buttonFour');
 // eslint-disable-next-line no-unused-vars
-const buttonFive = document.getElementsByName('button_five');
+const buttonFive = document.getElementsByName('buttonFive');
 // eslint-disable-next-line no-unused-vars
-const buttonSix = document.getElementsByName('button_six');
+const buttonSix = document.getElementsByName('buttonSix');
 // eslint-disable-next-line no-unused-vars
-const buttonSeven = document.getElementsByName('button_seven');
+const buttonSeven = document.getElementsByName('buttonSeven');
 // eslint-disable-next-line no-unused-vars
-const buttonEight = document.getElementsByName('button_eight');
+const buttonEight = document.getElementsByName('buttonEight');
 // eslint-disable-next-line no-unused-vars
-const buttonNine = document.getElementsByName('button_nine');
+const buttonNine = document.getElementsByName('buttonNine');
 const numbers = ['One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine'];
 let custom;
 const normal = ['true', 'true', 'true', 'true', 'true', 'true', 'false', 'true', 'true'];
@@ -34,8 +34,8 @@ function givetitles() {
 function setintoplace() {
     for (let i = 0; i < numberofpages; i++) {
         switches[i].style.left = `${maxdivbox * i}%`;
-        givetitles();
     }
+    givetitles();
 }
 
 function closesttomiddle() {
@@ -76,8 +76,14 @@ function updatesliderbar() {
 }
 
 function getinfo(number) {
-    const numbertoreturn = numbers.indexOf(number);
-    if (custom[numbertoreturn] == 'false') {
+    let thisValue;
+    if (typeof number == "string") {
+        numbertoreturn = numbers.indexOf(number);
+        thisValue = custom[numbertoreturn];
+    } else {
+        thisValue = custom[number - 1];
+    }
+    if (thisValue == 'false') {
         return false;
     } else {
         return true;
@@ -101,7 +107,7 @@ function defultsettings() {
 let artificalmove;
 
 function resetPage() {
-    if (getinfo('one')) {
+    if (getinfo(1)) {
         document.getElementById('pagebody').setAttribute('onmousemove', 'timeoutScreen()');
     } else {
         if (custom[1] == 'true') {
@@ -110,11 +116,12 @@ function resetPage() {
         clearTimeout(notMovingTimer);
         document.getElementById('pagebody').removeAttribute('onmousemove');
     }
-    if (getinfo('seven')) {
+    if (getinfo(7)) {
         clearInterval(randomizeTriangles);
         artificalmove = setInterval(randomcolorTriangles, randomizeTime);
     } else {
         clearInterval(artificalmove);
+        clearInterval(randomizeTriangles);
     }
 }
 

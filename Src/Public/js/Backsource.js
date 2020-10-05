@@ -103,7 +103,7 @@ function createTriangle(name, stringOfPoints) {
     mypolygon.setAttribute('points', stringOfPoints);
     mypolygon.setAttribute('fill', colors[Math.floor(Math.random() * colors.length)]);
     mypolygon.setAttribute('onmouseover', 'hoverchange(this)');
-    mypolygon.setAttribute('onclick', 'clickfadeBody()');
+    mypolygon.setAttribute('onclick', 'clickFadeBody()');
     mypolygon.setAttribute('class', 'back-triangles');
     totalTriangles++;
 }
@@ -297,7 +297,7 @@ function fadeOutBody() {
 }
 // eslint-disable-next-line no-unused-vars
 function clickFadeBody() {
-    if (getinfo('four')) {
+    if (getinfo(4)) {
         fadeBody();
     }
 }
@@ -325,7 +325,7 @@ function AFK() {
     FadeTotalTime = 5000;
     clearInterval(Fadeinterval);
     Fadeinterval = setInterval(fadeOutBody, Fadetime);
-    if (getinfo('two') && !getinfo('seven')) {
+    if (getinfo(2) && !getinfo(7)) {
         randomizeTriangles = setInterval(randomcolorTriangles, randomizeTime);
     }
 }

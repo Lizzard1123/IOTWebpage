@@ -17,7 +17,7 @@ const time = `${d.getHours()}${d.getMinutes()}${d.getSeconds()}`;
 let logspath;
 // "C:\\Users\\ethan_lbv4wic\\Desktop\\IOTwebpage\\Src\\Private\\logs";
 
-async function updatecurrentdir() {
+async function updateCurrentDir() {
     console.log('Updating Dir');
     const dir = await fs.promises.opendir(logspath);
     const newdir = [];
@@ -66,10 +66,10 @@ export function record(qtype, string, level) {
     });
 }
 
-export async function CheckDaily(paththing) {
+export async function checkDaily(paththing) {
     logspath = path.join(paththing, 'Private', 'Logs');
     console.log('checking daily');
-    const currentdir = await updatecurrentdir();
+    const currentdir = await updateCurrentDir();
     const testcase = `${title}.json`;
     console.log('dirrrrrrrrrr');
     console.log(currentdir);

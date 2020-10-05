@@ -26,17 +26,17 @@ const lefttarget = 50;
 const righttarget = 40;
 // status vars
 // eslint-disable-next-line no-unused-vars
-const bottomisshowing = false;
+let bottomisshowing = false;
 // eslint-disable-next-line no-unused-vars
-const bottominProgress = false;
+let bottominProgress = false;
 // eslint-disable-next-line no-unused-vars
-const leftisshowing = true;
+let leftisshowing = true;
 // eslint-disable-next-line no-unused-vars
-const leftinProgress = false;
+let leftinProgress = false;
 // eslint-disable-next-line no-unused-vars
-const rightisshowing = true;
+let rightisshowing = true;
 // eslint-disable-next-line no-unused-vars
-const rightinProgress = false;
+let rightinProgress = false;
 // global
 let count = 0;
 // delay inbetween each incriment
@@ -44,7 +44,8 @@ let count = 0;
 const delay = 5;
 // % per incriment
 const incriment = .25;
-const functionQueue = [];
+// eslint-disable-next-line prefer-const
+let functionQueue = [];
 // eslint-disable-next-line no-unused-vars
 function Move(upwards, name, contents, target) {
     const done = target / incriment;

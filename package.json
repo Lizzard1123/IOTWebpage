@@ -43,24 +43,45 @@
         ],
         "rules": {
             "no-unused-vars": "warn",
-            "linebreak-style": ["error", "windows"],
-            "eol-last": ["error", "never"],
-            "object-curly-spacing": ["error", "always"],
-            "indent": ["error", 4, { "SwitchCase": 1 }],
-            "max-len": ["error", {
-                "code": 200,
-                "ignoreComments": true,
-                "ignoreUrls": true
-            }],
-            "require-jsdoc": ["error", {
-                "require": {
-                    "FunctionDeclaration": false,
-                    "MethodDefinition": false,
-                    "ClassDeclaration": false,
-                    "ArrowFunctionExpression": false,
-                    "FunctionExpression": false
+            "linebreak-style": [
+                "error",
+                "windows"
+            ],
+            "eol-last": [
+                "error",
+                "never"
+            ],
+            "object-curly-spacing": [
+                "error",
+                "always"
+            ],
+            "indent": [
+                "error",
+                4,
+                {
+                    "SwitchCase": 1
                 }
-            }]
+            ],
+            "max-len": [
+                "error",
+                {
+                    "code": 200,
+                    "ignoreComments": true,
+                    "ignoreUrls": true
+                }
+            ],
+            "require-jsdoc": [
+                "error",
+                {
+                    "require": {
+                        "FunctionDeclaration": false,
+                        "MethodDefinition": false,
+                        "ClassDeclaration": false,
+                        "ArrowFunctionExpression": false,
+                        "FunctionExpression": false
+                    }
+                }
+            ]
         }
     }
 }
