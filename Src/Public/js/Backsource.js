@@ -1,99 +1,131 @@
-var width = window.innerWidth;
-var height = window.innerHeight;
-//how many triangles can be seen in a window
-var screenhigh = 16;
-//how many are required to fill entire page
-//var actualhigh = 42;
-//how many triangles go across
-var numberwide = 22;
-var triagnleWidth = width / numberwide;
-var triangleheight = height / screenhigh;
-//how many extra tiangles per row/height
-var widthBuffer = 2;
-var heightBuffer = 2;
-//set triangles back some
-var widthOffset = 1;
-var heightOffset = 1;
-var colors = ["#34b4eb", "#1b8ebf", "#0b5b7d", "#34708a", "#134b63", "#359fcc", "#00acf5", "#0e52c7", "#357efc", "#2e7bff", "#0e7ead", "#40addb", "#1483b3", "#6bc6ed", "#44aedb", "#196f94", "#146fc9", "#4487c9", "#0575e3", "#298ff2", "#034e96", "#78b8f5", "#2289b5", "#23afeb", "#0373a3", "#06668f", "#0489c2", "#77a8f2", "#3882f2", "#1051b3", "#267ea3"]
-    //var colors = [];
-var coloroffset = 50;
-var numberofcolors = 35;
+const width = window.innerWidth;
+const height = window.innerHeight;
+// how many triangles can be seen in a window
+const screenhigh = 16;
+// how many are required to fill entire page
+// var actualhigh = 42;
+// how many triangles go across
+const numberwide = 22;
+const triagnleWidth = width / numberwide;
+const triangleheight = height / screenhigh;
+// how many extra tiangles per row/height
+const widthBuffer = 2;
+const heightBuffer = 2;
+// set triangles back some
+const widthOffset = 1;
+const heightOffset = 1;
+const colors = [
+    '#34b4eb',
+    '#1b8ebf',
+    '#0b5b7d',
+    '#34708a',
+    '#134b63',
+    '#359fcc',
+    '#00acf5',
+    '#0e52c7',
+    '#357efc',
+    '#2e7bff',
+    '#0e7ead',
+    '#40addb',
+    '#1483b3',
+    '#6bc6ed',
+    '#44aedb',
+    '#196f94',
+    '#146fc9',
+    '#4487c9',
+    '#0575e3',
+    '#298ff2',
+    '#034e96',
+    '#78b8f5',
+    '#2289b5',
+    '#23afeb',
+    '#0373a3',
+    '#06668f',
+    '#0489c2',
+    '#77a8f2',
+    '#3882f2',
+    '#1051b3',
+    '#267ea3',
+];
+// var colors = [];
+/*
+const coloroffset = 50;
 
 function colorAlgogradient(r, g, b) {
-    var value = (r + g + b) / 3;
-    var newvalue = value + 2 * Math.random() * coloroffset - coloroffset;
-    var valueratio = newvalue / value;
+    const value = (r + g + b) / 3;
+    const newvalue = value + 2 * Math.random() * coloroffset - coloroffset;
+    const valueratio = newvalue / value;
     return [r * valueratio, g * valueratio, b * valueratio];
 }
-/*
+
 for (var i = 0; i < numberofcolors; i++) {
     colors.push(`rgb(${colorAlgogradient(41, 112, 133)})`);
     //colors.push(`rgb(${ Math.floor(Math.random() * 255)}, ${ Math.floor(Math.random() * 255)}, ${ Math.floor(Math.random() * 255)})`);
 }
 */
-var totalTriangles = 0;
+let totalTriangles = 0;
 
-//created staggered rows of all coordindates for triangles
+// created staggered rows of all coordindates for triangles
+// eslint-disable-next-line no-unused-vars
 function backpoints(width, height, actualhigh) {
-    var coords = [];
-    var count = 0;
-    for (var g = 0; g <= actualhigh + heightBuffer; g++) {
-        var row = [];
+    const coords = [];
+    let count = 0;
+    for (let g = 0; g <= actualhigh + heightBuffer; g++) {
+        const row = [];
         count++;
         if (count % 2 == 0) {
-            for (var i = 0; i <= (numberwide + widthBuffer); i++) {
+            for (let i = 0; i <= (numberwide + widthBuffer); i++) {
                 row.push([Math.round((i - widthOffset) * triagnleWidth + (triagnleWidth / 2)), Math.round((g - heightOffset) * triangleheight)]);
             }
         } else {
-            for (var i = 0; i <= (numberwide + widthBuffer); i++) {
+            for (let i = 0; i <= (numberwide + widthBuffer); i++) {
                 row.push([Math.round((i - widthOffset) * triagnleWidth), Math.round((g - heightOffset) * triangleheight)]);
             }
         }
         coords.push(row);
     }
     return coords;
-
 }
 
-//takes in 3 verticies of coordinate arrays and concatinated it into string
+// takes in 3 verticies of coordinate arrays and concatinated it into string
 function pointsToString(one, two, three) {
-    var endstring = "";
-    endstring = one[0] + "," + one[1] + " " + two[0] + "," + two[1] + " " + three[0] + "," + three[1];
+    let endstring = '';
+    endstring = one[0] + ',' + one[1] + ' ' + two[0] + ',' + two[1] + ' ' + three[0] + ',' + three[1];
     return endstring;
 }
 
-//takes in #id and string of points and creates polygon inside of div parent + sets all attributes
-function CreateTriangle(name, stringOfPoints) {
-    const svg = document.getElementById("parent");
-    const mypolygon = document.createElementNS("http://www.w3.org/2000/svg", 'polygon');
+// takes in #id and string of points and creates polygon inside of div parent + sets all attributes
+function createTriangle(name, stringOfPoints) {
+    const svg = document.getElementById('parent');
+    const mypolygon = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
     svg.appendChild(mypolygon);
     mypolygon.id = name;
-    mypolygon.setAttribute("points", stringOfPoints);
-    mypolygon.setAttribute("fill", colors[Math.floor(Math.random() * colors.length)]);
-    mypolygon.setAttribute("onmouseover", "hoverchange(this)");
-    mypolygon.setAttribute("onclick", "clickfadeBody()");
-    mypolygon.setAttribute("class", "back-triangles");
+    mypolygon.setAttribute('points', stringOfPoints);
+    mypolygon.setAttribute('fill', colors[Math.floor(Math.random() * colors.length)]);
+    mypolygon.setAttribute('onmouseover', 'hoverchange(this)');
+    mypolygon.setAttribute('onclick', 'clickfadeBody()');
+    mypolygon.setAttribute('class', 'back-triangles');
     totalTriangles++;
 }
 
-//var trianglepositions = [];
+// var trianglepositions = [];
 
-//goes thtogh and takes the indexes of coordinates list to make a row of triangles
+// goes thtogh and takes the indexes of coordinates list to make a row of triangles
+// eslint-disable-next-line no-unused-vars
 function makeTriangleRows(list, actualhigh) {
-    var currentTriangle = 0;
-    var numberofrows = (((actualhigh + heightBuffer) + 3 - (actualhigh + heightBuffer) % 3) / 3);
-    var numberofsections = numberwide - 1 + widthBuffer; //nice
-    for (var t = 0; t < numberofrows + 1; t++) {
-        var begstringOfPoints = pointsToString(list[t * 2][0], list[t * 2 + 1][0], list[t * 2 + 2][0]);
+    let currentTriangle = 0;
+    const numberofrows = (((actualhigh + heightBuffer) + 3 - (actualhigh + heightBuffer) % 3) / 3);
+    const numberofsections = numberwide - 1 + widthBuffer; // nice
+    for (let t = 0; t < numberofrows + 1; t++) {
+        const begstringOfPoints = pointsToString(list[t * 2][0], list[t * 2 + 1][0], list[t * 2 + 2][0]);
         currentTriangle++;
-        var begtriangleName = "triangle" + currentTriangle;
-        CreateTriangle(begtriangleName, begstringOfPoints);
-        var posRow = [];
-        //posRow.push(begtriangleName);
-        for (var g = 0; g < numberofsections + 1; g++) {
-            for (var i = 0; i < 4; i++) {
-                var first = [0 + (t * 2), 0 + g];
-                var second = [0 + (t * 2), 1 + g];
+        const begtriangleName = 'triangle' + currentTriangle;
+        createTriangle(begtriangleName, begstringOfPoints);
+        // posRow.push(begtriangleName);
+        for (let g = 0; g < numberofsections + 1; g++) {
+            for (let i = 0; i < 4; i++) {
+                const first = [0 + (t * 2), 0 + g];
+                const second = [0 + (t * 2), 1 + g];
                 switch (i) {
                     case 1:
                         first[0] += 1;
@@ -109,31 +141,31 @@ function makeTriangleRows(list, actualhigh) {
                         second[0] += 2;
                         break;
                 }
-                var third = [1 + (t * 2), 0 + g];
+                const third = [1 + (t * 2), 0 + g];
                 currentTriangle++;
-                var triangleName = "triangle" + currentTriangle;
-                var stringOfPoints = pointsToString(list[first[0]][first[1]], list[second[0]][second[1]], list[third[0]][third[1]]);
-                CreateTriangle(triangleName, stringOfPoints);
-                //posRow.push(triangleName);
+                const triangleName = 'triangle' + currentTriangle;
+                const stringOfPoints = pointsToString(list[first[0]][first[1]], list[second[0]][second[1]], list[third[0]][third[1]]);
+                createTriangle(triangleName, stringOfPoints);
+                // posRow.push(triangleName);
             }
         }
-        //trianglepositions.push(posRow);
+        // trianglepositions.push(posRow);
     }
 }
-//changes the coordinates in a random direction in a random number with these variables max
-var randomxchangelimit = 25;
-var randomychangelimit = 20;
-
+// changes the coordinates in a random direction in a random number with these variables max
+const randomxchangelimit = 25;
+const randomychangelimit = 20;
+// eslint-disable-next-line no-unused-vars
 function randomizecoords(list) {
-    var newlist = []
-    for (var i = 0; i < list.length; i++) {
-        var newrow = [];
-        for (var t = 0; t < list[i].length; t++) {
-            var changex = Math.floor(Math.random() * randomxchangelimit);
-            var changey = Math.floor(Math.random() * randomychangelimit);
-            var Add = Math.random() >= 0.5;
-            var newx;
-            var newy;
+    const newlist = [];
+    for (let i = 0; i < list.length; i++) {
+        const newrow = [];
+        for (let t = 0; t < list[i].length; t++) {
+            const changex = Math.floor(Math.random() * randomxchangelimit);
+            const changey = Math.floor(Math.random() * randomychangelimit);
+            const Add = Math.random() >= 0.5;
+            let newx;
+            let newy;
             if (Add) {
                 newx = list[i][t][0] + changex;
                 newy = list[i][t][1] + changey;
@@ -141,7 +173,7 @@ function randomizecoords(list) {
                 newx = list[i][t][0] - changex;
                 newy = list[i][t][1] - changey;
             }
-            var newcoord = [newx, newy];
+            const newcoord = [newx, newy];
             newrow.push(newcoord);
         }
         newlist.push(newrow);
@@ -207,30 +239,30 @@ circleChange = setInterval(ChangeByStep(orderList), 100);
 var testing = setInterval(() => { console.log('1sec') }, 1000);
 
 
-
 */
 
-//removes and resets the fill of polygon 
+// removes and resets the fill of polygon
+// eslint-disable-next-line no-unused-vars
 function hoverchange(triangle) {
-    triangle.removeAttribute("fill");
-    triangle.setAttribute("fill", colors[Math.floor(Math.random() * colors.length)]);
+    triangle.removeAttribute('fill');
+    triangle.setAttribute('fill', colors[Math.floor(Math.random() * colors.length)]);
 }
 
-//fadescreen variables
-var Fadeinterval;
-var Fadetime = 1;
-var FadeTotalTime = 800;
-var bodyVisible = true;
-var dissapearingActs = ["header", "scrollbar", "body", "footer", "Weather"];
-var opacitysetting = 1;
-var inProgress = false;
+// fadescreen variables
+let Fadeinterval;
+const Fadetime = 1;
+let FadeTotalTime = 800;
+let bodyVisible = true;
+const dissapearingActs = ['header', 'scrollbar', 'body', 'footer', 'Weather'];
+let opacitysetting = 1;
+let inProgress = false;
 
 function fadeInBody() {
     inProgress = true;
-    document.getElementById("backsplash").style.zIndex = -1;
+    document.getElementById('backsplash').style.zIndex = -1;
     if (opacitysetting < 1) {
         opacitysetting += (1 / FadeTotalTime);
-        for (var i = 0; i < dissapearingActs.length; i++) {
+        for (let i = 0; i < dissapearingActs.length; i++) {
             try {
                 document.getElementById(dissapearingActs[i]).style.opacity = opacitysetting;
             } catch {
@@ -249,7 +281,7 @@ function fadeOutBody() {
 
     if (opacitysetting > 0) {
         opacitysetting -= (1 / FadeTotalTime);
-        for (var i = 0; i < dissapearingActs.length; i++) {
+        for (let i = 0; i < dissapearingActs.length; i++) {
             try {
                 document.getElementById(dissapearingActs[i]).style.opacity = opacitysetting;
             } catch {
@@ -259,12 +291,12 @@ function fadeOutBody() {
     } else {
         clearInterval(Fadeinterval);
         bodyVisible = false;
-        document.getElementById("backsplash").style.zIndex = 10;
+        document.getElementById('backsplash').style.zIndex = 10;
         inProgress = false;
     }
 }
-
-function clickfadeBody() {
+// eslint-disable-next-line no-unused-vars
+function clickFadeBody() {
     if (getinfo('four')) {
         fadeBody();
     }
@@ -282,12 +314,11 @@ function fadeBody() {
 }
 
 
-var notMovingTimer;
-var timeoutTime = 10000;
-var Moving = false;
-var needToResume = false;
-var randomizeTriangles;
-var randomizeTime = 100;
+let notMovingTimer;
+const timeoutTime = 10000;
+let needToResume = false;
+let randomizeTriangles;
+const randomizeTime = 100;
 
 function AFK() {
     needToResume = true;
@@ -297,9 +328,9 @@ function AFK() {
     if (getinfo('two') && !getinfo('seven')) {
         randomizeTriangles = setInterval(randomcolorTriangles, randomizeTime);
     }
-
 }
 
+// eslint-disable-next-line no-unused-vars
 function timeoutScreen() {
     if (needToResume) {
         FadeTotalTime = 300;
@@ -313,15 +344,15 @@ function timeoutScreen() {
 }
 
 function randomcolorTriangles() {
-    var randomselector = Math.floor(Math.random() * totalTriangles);
-    var triangle = document.getElementById("triangle" + (randomselector + 1));
-    triangle.removeAttribute("fill");
-    triangle.setAttribute("fill", colors[Math.floor(Math.random() * colors.length)]);
+    const randomselector = Math.floor(Math.random() * totalTriangles);
+    const triangle = document.getElementById('triangle' + (randomselector + 1));
+    triangle.removeAttribute('fill');
+    triangle.setAttribute('fill', colors[Math.floor(Math.random() * colors.length)]);
 }
 
-//Window key presses
+// Window key presses
 window.onkeydown = function(e) {
     if (e.keyCode == 32) {
-        //ChangeByStep(orderList);
+        // ChangeByStep(orderList);
     }
-}
+};

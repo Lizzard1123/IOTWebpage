@@ -1,32 +1,53 @@
-//things that move
-var bottomcontents = ["Weather", "footer"];
-var leftcontents = ["scrollbar_left", "leftscrollbarcontent"];
-var rightcontents = ["scrollbar_right", "rightscrollbarcontent"];
-//timers
-var movingtimerbottom;
-var movingtimerleft;
-var movingtimerright;
+/*
+There is a lot of ignoring eslint commets bc i used a system of variable varibles which in turn uses eval()
+which i know is bad practice, but there shouldnt be a way to use it mallicously
+and its pretty cool how it works lol it condenced the code a whole lot
+*/
+// things that move
+// eslint-disable-next-line no-unused-vars
+const bottomcontents = ['Weather', 'footer'];
+// eslint-disable-next-line no-unused-vars
+const leftcontents = ['scrollbar_left', 'leftscrollbarcontent'];
+// eslint-disable-next-line no-unused-vars
+const rightcontents = ['scrollbar_right', 'rightscrollbarcontent'];
+// timers
+// eslint-disable-next-line no-unused-vars
+let movingtimerbottom;
+// eslint-disable-next-line no-unused-vars
+let movingtimerleft;
+// eslint-disable-next-line no-unused-vars
+let movingtimerright;
 // % to move up
-var bottomtarget = 37;
-var lefttarget = 50;
-var righttarget = 40;
-//status vars
-var bottomisshowing = false;
-var bottominProgress = false;
-var leftisshowing = true;
-var leftinProgress = false;
-var rightisshowing = true;
-var rightinProgress = false;
-//global
-var count = 0;
+// eslint-disable-next-line no-unused-vars
+const bottomtarget = 37;
+// eslint-disable-next-line no-unused-vars
+const lefttarget = 50;
+// eslint-disable-next-line no-unused-vars
+const righttarget = 40;
+// status vars
+// eslint-disable-next-line no-unused-vars
+const bottomisshowing = false;
+// eslint-disable-next-line no-unused-vars
+const bottominProgress = false;
+// eslint-disable-next-line no-unused-vars
+const leftisshowing = true;
+// eslint-disable-next-line no-unused-vars
+const leftinProgress = false;
+// eslint-disable-next-line no-unused-vars
+const rightisshowing = true;
+// eslint-disable-next-line no-unused-vars
+const rightinProgress = false;
+// global
+let count = 0;
 // delay inbetween each incriment
-var delay = 5;
-//% per incriment
-var incriment = .25;
-var functionQueue = [];
-
+// eslint-disable-next-line no-unused-vars
+const delay = 5;
+// % per incriment
+const incriment = .25;
+const functionQueue = [];
+// eslint-disable-next-line no-unused-vars
 function Move(upwards, name, contents, target) {
-    var done = target / incriment;
+    const done = target / incriment;
     if (count == done) {
         count = 0;
         if (upwards) {
@@ -38,23 +59,23 @@ function Move(upwards, name, contents, target) {
         eval(`clearInterval(movingtimer${name});`);
         eval(functionQueue.pop());
     } else {
-        for (var i = 0; i < contents.length; i++) {
-            var obj = document.getElementById(contents[i]);
-            var bottomnumber = (obj.style.bottom).split("");
+        for (let i = 0; i < contents.length; i++) {
+            const obj = document.getElementById(contents[i]);
+            const bottomnumber = (obj.style.bottom).split('');
             bottomnumber.pop();
-            var newval;
+            let newval;
             if (bottomnumber[0] == '-') {
                 bottomnumber.shift();
                 if (upwards) {
-                    newval = -(parseFloat(bottomnumber.join("")) - incriment);
+                    newval = -(parseFloat(bottomnumber.join('')) - incriment);
                 } else {
-                    newval = -(parseFloat(bottomnumber.join("")) + incriment);
+                    newval = -(parseFloat(bottomnumber.join('')) + incriment);
                 }
             } else {
                 if (upwards) {
-                    newval = (parseFloat(bottomnumber.join("")) + incriment);
+                    newval = (parseFloat(bottomnumber.join('')) + incriment);
                 } else {
-                    newval = (parseFloat(bottomnumber.join("")) - incriment);
+                    newval = (parseFloat(bottomnumber.join('')) - incriment);
                 }
             }
             obj.style.bottom = `${ newval }vh`;
@@ -63,7 +84,8 @@ function Move(upwards, name, contents, target) {
     }
 }
 
-//clicked on
+// clicked on
+// eslint-disable-next-line no-unused-vars
 function moveBottom(name) {
     eval(`
         if (!bottominProgress && !leftinProgress && !rightinProgress) {
@@ -79,7 +101,7 @@ function moveBottom(name) {
         }
     `);
 }
-//nice
+// nice
 
 /*
 SCROLLBAR
