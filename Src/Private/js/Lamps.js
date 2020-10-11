@@ -3,8 +3,8 @@ const allButtons = ["deskButton", "bedButton"];
 const deskLamp = {
     name: "desk",
     HTMLnode: document.getElementsByName("deskLampButton")[0],
-    lampTitle: document.getElementById("deskLableTitle"),
-    noComsPic: document.getElementById("desknoComsPic"),
+    lampTitle: document.getElementById("deskLabelTitle"),
+    noComsPic: document.getElementById("deskNoComsPic"),
     buttonBox: document.getElementById("deskLampButton"),
     buttonState: "Off",
     changeState: function(state) {
@@ -14,7 +14,7 @@ const deskLamp = {
         this.noComsPic.style.visibility = "hidden";
         loader.style.visibility = "hidden";
         console.log("hiya");
-        this.lampTitle.innerHTML = "Lamp Status";
+        this.lampTitle.innerHTML = "Desk Lamp Status";
         this.HTMLnode.disabled = false;
         this.buttonBox.style.visibility = "visible";
         this.HTMLnode.removeAttribute("onchange");
@@ -27,8 +27,8 @@ const deskLamp = {
 const bedLamp = {
     name: "bed",
     HTMLnode: document.getElementsByName("bedLampButton")[0],
-    lampTitle: document.getElementById("bedLableTitle"),
-    noComsPic: document.getElementById("bednoComsPic"),
+    lampTitle: document.getElementById("bedLabelTitle"),
+    noComsPic: document.getElementById("bedNoComsPic"),
     buttonBox: document.getElementById("LampButton"),
     buttonState: "Off",
     changeState: function(state) {
@@ -38,7 +38,7 @@ const bedLamp = {
         this.noComsPic.style.visibility = "hidden";
         loader.style.visibility = "hidden";
         console.log("hiya");
-        this.lampTitle.innerHTML = "Lamp Status";
+        this.lampTitle.innerHTML = "Bed Lamp Status";
         this.HTMLnode.disabled = false;
         this.buttonBox.style.visibility = "visible";
         this.HTMLnode.removeAttribute("onchange");

@@ -45,26 +45,21 @@
             background-color: #86d199;
         }
         
-        #buttoncenter {
+        .buttoncenter {
             position: absolute;
-            top: 10%;
             height: 10%;
             width: 100%;
-            left: 0;
             align-content: center;
         }
         
-        #labelForButton {
+        .labelForButton {
             position: relative;
-            top: 60px;
             width: 100%;
             text-align: center;
         }
         
-        #noComsPic {
-            position: absolute;
-            left: calc(50% - 28px);
-            top: 10%;
+        .noComsPic {
+            position: relative;
             width: 60px;
             height: 60px;
             background-color: rgb(225, 243, 255);
@@ -72,7 +67,7 @@
             align-content: center;
         }
         
-        #noComsSvg {
+        .noComsSvg {
             left: 2px;
             top: 2px;
             position: relative;
@@ -115,25 +110,63 @@
             width: 100%;
             align-content: center;
         }
+        
+        #titlebox {
+            position: absolute;
+            width: 100%;
+            top: 0;
+            left: 0;
+            align-content: center;
+        }
+        
+        .collum {
+            position: absolute;
+            width: 25%;
+            top: 10%;
+            height: 90%;
+        }
+        
+        #collumOne {
+            left: 0;
+        }
+        
+        #collumTwo {
+            left: 25%;
+        }
+        
+        #collumThree {
+            left: 50%;
+        }
+        
+        #collumFour {
+            left: 75%;
+        }
     </style>
 
 </head>
 
 <body style="width:397px; height:1000px" onload="startupLamps()">
-    <h1>Lamps!</h1>
-    <div id="buttoncenter">
-        <div class="button b2 button-13" id="LampButton" style="visibility: hidden;">
-            <input type="checkbox" class="checkbox" name="LampButton">
-            <div class="knobs">
-                <span></span>
-            </div>
-            <div class="layer"></div>
-
-        </div>
-        <div id="labelForButton"><b id="lable">Connecting...</b></div>
+    <!--Title-->
+    <div id="titleBox">
+        <h1>Lamps!</h1>
     </div>
-    <div id="noComsPic" style="visibility: hidden;" onclick="checkForConnection()">
-        <svg id="noComsSvg" xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-access-point-off" width="56" height="56" viewBox="0 0 24 24" stroke-width="1.5" stroke="#000000" fill="none" stroke-linecap="round" stroke-linejoin="round">
+
+
+    <!--desk Button-->
+    <div class="collum" id="collumOne">
+        <div class="buttoncenter" id="deskButtonCenter">
+            <div class="button b2 button-13" id="deskLampButton" style="visibility: hidden;">
+                <input type="checkbox" class="checkbox" name="deskLampButton">
+                <div class="knobs">
+                    <span></span>
+                </div>
+                <div class="layer"></div>
+
+            </div>
+            <div class="labelForButton"><b id="deskLabelTitle">Connecting...</b></div>
+        </div>
+        <div class="noComsPic" id="deskNoComsPic" style="visibility: hidden;" onclick="checkForConnection()">
+            <svg id="deskNoComsSvg" xmlns="http://www.w3.org/2000/svg" class="noComsSvg icon icon-tabler icon-tabler-access-point-off" width="56" height="56" viewBox="0 0 24 24" stroke-width="1.5" stroke="#000000" fill="none" stroke-linecap="round" stroke-linejoin="round">
             <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
             <line x1="3" y1="3" x2="21" y2="21" />
             <path d="M14.828 9.172a4 4 0 0 1 1.172 2.828" />
@@ -141,9 +174,35 @@
             <path d="M9.168 14.828a4 4 0 0 1 0 -5.656" />
             <path d="M6.337 17.657a8 8 0 0 1 0 -11.314" />
           </svg>
+        </div>
     </div>
-    <div id="loadingg"><span class="loader"></span></div>
+    <!--bed Button-->
+    <div class="collum" id="collumTwo">
+        <div class="buttoncenter" id="bedButtonCenter">
+            <div class="button b2 button-13" id="bedLampButton" style="visibility: hidden;">
+                <input type="checkbox" class="checkbox" name="LampButton">
+                <div class="knobs">
+                    <span></span>
+                </div>
+                <div class="layer"></div>
 
+            </div>
+            <div class="labelForButton"><b id="bedLabelTitle">Connecting...</b></div>
+        </div>
+        <div class="noComsPic" id="bedNoComsPic" style="visibility: hidden;" onclick="checkForConnection()">
+            <svg id="bedNoComsSvg" xmlns="http://www.w3.org/2000/svg" class="noComsSvg icon icon-tabler icon-tabler-access-point-off" width="56" height="56" viewBox="0 0 24 24" stroke-width="1.5" stroke="#000000" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+            <line x1="3" y1="3" x2="21" y2="21" />
+            <path d="M14.828 9.172a4 4 0 0 1 1.172 2.828" />
+            <path d="M17.657 6.343a8 8 0 0 1 1.635 8.952" />
+            <path d="M9.168 14.828a4 4 0 0 1 0 -5.656" />
+            <path d="M6.337 17.657a8 8 0 0 1 0 -11.314" />
+          </svg>
+        </div>
+    </div>
+    <div class="collum" id="collumThree"></div>
+    <div class="collum" id="collumFour"></div>
+    <div id="loadingg"><span class="loader"></span></div>
     <script src="/privatestatic/js/Lamps.js"></script>
 </body>
 
