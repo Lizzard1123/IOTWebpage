@@ -56,6 +56,11 @@
     height: 8%;
 }
 
+#Title {
+    position: relative;
+    top: -25%;
+}
+
 .scrollbar {
     background-color: #1463ad;
     height: 5%;

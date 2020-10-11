@@ -20,8 +20,8 @@ let custom;
 const normal = ['true', 'true', 'true', 'true', 'true', 'true', 'false', 'true', 'true'];
 const slider = document.getElementById('switcherselector');
 const switches = document.getElementsByClassName('switchpages');
-const titles = ['content one', 'content two', 'Home', 'content four', 'TODO'];
-const pagelink = ['content_1', 'content_2', 'Home', 'content_4', 'ToDo'];
+const titles = ['content one', 'content two', 'Home', 'Lamps', 'TODO'];
+const pagelink = ['content_1', 'content_2', 'Home', 'Lamps', 'ToDo'];
 const numberofpages = titles.length;
 const maxdivbox = 100 / numberofpages;
 
@@ -118,6 +118,7 @@ function resetPage() {
     }
     if (getinfo(7)) {
         clearInterval(randomizeTriangles);
+        clearInterval(artificalmove);
         artificalmove = setInterval(randomcolorTriangles, randomizeTime);
     } else {
         clearInterval(artificalmove);

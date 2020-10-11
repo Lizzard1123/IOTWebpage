@@ -8,7 +8,7 @@ import bcrypt from 'bcrypt';
 import cookieParser from 'cookie-parser';
 import { record } from './Private/js/logs.js';
 import { checkDaily } from './Private/js/logs.js';
-
+import request from 'request';
 
 const __dirname = path.resolve();
 const port = 3000;
@@ -217,5 +217,82 @@ app.get('/userinfo', (req, res, next) => {
     });
 });
 
+//esp local ip
+const espLightsIP = "http://192.168.1.110:80/ESPLights";
+
+function sendMessageToESPLights(mes, callback) {
+    request.post(espLightsIP, {
+            headers: {
+                "content-type": "text/plain",
+            },
+            //message it sends
+            body: JSON.stringify({
+                message: mes
+            })
+        },
+        (error, response) => {
+            if (error || (response.statusCode == 500)) {
+                console.log(error);
+                console.log("req error");
+                callback(error);
+                return;
+            }
+            if (response.statusCode != 200) {
+                console.log("fix status code dumbass");
+            }
+            callback(error, response.body);
+            return response;
+        }
+
+    );
+}
+//turn on lights
+/* (req, res, next) => {
+    auth(req, res, next);
+},
+*/
+
+function ESPPostErr(err, res) {
+    if (err) {
+        console.log("Post err");
+        console.log(err);
+        res.json({ status: "noComs" });
+    } else {
+        res.json({ status: 'Got it' });
+    }
+}
+
+app.post('/espLights_Update', (req, res) => {
+    console.log(typeof req.body);
+    let reqMessage = req.body;
+    if (reqMessage.state == "On") {
+        sendMessageToESPLights("On", (err) => {
+            ESPPostErr(err, res);
+        });
+    } else if (reqMessage.state == "Off") {
+        sendMessageToESPLights("Off", (err) => {
+            ESPPostErr(err, res);
+        });
+    } else if (reqMessage.state == "Off" || reqMessage.state == "On") {
+        console.log("already");
+    } else {
+        console.log("unknown res");
+    }
+    return;
+});
+
+//get lights status
+app.get('/espLights_Status', (req, res) => {
+    sendMessageToESPLights("question", (err, mes) => {
+        if (err) {
+            if (err.errno == 'ETIMEDOUT') {
+                console.log("timeout err");
+                res.json({ status: "noComs" });
+            }
+        } else {
+            res.json({ status: mes });
+        }
+    });
+});
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" type="text/css" href="/publicstatic/css/options.css">
+    <style>
+        body {
+            background-color: #3b7175;
+        }
+        
+        h1 {
+            text-align: center;
+            position: absolute;
+            top: 0;
+            width: 100%;
+            left: 0;
+        }
+        
+        .button-13 .knobs:before {
+            content: 'On';
+        }
+        
+        .button-13 .knobs:after {
+            content: 'Off';
+        }
+        
+        .button-13 .knobs span {
+            background-color: #0e5e36;
+        }
+        
+        .button-13 .checkbox:checked+.knobs span {
+            background-color: #F44336;
+        }
+        
+        .button-13 .checkbox:checked~.layer {
+            background-color: #fcebeb;
+        }
+        
+        .button-13 .knobs:before,
+        .button-13 .knobs:after {
+            color: #4e4e4e;
+        }
+        
+        .layer {
+            background-color: #86d199;
+        }
+        
+        #buttoncenter {
+            position: absolute;
+            top: 10%;
+            height: 10%;
+            width: 100%;
+            left: 0;
+            align-content: center;
+        }
+        
+        #labelForButton {
+            position: relative;
+            top: 60px;
+            width: 100%;
+            text-align: center;
+        }
+        
+        #noComsPic {
+            position: absolute;
+            left: calc(50% - 28px);
+            top: 10%;
+            width: 60px;
+            height: 60px;
+            background-color: rgb(225, 243, 255);
+            border-radius: 20px;
+            align-content: center;
+        }
+        
+        #noComsSvg {
+            left: 2px;
+            top: 2px;
+            position: relative;
+        }
+        
+        .loader {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            display: block;
+            margin: 15px auto;
+            position: relative;
+            color: #FFF;
+            box-sizing: border-box;
+            animation: animloader 2s linear infinite;
+        }
+        
+        @keyframes animloader {
+            0% {
+                box-shadow: 14px 0 0 -2px, 38px 0 0 -2px, -14px 0 0 -2px, -38px 0 0 -2px;
+            }
+            25% {
+                box-shadow: 14px 0 0 -2px, 38px 0 0 -2px, -14px 0 0 -2px, -38px 0 0 2px;
+            }
+            50% {
+                box-shadow: 14px 0 0 -2px, 38px 0 0 -2px, -14px 0 0 2px, -38px 0 0 -2px;
+            }
+            75% {
+                box-shadow: 14px 0 0 2px, 38px 0 0 -2px, -14px 0 0 -2px, -38px 0 0 -2px;
+            }
+            100% {
+                box-shadow: 14px 0 0 -2px, 38px 0 0 2px, -14px 0 0 -2px, -38px 0 0 -2px;
+            }
+        }
+        
+        #loadingg {
+            position: absolute;
+            top: 10%;
+            left: 0;
+            width: 100%;
+            align-content: center;
+        }
+    </style>
+
+</head>
+
+<body style="width:397px; height:1000px" onload="startupLamps()">
+    <h1>Lamps!</h1>
+    <div id="buttoncenter">
+        <div class="button b2 button-13" id="LampButton" style="visibility: hidden;">
+            <input type="checkbox" class="checkbox" name="LampButton">
+            <div class="knobs">
+                <span></span>
+            </div>
+            <div class="layer"></div>
+
+        </div>
+        <div id="labelForButton"><b id="lable">Connecting...</b></div>
+    </div>
+    <div id="noComsPic" style="visibility: hidden;" onclick="checkForConnection()">
+        <svg id="noComsSvg" xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-access-point-off" width="56" height="56" viewBox="0 0 24 24" stroke-width="1.5" stroke="#000000" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+            <line x1="3" y1="3" x2="21" y2="21" />
+            <path d="M14.828 9.172a4 4 0 0 1 1.172 2.828" />
+            <path d="M17.657 6.343a8 8 0 0 1 1.635 8.952" />
+            <path d="M9.168 14.828a4 4 0 0 1 0 -5.656" />
+            <path d="M6.337 17.657a8 8 0 0 1 0 -11.314" />
+          </svg>
+    </div>
+    <div id="loadingg"><span class="loader"></span></div>
+
+    <script src="/privatestatic/js/Lamps.js"></script>
+</body>
+
+</html>
