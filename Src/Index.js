@@ -290,7 +290,7 @@ app.get('/espLights_Status', (req, res) => {
                 res.json({ status: "noComs" });
             }
         } else {
-            res.json({ status: mes });
+            res.json(mes);
         }
     });
 });

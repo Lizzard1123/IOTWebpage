@@ -1,11 +1,55 @@
-const button = document.getElementsByName("LampButton")[0];
-const lampTitle = document.getElementById("lable");
-const noComsPic = document.getElementById("noComsPic");
-const buttonBox = document.getElementById("LampButton");
 const loader = document.getElementById("loadingg");
-let buttonState = "Off";
+const allButtons = ["deskButton", "bedButton"];
+const deskLamp = {
+    name: "desk",
+    HTMLnode: document.getElementsByName("deskLampButton")[0],
+    lampTitle: document.getElementById("deskLableTitle"),
+    noComsPic: document.getElementById("desknoComsPic"),
+    buttonBox: document.getElementById("deskLampButton"),
+    buttonState: "Off",
+    changeState: function(state) {
+        this.buttonState = state;
+    },
+    changeItself: function() {
+        this.noComsPic.style.visibility = "hidden";
+        loader.style.visibility = "hidden";
+        console.log("hiya");
+        this.lampTitle.innerHTML = "Lamp Status";
+        this.HTMLnode.disabled = false;
+        this.buttonBox.style.visibility = "visible";
+        this.HTMLnode.removeAttribute("onchange");
+        if (this.buttonState == "Off") {
+            this.HTMLnode.click();
+        }
+        this.HTMLnode.setAttribute("onchange", "buttonChange()");
+    }
+}
+const bedLamp = {
+    name: "bed",
+    HTMLnode: document.getElementsByName("bedLampButton")[0],
+    lampTitle: document.getElementById("bedLableTitle"),
+    noComsPic: document.getElementById("bednoComsPic"),
+    buttonBox: document.getElementById("LampButton"),
+    buttonState: "Off",
+    changeState: function(state) {
+        this.buttonState = state;
+    },
+    changeItself: function() {
+        this.noComsPic.style.visibility = "hidden";
+        loader.style.visibility = "hidden";
+        console.log("hiya");
+        this.lampTitle.innerHTML = "Lamp Status";
+        this.HTMLnode.disabled = false;
+        this.buttonBox.style.visibility = "visible";
+        this.HTMLnode.removeAttribute("onchange");
+        if (this.buttonState == "Off") {
+            this.HTMLnode.click();
+        }
+        this.HTMLnode.setAttribute("onchange", "buttonChange()");
+    }
+}
 
-function setLamp(state, callback) {
+function setLamp(currentButton, callback) {
     const lampChange = new XMLHttpRequest();
     lampChange.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
@@ -15,32 +59,47 @@ function setLamp(state, callback) {
     };
     lampChange.open('POST', '/espLights_Update', true);
     lampChange.setRequestHeader("Content-type", "application/json");
-    lampChange.send(JSON.stringify({ state: state }));
+    //string JSON
+    lampChange.send(`{ ${currentButton.name}: ${currentButton.buttonState}}`);
 }
 
-function noComsSetup() {
-    lampTitle.innerHTML = "No Connection";
-    noComsPic.style.visibility = "visible";
-    buttonBox.style.visibility = "hidden";
+function noComsSetup(currentButton) {
+    currentButton.lampTitle.innerHTML = "No Connection";
+    currentButton.noComsPic.style.visibility = "visible";
+    currentButton.buttonBox.style.visibility = "hidden";
     loader.style.visibility = "hidden";
 }
 
-function buttonChange() {
-    button.disabled = true;
-    setTimeout(function() {
-        console.log("HAHHA");
-        button.disabled = false;
-    }, 1500);
-    if (buttonState == "Off") {
-        buttonState = "On";
+function subButtonChange(currentButton) {
+    if (currentButton.buttonState == "Off") {
+        currentButton.buttonState = "On";
     } else {
-        buttonState = "Off";
+        currentButton.buttonState = "Off";
     }
-    setLamp(buttonState, (mes) => {
+    setLamp(currentButton, (mes) => {
         if (mes == "noComs") {
-            noComsSetup();
+            noComsSetup(currentButton);
         }
     });
+}
+
+function buttonChange(currentButton) {
+    currentButton.disabled = true;
+    setTimeout(function() {
+        console.log("HAHHA");
+        currentButton.disabled = false;
+    }, 1500);
+    let buttonIdNum = allButtons.indexOf(currentButton.id);
+    switch (buttonIdNum) {
+        case 0:
+            //desk lamp
+            subButtonChange(deskLamp);
+            break;
+        case 1:
+            //bed lamp
+            subButtonChange(bedLamp);
+            break;
+    }
 }
 
 
@@ -49,16 +108,20 @@ function getLamp(callback) {
     lampCheck.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
             const obj = JSON.parse(this.responseText);
-            if (obj.status == "noComs") {
-                noComsSetup();
-                return;
-            } else if (obj.status == "On") {
-                buttonState = "On";
-            } else if (obj.status == "Off") {
-                buttonState = "Off";
+            let objKeys = Object.keys(obj);
+            let length = Object.keys(obj).length;
+            //add more state change ehre
+            for (let i = 0; i < length; i++) {
+                if (objKeys[i] == 'desk') {
+                    deskLamp.changeState(obj[objKeys[i]]);
+                } else if (objKeys[i] == 'bed') {
+                    bedLamp.changeState(obj[objKeys[i]]);
+                } else {
+                    console.log("no button found fuck");
+                }
             }
             if (callback !== undefined) {
-                callback();
+                callback(objKeys, length);
             }
         }
     };
@@ -66,32 +129,25 @@ function getLamp(callback) {
     lampCheck.send();
 }
 
-function changePage() {
-    //defualt is on so idk
-    button.removeAttribute("onchange");
-    if (buttonState == "Off") {
-        button.click();
-    }
-    button.setAttribute("onchange", "buttonChange()");
-}
 
-function checkForConnection(starting) {
-    let temp = buttonState;
-    getLamp(() => {
+function checkForConnection() {
+    getLamp((objKeys, length) => {
         //gets connection
-        noComsPic.style.visibility = "hidden";
-        loader.style.visibility = "hidden";
-        console.log("hiya");
-        lampTitle.innerHTML = "Lamp Status";
-        button.disabled = false;
-        buttonBox.style.visibility = "visible";
-        changePage();
-        button.setAttribute("onchange", "buttonChange()");
+        for (let i = 0; i < length; i++) {
+            if (objKeys[i] == 'desk') {
+                deskLamp.changeItself();
+            } else if (objKeys[i] == 'bed') {
+                bedLamp.changeItself();
+            } else {
+                console.log("no button found fuck here");
+            }
+        }
     });
 }
 
 function startupLamps() {
-    button.disabled = true;
+    deskLamp.HTMLnode.disabled = true;
+    bedLamp.HTMLnode.disabled = true;
     //handles if no connection found
     checkForConnection();
 }
