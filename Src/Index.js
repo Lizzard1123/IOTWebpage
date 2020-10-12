@@ -220,15 +220,15 @@ app.get('/userinfo', (req, res, next) => {
 //esp local ip
 const espLightsIP = "http://192.168.1.110:80/ESPLights";
 
-function sendMessageToESPLights(mes, callback) {
+function sendMessageToESPLights(name, mes, callback) {
+    let propperMes = {};
+    propperMes[name] = mes;
     request.post(espLightsIP, {
             headers: {
                 "content-type": "text/plain",
             },
             //message it sends
-            body: JSON.stringify({
-                message: mes
-            })
+            body: JSON.stringify(propperMes)
         },
         (error, response) => {
             if (error || (response.statusCode == 500)) {
@@ -263,19 +263,23 @@ function ESPPostErr(err, res) {
 }
 
 app.post('/espLights_Update', (req, res) => {
-    console.log(typeof req.body);
     let reqMessage = req.body;
-    if (reqMessage.state == "On") {
-        sendMessageToESPLights("On", (err) => {
+    console.log(reqMessage);
+    let firstObj = Object.keys(reqMessage)[0];
+    if (reqMessage[firstObj] == "On") {
+        console.log("pointy on");
+        sendMessageToESPLights(firstObj, "On", (err) => {
+            console.log("pointyq");
             ESPPostErr(err, res);
         });
-    } else if (reqMessage.state == "Off") {
-        sendMessageToESPLights("Off", (err) => {
+    } else if (reqMessage[firstObj] == "Off") {
+        console.log("pointy off");
+        sendMessageToESPLights(firstObj, "Off", (err) => {
+            console.log("pointyw");
             ESPPostErr(err, res);
         });
-    } else if (reqMessage.state == "Off" || reqMessage.state == "On") {
-        console.log("already");
     } else {
+        console.log(res.body);
         console.log("unknown res");
     }
     return;
@@ -283,7 +287,7 @@ app.post('/espLights_Update', (req, res) => {
 
 //get lights status
 app.get('/espLights_Status', (req, res) => {
-    sendMessageToESPLights("question", (err, mes) => {
+    sendMessageToESPLights("status", "question", (err, mes) => {
         if (err) {
             if (err.errno == 'ETIMEDOUT') {
                 console.log("timeout err");

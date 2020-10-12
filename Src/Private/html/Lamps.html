@@ -46,7 +46,7 @@
         }
         
         .buttoncenter {
-            position: absolute;
+            position: relative;
             height: 10%;
             width: 100%;
             align-content: center;
@@ -60,6 +60,8 @@
         
         .noComsPic {
             position: relative;
+            top: 40px;
+            left: calc(50% - 30px);
             width: 60px;
             height: 60px;
             background-color: rgb(225, 243, 255);
@@ -83,6 +85,10 @@
             color: #FFF;
             box-sizing: border-box;
             animation: animloader 2s linear infinite;
+        }
+        
+        .button {
+            top: 70%;
         }
         
         @keyframes animloader {
@@ -124,6 +130,7 @@
             width: 25%;
             top: 10%;
             height: 90%;
+            align-content: center;
         }
         
         #collumOne {
@@ -179,8 +186,8 @@
     <!--bed Button-->
     <div class="collum" id="collumTwo">
         <div class="buttoncenter" id="bedButtonCenter">
-            <div class="button b2 button-13" id="bedLampButton" style="visibility: hidden;">
-                <input type="checkbox" class="checkbox" name="LampButton">
+            <div class="button b2 button-13 custombutton" id="bedLampButton" style="visibility: hidden;">
+                <input type="checkbox" class="checkbox" name="bedLampButton">
                 <div class="knobs">
                     <span></span>
                 </div>
