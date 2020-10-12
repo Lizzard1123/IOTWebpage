@@ -143,7 +143,10 @@ function getLamp(callback) {
     lampCheck.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
             //idfk
-            const obj = JSON.parse(JSON.parse(this.responseText));
+            let obj = JSON.parse(this.responseText);
+            if (typeof obj == "string") {
+                obj = JSON.parse(obj);
+            }
             if (obj.status == "noComs") {
                 console.log(obj);
                 noComsSetup(allLampObj);
