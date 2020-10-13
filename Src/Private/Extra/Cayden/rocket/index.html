@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Rocket Calculator</title>
+	<link rel="shortcut icon" href="RocketIcon.ico" type="image/x-icon" />
+	<link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+	<h1>
+		Rocket Calculator
+	</h1>
+	<h2>
+		AP CSP Create
+	</h2>
+	<p>
+		Enter the attributes of your rocket, and hit calculate. Your thrust to weight ratio and the altitute at which you will have to ignite your engine to land is to the right. Then hit launch and watch your rocket fly.
+	</p>
+	<form>
+		<dir>
+			<input type="text" id="apogee"> Apogee in Meters</input>
+		</dir>
+		<dir>
+			<input type="text" id="mass"> Mass in Grams</input>
+	    </dir>
+	    <dir>
+			<input type="text" id="thrust"> Thrust in Newtons</input>
+		</dir>
+		<dir>
+			<button type="button" id="calculate">Calculate</button>
+		</dir>
+	</form>
+	<dir>
+		Thrust to weight ratio: <span id="t/w">____</span>/1<br>
+	</dir>
+	<dir>
+		Altitude to ignite: <span id="ats">____</span><br>
+	</dir>
+	<dir>
+		<button type="button" id="launchbtn">Launch</button>
+	</dir>
+	<dir>
+		<a href="index.html"><button type="button" name="resart">Resart</button></a>
+	</dir>
+	<div class="sky"></div>
+	<div class="ground"></div>
+	<img src="Parabola.svg" class="parabola">
+	<img src="Rocket.svg" class="rocket">
+	<img src="Equation.svg" class="equation">
+	<p class="equationexp">
+		This is the equation for calculating the distance to stop <br>
+		A = Apogee<br>
+		M = Mass<br>
+		T = Thrust<br>
+		X = Current Altitude<br>
+		Y = Distance to stop
+	</p>
+	<!--<img src="Flame.svg" class="flame">-->
+	<img src="Apogee.svg" class="apogee">
+</body>
+	<script src="main.js"></script>
+</html>

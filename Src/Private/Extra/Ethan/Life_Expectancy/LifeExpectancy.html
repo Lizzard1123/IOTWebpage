@@ -1,0 +1,222 @@
+<html>
+
+<head>
+    <title>
+        Life Expectancy
+    </title>
+    <link rel="shortcut icon" type="image/png" href="heart.icon">
+    <style>
+        #body {
+            background-color: #053b91;
+        }
+        
+        #battery {
+            position: absolute;
+            left: 35%;
+            bottom: 55%;
+            width: 30%;
+            height: 20%;
+            background-color: #ffffff;
+            border: 5px solid black;
+            border-radius: 20px;
+        }
+        
+        #top {
+            position: relative;
+            background-color: black;
+            width: 2.5%;
+            height: 50%;
+            left: 102%;
+            bottom: -25%;
+            border-radius: 0px 20px 20px 0px;
+        }
+        
+        #progress {
+            position: relative;
+            width: 0%;
+            height: 100%;
+            bottom: 50%;
+            border-radius: 15px;
+            background-color: #13a500;
+        }
+        
+        #title {
+            position: relative;
+            font-family: "Helvetica";
+            left: 0%;
+            bottom: 270%;
+            font-size: 425%;
+            color: white;
+        }
+        
+        #percent {
+            position: relative;
+            font-family: "Helvetica";
+            Left: 40%;
+            top: 35%;
+            font-size: 200%;
+            color: white;
+        }
+        
+        .titles {
+            font-family: "Helvetica";
+            font-size: 30px;
+            color: white;
+            position: relative;
+        }
+        
+        .insert {
+            position: relative;
+            width: 60%;
+            height: 40%;
+        }
+        
+        #age {
+            border-radius: 20px;
+            text-align: center;
+        }
+        
+        #gender {
+            border-radius: 20px;
+        }
+        
+        #agetitle {
+            left: 0%;
+        }
+        
+        #gendertitle {
+            left: 0%;
+        }
+        
+        #racetitle {
+            left: 0%;
+        }
+        
+        #race {
+            border-radius: 20px;
+        }
+        
+        #table {
+            position: relative;
+            left: 25%;
+            bottom: -50%;
+            width: 50%;
+            height: 20%;
+        }
+        
+        .box {
+            width: 1%;
+        }
+        
+        #button {
+            position: absolute;
+            border-radius: 40px;
+            width: 20%;
+            height: 10%;
+            background-color: #ffffff;
+            left: 40%;
+            bottom: 10%;
+        }
+    </style>
+</head>
+
+<body id="body">
+    <div id="battery">
+        <div id="top"></div>
+        <div id="progress">
+            <div id="percent"></div>
+        </div>
+        <h1 id="title">Lifetime Left</h1>
+    </div>
+    <table id="table">
+        <tr>
+            <th class="box">
+                <h3 class="titles" id="agetitle">Age</h3>
+                <input id="age" class="insert" type="number">
+            </th>
+            <th class="box">
+                <h3 class="titles" id="gendertitle">Gender</h3>
+                <select id="gender" class="insert">
+                        <option value="Select">Select</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                    </select>
+            </th>
+            <th class="box">
+                <h3 id="racetitle" class="titles">Race</h3>
+                <select id="race" class="insert">
+                        <option value="select">Select</option>
+                        <option value="white">White</option>
+                        <option value="black">Black</option>
+                        <option value="hispanic">Hispanic</option>
+                    </select>
+            </th>
+        </tr>
+    </table>
+    <button type="button" id="button" onclick="calc()">Calculate</button>
+    <script>
+        var progress = document.getElementById("progress");
+        var age = document.getElementById("age");
+        var perc = document.getElementById("percent");
+        var race = document.getElementById("race");
+        var gender = document.getElementById("gender");
+        var final = 0;
+        var dividen = 0;
+
+        function lifeexpect() {
+            if (race.value == "white" && gender.value == "Male") {
+                final = 76.6;
+                dividen = 76.6;
+            } else if (race.value == "white" && gender.value == "Female") {
+                final = 81.3;
+                dividen = 81.3;
+            } else if (race.value == "black" && gender.value == "Male") {
+                final = 72.2;
+                dividen = 72.2;
+            } else if (race.value == "black" && gender.value == "Female") {
+                final = 78.2;
+                dividen = 78.2;
+            } else if (race.value == "hispanic" && gender.value == "Male") {
+                final = 78.8;
+                dividen = 78.8;
+            } else if (race.value == "hispanic" && gender.value == "Female") {
+                final = 83.7;
+                dividen = 83.7;
+            }
+        }
+
+        function calc() {
+            console.log("clicked");
+            lifeexpect();
+            final = Math.round((((final - age.value) / dividen) * 100));
+            change();
+        }
+
+        function change() {
+            if (final <= 10) {
+                progress.style.width = 10 + "%";
+                progress.style.backgroundColor = "#ff0000";
+                perc.innerHTML = final + "%";
+                perc.style.left = 12 + "%";
+                perc.style.fontSize = 100 + "%";
+                perc.style.top = 43 + "%";
+            } else if (final <= 20) {
+                progress.style.width = final + "%";
+                progress.style.backgroundColor = "#ff0000";
+                perc.innerHTML = final + "%";
+                perc.style.left = 13 + "%";
+                perc.style.fontSize = 150 + "%";
+                perc.style.top = 40 + "%";
+            } else {
+                progress.style.width = final + "%";
+                progress.style.backgroundColor = "#13a500";
+                perc.innerHTML = final + "%";
+                perc.style.left = 40 + "%";
+                perc.style.fontSize = 200 + "%";
+                perc.style.top = 35 + "%";
+            }
+        }
+    </script>
+</body>
+
+</html>

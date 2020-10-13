@@ -1,0 +1,864 @@
+<html>
+<title>
+    FBLA Snake Trivia
+</title>
+<style>
+    /* styles the Start button */
+    
+    #StartButton {
+        height: 6%;
+        width: 25%;
+        font-size: 140%;
+        background-image: linear-gradient(to right, red, orange, yellow, green);
+        border: 5px solid black;
+        color: black;
+        visibility: visible;
+        z-index: 1;
+    }
+    /* styles the 8 buttons on the setting pages */
+    
+    .Buttons {
+        position: relative;
+        font-size: 90%;
+        border: 3px solid black;
+        background-color: black;
+        visibility: visible;
+        color: white;
+    }
+    /* sets the background color of the page */
+    
+    #body {
+        background-color: #76ccde;
+    }
+    /* styles the settings page button on top right of page */
+    
+    #Settings {
+        position: absolute;
+        height: 10%;
+        width: 10%;
+        background-image: url("https://codehs.com/uploads/ae4d0897804d70310080c1bda7093972");
+        background-position: center;
+        background-size: 60px 60px;
+        background-repeat: no-repeat;
+        border-radius: 50%;
+        left: 89%;
+        bottom: 90%;
+        z-index: 3;
+    }
+    /* sets visibility of the Title */
+    
+    #Title {
+        visibility: visible;
+    }
+    /* sets visibility of the created by section */
+    
+    #Createdby {
+        visibility: visible;
+    }
+    /* sets visibility of the first line*/
+    
+    #Line1 {
+        visibility: visible;
+    }
+    /* sets visibility of the credits section */
+    
+    #Credits {
+        visibility: visible;
+    }
+    /* sets visibility of the second line */
+    
+    #Line2 {
+        visibility: visible;
+    }
+    /* sets visibility of the How to Play Title */
+    
+    #How {
+        visibility: visible;
+        font-size: 150%;
+    }
+    /* sets visibility of the how to play and info text section */
+    
+    #Instruction {
+        visibility: visible;
+    }
+    /* sets style of the Instruction table at the bottom of the page */
+    
+    #Table {
+        position: absolute;
+        bottom: 0%;
+        width: 99%;
+        height: 15%;
+        visibility: visible;
+        z-index: -1;
+    }
+    /* further styles the Speed up button on the settings page */
+    
+    #SpeedUP {
+        height: 30%;
+        width: 40%;
+        visibility: hidden;
+    }
+    /* further styles the Speed Down button on the settings page */
+    
+    #SpeedDOWN {
+        height: 30%;
+        width: 40%;
+        visibility: hidden;
+    }
+    /* further styles the Apple moving On button on the settings page*/
+    
+    #AppleON {
+        height: 30%;
+        width: 40%;
+        visibility: hidden;
+    }
+    /* further styles Apple moving off button on the settings page*/
+    
+    #AppleOFF {
+        height: 30%;
+        width: 40%;
+        visibility: hidden;
+    }
+    /* further styles the Questions on button on the settings page */
+    
+    #QuestionsON {
+        height: 30%;
+        width: 40%;
+        visibility: hidden;
+    }
+    /* further styles the Questions off button on the settings page */
+    
+    #QuestionsOFF {
+        height: 30%;
+        width: 40%;
+        visibility: hidden;
+    }
+    /* styles the speed text box on the settings page */
+    
+    #Speedrange {
+        font-size: 200%;
+        height: 20%;
+        width: 40%;
+        border: 3px solid black;
+        border-collapse: collapse;
+        visibility: hidden;
+    }
+    /* styles the Apple moving indicator on the settings page */
+    
+    #Appleonoroff {
+        font-size: 200%;
+        height: 20%;
+        width: 40%;
+        border: 3px solid black;
+        border-collapse: collapse;
+        visibility: hidden;
+    }
+    /* styles the Questions on or off indicator on the settings page */
+    
+    #Questionsonoroff {
+        font-size: 200%;
+        height: 20%;
+        width: 40%;
+        border: 3px solid black;
+        border-collapse: collapse;
+        visibility: hidden;
+    }
+    /* styles the Length per apple on settings page */
+    
+    #AppleLength {
+        font-size: 200%;
+        height: 20%;
+        width: 40%;
+        border: 3px solid black;
+        border-collapse: collapse;
+        visibility: hidden;
+    }
+    /* styles length up button on the settings page */
+    
+    #LengthUP {
+        height: 30%;
+        width: 40%;
+        visibility: hidden;
+    }
+    /*  styles the length down button on the settings page */
+    
+    #LengthDOWN {
+        height: 30%;
+        width: 40%;
+        visibility: hidden;
+    }
+    /* styles the big settings table on the settings page that holds everything in place */
+    
+    #SettingTable {
+        top: 0%;
+        left: 0%;
+        visibility: hidden;
+        position: absolute;
+        height: 98%;
+        width: 100%;
+        border-collapse: collapse;
+        border: 3px solid black;
+    }
+    /* styles and changes the rows of the table on the settings page */
+    
+    .Rows {
+        border-collapse: collapse;
+        border: 3px solid black;
+        width: 25%;
+    }
+    /* styles and changes the other rows and collums on the setting page*/
+    
+    .C {
+        border-collapse: collapse;
+        border: 3px solid black;
+        width: 25%;
+    }
+    /* changes font size of the settings page title*/
+    
+    #TitleforSet {
+        font-size: 400%;
+    }
+    /* sets the beginning background color of the table box that contains the Question buttons*/
+    
+    #Questions {
+        background-color: rgb( 0, 235, 24);
+    }
+    /* sets the beginning background color of the table box that contains the Apples on or off buttons*/
+    
+    #Apples {
+        background-color: rgb( 0, 235, 24);
+    }
+    /* sets the style of the inner table that contains the color changes */
+    
+    #innertable {
+        border: 3px solid black;
+        border-collapse: collapse;
+        height: 90%;
+        width: 100%;
+    }
+    /* sets the style and look of the Select container that holds the preset color schemes */
+    
+    #select {
+        width: 30%;
+        background-color: #000000;
+        color: #ffffff;
+    }
+</style>
+<!-- the body holds all of the elements in the page -->
+
+<body id="body">
+    <!-- Title -->
+    <h1 style="color:#4a4a4a;" id="Title">
+        FBLA Snake Trivia
+    </h1>
+    <!-- Created by section -->
+    <p id="Createdby">
+        Created By: Ethan Gutierrez
+    </p>
+    <!-- first line -->
+    <hr style=" border: 1px solid Black;" id="Line1">
+    <!-- Credits section -->
+    <p id="Credits"><b>-Credits-</b></br>Ethan Gutierrez made the game with assistance in the beginning with making the questions from Michael Kimbell and Hayden Gregorovic.</p>
+    <!-- second line -->
+    <hr style="border: 1px solid Black;" id="Line2">
+    <!-- How to play section + Title -->
+    <h1 style="Color: Blue;" id="How">How To Play</h1>
+    <p id="Instruction">
+        Start by moving the dot using the up, down, left, and right arrow keys on the keyboard, or W, A, S, and D. Correct answers will grow the dot into a snake. Keep moving the dot or snake, and prevent it from hitting itself or the walls. Hitting the red apples
+        and answering the question correctly will grow your snake, however an incorrect answer will remove a heart. To answer a question, move your snake to an apple, and then click with the computer mouse. Each correct answer produces a regeneration
+        point. After 4 regeneration points, an extra heart will be awarded, or bonus points if you have all 5 hearts already. The goal of the game is to answer 25 questions correctly. The scoreboard on the top left of the game screen tracks your current
+        score, the goal score, and your highest score. The space bar is used to pause the game. The escape button will close the game at any point, including the start page. Click on the settings image at the top right of the screen to add variety to
+        the game, if desired. Best of luck!
+    </p>
+    <!-- start button -->
+    <form action="/privatestatic/Extra/Ethan/Snake_Game/FBLASnake.html" target="_blank">
+        <input type="submit" value="Start FBLA Snake Game!" id="StartButton" />
+
+        <!-- How to play Table -->
+        <table id="Table">
+            <!-- left side and collum holds image -->
+            <th><img src="https://codehs.com/uploads/7d9c8d9e057f917be176e5002acf3d7b" width=200px height=200px></th>
+            <!-- left side holding the instructions -->
+            <th>
+                <ul>
+                    <li>Up Arrow: Moves Snake Up</li>
+                    </br>
+                    <li>Left Arrow: Moves Snake Left</li>
+                    </br>
+                    <li>Down Arrow: Moves Snake Down</li>
+                    </br>
+                    <li>Right Arrow: Moves Snake Right</li>
+                    </br>
+                </ul>
+            </th>
+            <!-- right side holding the images -->
+            <th><img src="https://codehs.com/uploads/e05592a844a1e7a86caaa2d2b3e8fa1a" height=150px width=150px></br><img src="https://codehs.com/uploads/b8b13a41ee6de2454303c4ef7380452e" height=125px width=150px align="left"></th>
+            <!-- right side holding the instructions -->
+            <th>
+                <ul>
+                    <li>Space Bar: Pauses Game</li>
+                    </br>
+                    </br>
+                    </br>
+                    </br>
+                    </br>
+                    </br>
+                    <li>Escape Button: Quits Game by Closing Tab</li>
+                </ul>
+            </th>
+        </table>
+        <!-- settings image on top right -->
+        <div id="Settings" class="everything" onclick="settingspage()"></div>
+        <!-- settings table -->
+        <table id="SettingTable">
+            <!-- frist row holding the title -->
+            <tr class="Rows">
+                <!-- row section taking up three collum spaces holding the title -->
+                <th class="C" colspan="3" id="TitleforSet">
+                    Settings
+                </th>
+                <!-- second row holding the speed control, the top part of the color picker, and the apple moving on or off changer -->
+            </tr>
+            <!-- row holding the middle three collums -->
+            <tr class="Rows">
+                <!-- block holding the buttons for the speed dial, the speed range indicator -->
+                <td class="C" label id="Speeds">
+                    <button type="button" class="Buttons" id="SpeedUP" onclick="Speedup()">UP</button>
+                    <p id="Speedrange">4</p>
+                    <button type="button" class="Buttons" id="SpeedDOWN" onclick="Speeddown()">DOWN</button>
+                </td>
+                <!-- inner table holding the color coustimazation -->
+                <td label rowspan="2">
+                    <table id="innertable">
+                        <!-- first row holding the style present box -->
+                        <tr id="StyleContainer" colspan="2">
+                            <!-- the style dropdown box with its selections -->
+                            <h2 id="Style">Style</h2>
+                            <select id="Select" onchange="Check()">
+                   <option value="1">Classic</option>
+                   <option value="2">FBLA</option>
+                   <option value="3">Dark</option>
+                   <option value="4">Light</option>
+                   <option value="5">Custom</option>
+                   </select>
+                        </tr>
+                        <!-- row with the first two customization boxes-->
+                        <tr>
+                            <!-- block with the top left customization box -->
+                            <td id="S1" label>
+                                <h2 id="SCT">Snake Color</h2>
+                                <input type="color" id="SnakeC" value="#007d00" onchange="change()" disabled>
+                            </td>
+                            <!-- block with the top right customization box-->
+                            <td id="A2" label>
+                                <h2 id="ACT">Apple Color</h2>
+                                <input type="color" id="AppleC" value="#ff0000" onchange="change()" disabled>
+                            </td>
+                        </tr>
+                        <!-- second row of customization boxes-->
+                        <tr>
+                            <!-- second left box of customization -->
+                            <td id="B3" label>
+                                <h2 id="BGCT">Background Color</h2>
+                                <input type="color" id="BgC" value="#007d00" onchange="change()" disabled>
+                            </td>
+                            <!-- second right box of customization -->
+                            <td id="C4" label>
+                                <h2 id="CCT">Canvas Color</h2>
+                                <input type="color" id="CanvasC" value="#ffffff" onchange="change()" disabled>
+                            </td>
+                        </tr>
+                        <!-- third row down of customizations -->
+                        <tr>
+                            <!-- third left box of customizations -->
+                            <td id="B5" label>
+                                <h2 id="BCT">Buttons Color</h2>
+                                <input type="color" id="ButtonsC" value="#000000" onchange="change()" disabled>
+                            </td>
+                            <!-- third right box of customizations -->
+                            <td id="S6" label>
+                                <h2 id="SCCT">Score Color</h2>
+                                <input type="color" id="ScoreC" value="#1666e5" onchange="change()" disabled>
+                            </td>
+                        </tr>
+                        <!-- bottom row of customizations -->
+                        <tr>
+                            <!-- bottom left box of customizations -->
+                            <td id="SBC" label>
+                                <h2 id="SBCT">Starting Page BG Color</h2>
+                                <input type="color" id="StartpageC" value="#76ccde" onchange="change()" disabled>
+                            </td>
+                            <!-- bottom right box of customizations -->
+                            <td id="STC" label>
+                                <h2 id="STCT">Starting Page Text Color</h2>
+                                <input type="color" id="StarttextC" value="#000000" onchange="change()" disabled>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+                <!-- block holding the Apple moving on or off buttons and indicator -->
+                <td class="C" label id="Apples">
+                    <button type="button" class="Buttons" id="AppleON" onclick="Appleon()">Apple Moving On</button>
+                    <p id="Appleonoroff">Off</p>
+                    <button type="button" class="Buttons" id="AppleOFF" onclick="Appleoff()">Apple Moving Off</button>
+                </td>
+            </tr>
+            <!-- row holding the bottom part of the inner table and the bottom row-->
+            <tr class="Rows">
+                <!-- block containing the Questions on or off buttons and indicator -->
+                <td class="C" label id="Questions">
+                    <button type="button" class="Buttons" id="QuestionsON" onclick="Questionson()">Questions On!</button>
+                    <p id="Questionsonoroff">On</p>
+                    <button type="button" class="Buttons" id="QuestionsOFF" onclick="Questionsoff()">Questions Off!</button>
+                </td>
+                <!-- block containing the Length per apple buttons and indicator -->
+                <td class="C" label id="Lengths">
+                    <button type="button" class="Buttons" id="LengthUP" onclick="Lengthup()">Increase Length Per Apple</button>
+                    <p id="AppleLength">5</p>
+                    <button type="button" class="Buttons" id="LengthDOWN" onclick="Lengthdown()">Decrease Length Per Apple</button>
+                </td>
+            </tr>
+        </table>
+</body>
+<script>
+    // settings page check variable set to off
+    var a = 0;
+    // speed variable used to send to the snake game about the speed of the snake
+    var Speed = 4;
+    localStorage.setItem("SnakeSpeed", Speed);
+    // apple on or off switch set to off
+    var Apple = 0;
+    localStorage.setItem("AppleMove", Apple);
+    // questions on or off switch set to on
+    var Questions = 1;
+    localStorage.setItem("Questionsoof", Questions);
+    // Length per apple set to 5
+    var AppleLengthPer = 5;
+    localStorage.setItem("AppleLengthPerApple", AppleLengthPer);
+    //sets the background colors of the Speed and Length per Apple blocks
+    ColorGraident();
+    SpeedDial();
+    // scheme # set to classic
+    var Scheme = 1;
+    localStorage.setItem("Scheme", Scheme);
+    //sets the customization colors as the classic original colors, so they can be changed later
+    var SnakeColor = "rgb(0, 125, 0)";
+    var BackColor = "rgb(0, 125, 0)";
+    var AppleColor = "rgb(255, 0, 0)";
+    var CanvasColor = "#ffffff"
+    var ButtonColors = "#000000"
+    var ScoreColor = "#1666e5"
+    var StartpageColor = "#76ccde"
+    var StarttextColor = "#000000"
+        // changes the background color of all of the customization blocks to the value of the color pickers
+    change();
+    // the onchange function of the scheme picker, it changes the values of the color pickers depending on the scheme # 
+    function Check() {
+        // if the select box is changed to custom it enables the changing of the color pickers
+        if ((document.getElementById("Select").value) == 5) {
+            document.getElementById("SnakeC").disabled = false;
+            document.getElementById("AppleC").disabled = false;
+            document.getElementById("BgC").disabled = false;
+            document.getElementById("CanvasC").disabled = false;
+            document.getElementById("ButtonsC").disabled = false;
+            document.getElementById("ScoreC").disabled = false;
+            document.getElementById("StartpageC").disabled = false;
+            document.getElementById("StarttextC").disabled = false;
+        }
+        // changes the color values of the color picker is the select box is selected to light
+        else if ((document.getElementById("Select").value) == 4) {
+            document.getElementById("SnakeC").value = "#66ff75";
+            document.getElementById("AppleC").value = "#FFC0CB";
+            document.getElementById("BgC").value = "#000000";
+            document.getElementById("CanvasC").value = "#ccfcff";
+            document.getElementById("ButtonsC").value = "#FFC0CB";
+            document.getElementById("ScoreC").value = "#ffffff";
+            document.getElementById("StartpageC").value = "#FFC0CB";
+            Close();
+            change();
+        }
+        //changes the colro values of the color pickers if the select box is selected to dark
+        else if ((document.getElementById("Select").value) == 3) {
+            document.getElementById("SnakeC").value = "#ffffff";
+            document.getElementById("AppleC").value = "#727272";
+            document.getElementById("BgC").value = "#000000";
+            document.getElementById("CanvasC").value = "#000000";
+            document.getElementById("ButtonsC").value = "#000000";
+            document.getElementById("ScoreC").value = "#ffffff";
+            document.getElementById("StartpageC").value = "#000000";
+            document.getElementById("StarttextC").value = "#ffffff";
+            Close();
+            change();
+        }
+        //changes the color picker values if the select box is selected to FBLA
+        else if ((document.getElementById("Select").value) == 2) {
+            document.getElementById("SnakeC").value = "#ffdf00";
+            document.getElementById("AppleC").value = "#ff0000";
+            document.getElementById("BgC").value = "#000080";
+            document.getElementById("CanvasC").value = "#afafaf";
+            document.getElementById("ButtonsC").value = "#000000";
+            document.getElementById("ScoreC").value = "#ffdf00";
+            document.getElementById("StartpageC").value = "#000080";
+            document.getElementById("StarttextC").value = "#ffffff";
+            Close();
+            change();
+        }
+        //changes the color picker values if the select box is selected to classic
+        else if ((document.getElementById("Select").value) == 1) {
+            document.getElementById("SnakeC").value = "#007d00";
+            document.getElementById("AppleC").value = "#ff0000";
+            document.getElementById("BgC").value = "#007d00";
+            document.getElementById("CanvasC").value = "#ffffff";
+            document.getElementById("ButtonsC").value = "#000000";
+            document.getElementById("ScoreC").value = "#1666e5";
+            document.getElementById("StartpageC").value = "#76ccde";
+            document.getElementById("StarttextC").value = "#000000";
+            Close();
+            change();
+        }
+    }
+    // function that disables use of the color pickers when using preset styles
+    function Close() {
+        document.getElementById("SnakeC").disabled = true;
+        document.getElementById("BgC").disabled = true;
+        document.getElementById("AppleC").disabled = true;
+        document.getElementById("CanvasC").disabled = true;
+        document.getElementById("ButtonsC").disabled = true;
+        document.getElementById("ScoreC").disabled = true;
+        document.getElementById("StartpageC").disabled = true;
+        document.getElementById("StarttextC").disabled = true;
+    }
+    // function that changes the values of the background color of the corresponding color picker box to the value of it
+    function change() {
+        document.getElementById("S1").style.backgroundColor = document.getElementById("SnakeC").value;
+        document.getElementById("A2").style.backgroundColor = document.getElementById("AppleC").value;
+        document.getElementById("B3").style.backgroundColor = document.getElementById("BgC").value;
+        document.getElementById("C4").style.backgroundColor = document.getElementById("CanvasC").value;
+        document.getElementById("B5").style.backgroundColor = document.getElementById("ButtonsC").value;
+        document.getElementById("S6").style.backgroundColor = document.getElementById("ScoreC").value;
+        document.getElementById("SBC").style.backgroundColor = document.getElementById("StartpageC").value;
+        document.getElementById("STC").style.backgroundColor = document.getElementById("StarttextC").value;
+        ChangeStart();
+    }
+    // changes everything on the start pages to the colors of the color pickers set to the text and background colors
+    function ChangeStart() {
+        document.getElementById("body").style.backgroundColor = document.getElementById("StartpageC").value;
+        document.getElementById("Title").style.color = document.getElementById("StarttextC").value;
+        document.getElementById("Createdby").style.color = document.getElementById("StarttextC").value;
+        document.getElementById("Line1").style.borderColor = document.getElementById("StarttextC").value;
+        document.getElementById("Line2").style.borderColor = document.getElementById("StarttextC").value;
+        document.getElementById("Credits").style.color = document.getElementById("StarttextC").value;
+        document.getElementById("How").style.color = document.getElementById("StarttextC").value;
+        document.getElementById("Instruction").style.color = document.getElementById("StarttextC").value;
+        document.getElementById("Table").style.color = document.getElementById("StarttextC").value;
+        document.getElementById("SettingTable").style.color = document.getElementById("StarttextC").value;
+        document.getElementById("StartButton").style.borderColor = document.getElementById("StarttextC").value;
+
+    }
+    // sets the classic variables to the new customized colors and logs them into the computers storage
+    function LogColor() {
+        Scheme = document.getElementById("Select").value;
+        SnakeColor = document.getElementById("SnakeC").value;
+        BackColor = document.getElementById("BgC").value;
+        AppleColor = document.getElementById("AppleC").value;
+        CanvasColor = document.getElementById("CanvasC").value;
+        ButtonColors = document.getElementById("ButtonsC").value;
+        ScoreColors = document.getElementById("ScoreC").value;
+        StartpageColor = document.getElementById("StartpageC").value;
+        StarttextColor = document.getElementById("StarttextC").value;
+        localStorage.setItem("SnakeColor", SnakeColor);
+        localStorage.setItem("BackColor", BackColor);
+        localStorage.setItem("AppleColor", AppleColor);
+        localStorage.setItem("Scheme", Scheme);
+        localStorage.setItem("Canvascolor", CanvasColor);
+        localStorage.setItem("ButtonColors", ButtonColors);
+        localStorage.setItem("ScoreColor", ScoreColors);
+        localStorage.setItem("StartpageColor", StartpageColor);
+        localStorage.setItem("StarttextColor", StarttextColor);
+    }
+    // changes the background color of the length per apple depending on the value of it
+    function ColorGraident() {
+        if (AppleLengthPer === 0) {
+            document.getElementById("Lengths").style.backgroundColor = "rgb( 255, 25, 5)"
+        } else if (AppleLengthPer === 1) {
+            document.getElementById("Lengths").style.backgroundColor = "rgb( 0, 236, 0)"
+        } else if (AppleLengthPer === 2) {
+            document.getElementById("Lengths").style.backgroundColor = "rgb( 24, 237, 0)"
+        } else if (AppleLengthPer === 3) {
+            document.getElementById("Lengths").style.backgroundColor = "rgb( 48, 238, 0)"
+        } else if (AppleLengthPer === 4) {
+            document.getElementById("Lengths").style.backgroundColor = "rgb( 72, 239, 0)"
+        } else if (AppleLengthPer === 5) {
+            document.getElementById("Lengths").style.backgroundColor = "rgb( 97, 240, 1)"
+        } else if (AppleLengthPer === 6) {
+            document.getElementById("Lengths").style.backgroundColor = "rgb( 122, 241, 1)"
+        } else if (AppleLengthPer === 7) {
+            document.getElementById("Lengths").style.backgroundColor = "rgb( 147, 242, 1)"
+        } else if (AppleLengthPer === 8) {
+            document.getElementById("Lengths").style.backgroundColor = "rgb( 172, 243, 1)"
+        } else if (AppleLengthPer === 9) {
+            document.getElementById("Lengths").style.backgroundColor = "rgb( 197, 244, 2)"
+        } else if (AppleLengthPer === 10) {
+            document.getElementById("Lengths").style.backgroundColor = "rgb( 222, 245, 2)"
+        } else if (AppleLengthPer === 11) {
+            document.getElementById("Lengths").style.backgroundColor = "rgb( 246, 243, 2)"
+        } else if (AppleLengthPer === 12) {
+            document.getElementById("Lengths").style.backgroundColor = "rgb( 247, 219, 2)"
+        } else if (AppleLengthPer === 13) {
+            document.getElementById("Lengths").style.backgroundColor = "rgb( 248, 196, 3)"
+        } else if (AppleLengthPer === 14) {
+            document.getElementById("Lengths").style.backgroundColor = "rgb( 249, 172, 3)"
+        } else if (AppleLengthPer === 15) {
+            document.getElementById("Lengths").style.backgroundColor = "rgb( 249, 147, 3)"
+        } else if (AppleLengthPer === 16) {
+            document.getElementById("Lengths").style.backgroundColor = "rgb( 251, 123, 3)"
+        } else if (AppleLengthPer === 17) {
+            document.getElementById("Lengths").style.backgroundColor = "rgb( 252, 99, 4)"
+        } else if (AppleLengthPer === 18) {
+            document.getElementById("Lengths").style.backgroundColor = "rgb( 253, 74, 4)"
+        } else if (AppleLengthPer === 19) {
+            document.getElementById("Lengths").style.backgroundColor = "rgb( 254, 49, 4)"
+        } else if (AppleLengthPer === 20) {
+            document.getElementById("Lengths").style.backgroundColor = "rgb( 255, 25, 5)"
+        }
+
+    }
+    //changes the background color of the speed box depending on the value
+    function SpeedDial() {
+        if (Speed === 8) {
+            document.getElementById("Speeds").style.backgroundColor = "rgb( 0, 235, 24)";
+        } else if (Speed === 7) {
+            document.getElementById("Speeds").style.backgroundColor = "rgb( 44, 237, 0)";
+        } else if (Speed === 6) {
+            document.getElementById("Speeds").style.backgroundColor = "rgb( 115, 240, 1)";
+        } else if (Speed === 5) {
+            document.getElementById("Speeds").style.backgroundColor = "rgb( 186, 243, 2)";
+        } else if (Speed === 4) {
+            document.getElementById("Speeds").style.backgroundColor = "rgb( 246, 233, 2)";
+        } else if (Speed === 3) {
+            document.getElementById("Speeds").style.backgroundColor = "rgb( 249, 165, 3)";
+        } else if (Speed === 2) {
+            document.getElementById("Speeds").style.backgroundColor = "rgb( 252, 95, 4)";
+        } else if (Speed === 1) {
+            document.getElementById("Speeds").style.backgroundColor = "rgb( 255, 25, 5)";
+        }
+    }
+    // changes the value of the speed variable when the speed up button is clicked
+    function Speedup() {
+        // prevents the speed from going above 8
+        if (Speed < 8) {
+            //increases speed
+            Speed++;
+            //makes sure that the speed down button is visible
+            document.getElementById("SpeedDOWN").style.visibility = "visible";
+            // removes speed up button if its equal to 8
+            if (Speed === 8) {
+                document.getElementById("SpeedUP").style.visibility = "hidden";
+            }
+        }
+        // sets the new speed variable and changes the text indicator along with changing the background
+        localStorage.setItem("SnakeSpeed", Speed);
+        document.getElementById("Speedrange").innerHTML = Speed;
+        SpeedDial();
+    } // changes the value of the speed variable when the speed down button is clicked
+    function Speeddown() {
+        //prevents the speed from going below 1
+        if (Speed > 1) {
+            //decreases speed
+            Speed--;
+            //makes sure the speed up button is visible
+            document.getElementById("SpeedUP").style.visibility = "visible";
+            //removes the speed up button if the speed value is equal to 1
+            if (Speed === 1) {
+                document.getElementById("SpeedDOWN").style.visibility = "hidden";
+            }
+        }
+        // sets and logs new speed variable along with changing background color and indicator
+        localStorage.setItem("SnakeSpeed", Speed);
+        document.getElementById("Speedrange").innerHTML = Speed;
+        SpeedDial();
+    }
+    // close tab linked to escape key
+    window.onkeyup = function(event) {
+            if (event.keyCode == 27) {
+                window.close();
+            }
+        }
+        // onclick event button that turns on apple movement, updates it in computer, and changes visibility of buttons and color of background
+    function Appleon() {
+        Apple = 1;
+        localStorage.setItem("AppleMove", Apple);
+        document.getElementById("Appleonoroff").innerHTML = "On";
+        document.getElementById("Apples").style.backgroundColor = "rgb( 255, 25, 5)";
+        document.getElementById("AppleON").style.visibility = "hidden";
+        document.getElementById("AppleOFF").style.visibility = "visible";
+    }
+    //onclick event button that turns apple movement off, updates it in the computer, and changes visibility of buttons and color fo background
+    function Appleoff() {
+        Apple = 0;
+        localStorage.setItem("AppleMove", Apple);
+        document.getElementById("Appleonoroff").innerHTML = "Off";
+        document.getElementById("Apples").style.backgroundColor = "rgb( 0, 235, 24)";
+        document.getElementById("AppleOFF").style.visibility = "hidden";
+        document.getElementById("AppleON").style.visibility = "visible";
+    }
+    // onclick event button that turns questions on, updates it in the computer, and changes visibility of buttons and background color changes 
+    function Questionson() {
+        Questions = 1;
+        localStorage.setItem("Questionsoof", Questions);
+        document.getElementById("Questionsonoroff").innerHTML = "On";
+        document.getElementById("Questions").style.backgroundColor = "rgb( 0, 235, 24)";
+        document.getElementById("QuestionsON").style.visibility = "hidden";
+        document.getElementById("QuestionsOFF").style.visibility = "visible";
+    }
+    //onclick event button that turns the questions off, updates it in the computer, along with changing visibility of the buttons and changing the bakground colors
+    function Questionsoff() {
+        Questions = 0;
+        localStorage.setItem("Questionsoof", Questions);
+        document.getElementById("Questionsonoroff").innerHTML = "Off";
+        document.getElementById("Questions").style.backgroundColor = "rgb( 255, 25, 5)";
+        document.getElementById("QuestionsOFF").style.visibility = "hidden";
+        document.getElementById("QuestionsON").style.visibility = "visible";
+    }
+    // changes the value of the length per apple up
+    function Lengthup() {
+        //prevents it from going above 20
+        if (AppleLengthPer < 20) {
+            // increases value
+            AppleLengthPer += 1;
+            // makes sure that the decrase button is on
+            document.getElementById("LengthDOWN").style.visibility = "visible";
+            // turns off the up button if it equals 20
+            if (AppleLengthPer === 20) {
+                document.getElementById("LengthUP").style.visibility = "hidden";
+            }
+        }
+        // updates new variable and background color
+        localStorage.setItem("AppleLengthPerApple", AppleLengthPer);
+        document.getElementById("AppleLength").innerHTML = AppleLengthPer;
+        ColorGraident();
+    }
+    // changes the value of the length per apple down
+    function Lengthdown() {
+        //prevents it from going below 0
+        if (AppleLengthPer > 0) {
+            // decreases value
+            AppleLengthPer -= 1;
+            //makes sure the up button is on
+            document.getElementById("LengthUP").style.visibility = "visible";
+            // turns off the down button if it equals 0
+            if (AppleLengthPer === 0)
+                document.getElementById("LengthDOWN").style.visibility = "hidden";
+        }
+        // updates new variable and background color
+        localStorage.setItem("AppleLengthPerApple", AppleLengthPer);
+        document.getElementById("AppleLength").innerHTML = AppleLengthPer;
+        ColorGraident();
+    }
+    // makes everything in the startign page invisible
+    function StartPageOff() {
+        document.getElementById("Title").style.visibility = "hidden";
+        document.getElementById("Createdby").style.visibility = "hidden";
+        document.getElementById("Line1").style.visibility = "hidden";
+        document.getElementById("Line2").style.visibility = "hidden";
+        document.getElementById("Credits").style.visibility = "hidden";
+        document.getElementById("How").style.visibility = "hidden";
+        document.getElementById("Instruction").style.visibility = "hidden";
+        document.getElementById("Table").style.visibility = "hidden"
+        document.getElementById("StartButton").style.visibility = "hidden";
+
+    }
+    // makes everything in the setttings page visible and checks to see which buttons need to be turned off
+    function SettingPageOn() {
+        document.getElementById("SpeedUP").style.visibility = "visible";
+        document.getElementById("SpeedDOWN").style.visibility = "visible";
+        document.getElementById("AppleON").style.visibility = "visible";
+        document.getElementById("AppleOFF").style.visibility = "visible";
+        document.getElementById("QuestionsON").style.visibility = "visible";
+        document.getElementById("QuestionsOFF").style.visibility = "visible";
+        document.getElementById("Speedrange").style.visibility = "visible";
+        document.getElementById("Appleonoroff").style.visibility = "visible"
+        document.getElementById("Questionsonoroff").style.visibility = "visible";
+        document.getElementById("LengthUP").style.visibility = "visible";
+        document.getElementById("LengthDOWN").style.visibility = "visible"
+        document.getElementById("AppleLength").style.visibility = "visible";
+        document.getElementById("SettingTable").style.visibility = "visible";
+        if (Apple === 0) {
+            document.getElementById("AppleOFF").style.visibility = "hidden";
+            document.getElementById("AppleON").style.visibility = "visible";
+        } else if (Apple == 1) {
+            document.getElementById("AppleON").style.visibility = "hidden";
+            document.getElementById("AppleOFF").style.visibility = "visible";
+        }
+        if (Questions === 1) {
+            document.getElementById("QuestionsON").style.visibility = "hidden";
+            document.getElementById("QuestionsOFF").style.visibility = "visible";
+        } else if (Questions === 0) {
+            document.getElementById("QuestionsON").style.visibility = "visible"
+            document.getElementById("QuestionsOFF").style.visibility = "hidden";
+        }
+        if (AppleLengthPer === 0) {
+            document.getElementById("LengthDOWN").style.visibility = "hidden"
+            document.getElementById("LengthUP").style.visibility = "visible";
+        } else if (AppleLengthPer === 20) {
+            document.getElementById("LengthUP").style.visibility = "hidden";
+            document.getElementById("LengthDOWN").style.visibility = "visible";
+        }
+        if (Speed === 1) {
+            document.getElementById("SpeedDOWN").style.visibility = "hidden";
+            document.getElementById("SpeedUP").style.visibility = "visible";
+        } else if (Speed === 8) {
+            document.getElementById("SpeedDOWN").style.visibility = "visible";
+            document.getElementById("SpeedUP").style.visibility = "hidden";
+        }
+    }
+    // makes everything in the settings page invisible
+    function SettingPageOff() {
+        document.getElementById("SpeedUP").style.visibility = "hidden";
+        document.getElementById("SpeedDOWN").style.visibility = "hidden";
+        document.getElementById("AppleON").style.visibility = "hidden";
+        document.getElementById("AppleOFF").style.visibility = "hidden";
+        document.getElementById("QuestionsON").style.visibility = "hidden";
+        document.getElementById("QuestionsOFF").style.visibility = "hidden";
+        document.getElementById("Speedrange").style.visibility = "hidden";
+        document.getElementById("Appleonoroff").style.visibility = "hidden"
+        document.getElementById("Questionsonoroff").style.visibility = "hidden";
+        document.getElementById("LengthUP").style.visibility = "hidden";
+        document.getElementById("LengthDOWN").style.visibility = "hidden"
+        document.getElementById("AppleLength").style.visibility = "hidden";
+        document.getElementById("SettingTable").style.visibility = "hidden";
+    }
+    // makes everything in the starting page visible
+    function StartPageOn() {
+        document.getElementById("Title").style.visibility = "visible";
+        document.getElementById("Createdby").style.visibility = "visible";
+        document.getElementById("Line1").style.visibility = "visible";
+        document.getElementById("Line2").style.visibility = "visible";
+        document.getElementById("Credits").style.visibility = "visible";
+        document.getElementById("How").style.visibility = "visible";
+        document.getElementById("Instruction").style.visibility = "visible";
+        document.getElementById("Table").style.visibility = "visible"
+        document.getElementById("StartButton").style.visibility = "visible";
+
+    }
+    //function linked to the settings image
+    function settingspage() {
+        // checks to see if the start page is on or off
+        // if its on then it turns it off and turns on the settings page
+        if (a === 0) {
+            StartPageOff();
+            SettingPageOn();
+            a = 1;
+        }
+        // if its off then it turns the settings page off and the start page back on
+        else if (a === 1) {
+            SettingPageOff();
+            StartPageOn();
+            LogColor();
+            a = 0;
+        }
+    }
+</script>
+</body>
+
+</html>

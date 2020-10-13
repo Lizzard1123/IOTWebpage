@@ -1,6 +1,7 @@
 const loader = document.getElementById("loadingg");
 const allButtons = ["deskLampButton", "bedLampButton"];
 const allLampObj = ["desk", "bed"];
+
 const deskLamp = {
     name: "desk",
     HTMLnode: document.getElementsByName("deskLampButton")[0],

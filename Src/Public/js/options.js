@@ -20,8 +20,8 @@ let custom;
 const normal = ['true', 'true', 'true', 'true', 'true', 'true', 'false', 'true', 'true'];
 const slider = document.getElementById('switcherselector');
 const switches = document.getElementsByClassName('switchpages');
-const titles = ['content one', 'content two', 'Home', 'Lamps', 'TODO'];
-const pagelink = ['content_1', 'content_2', 'Home', 'Lamps', 'ToDo'];
+const titles = ['Extra', 'content one', 'Home', 'Lamps', 'TODO'];
+const pagelink = ['Extra', 'content_1', 'Home', 'Lamps', 'ToDo'];
 const numberofpages = titles.length;
 const maxdivbox = 100 / numberofpages;
 

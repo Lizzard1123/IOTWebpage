@@ -1,8 +1,9 @@
 {
     "Public": {
-        "name": "Ethan"
+        "name": "Ethan",
+        "securityLevel": "admin"
     },
     "Private": {
-        "password": "$2b$12$51rQM/a4IsM6.xIz6pmtX.twRW5Xerxwl3ezUYfr.nkPJR6SN9vSy"
+        "password": "$2b$12$vzT/hYcw6ZvRDCsL31sUWewWepSIMSiaTCld78Gsn2WkcnbGGHGda"
     }
 }

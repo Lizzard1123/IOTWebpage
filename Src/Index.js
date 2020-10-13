@@ -14,9 +14,7 @@ const __dirname = path.resolve();
 const port = 3000;
 const app = express();
 const Keys = JSON.parse(fs.readFileSync('./Private/codes.json', 'utf8'));
-
 checkDaily(__dirname);
-
 app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -27,7 +25,7 @@ app.use('/privatestatic', [(err, req, res, next) => {
 app.use('/publicstatic', express.static('public'));
 
 function error(res, errorthing = 'default') {
-    console.log('error message lolzies fuck you');
+    console.log('error message lolzies  you');
     console.log(errorthing);
     record('Error', errorthing, 2);
     return res.sendStatus(401).end();
@@ -69,6 +67,37 @@ app.get('/home', (req, res, next) => {
     res.sendFile(path.join(__dirname, 'Main.html'));
 });
 
+app.post('/createAccount', (req, res, next) => {
+    console.log(req.body)
+    console.log('Authenticating with whitelist');
+    // request to login
+    // check validity again through whitelist
+    if (!validator.isWhitelisted(req.body.password, Keys.whitelist)) {
+        record('Invalid Characters on backend from account', req.connection.remoteAddress, 5);
+        console.log('invalid characters on createaccount');
+        error(res, 'validator account ');
+    } else {
+        next();
+    }
+}, (req, res) => {
+    let bcryptPassword = bcrypt.hashSync(req.body.password, 12);
+    console.log('Creating user');
+    fs.writeFile(`${__dirname}\\users\\${req.body.name}.json`, JSON.stringify({
+        "Public": {
+            "name": req.body.name,
+            "securityLevel": "stranger"
+        },
+        "Private": {
+            "password": bcryptPassword
+        }
+    }), (err) => {
+        if (err) {
+            console.log(err);
+            return;
+        }
+        console.log('Done writing user'); // Success
+    });
+});
 app.post('/login',
     (req, res, next) => {
         console.log('Authenticating with whitelist');
@@ -93,9 +122,10 @@ app.post('/login',
                     console.log('read err no file present');
                     error(res, err);
                 }
+                console.log(req.body.Name);
                 // there is a file for user parse it
                 const filedata = JSON.parse(data);
-                console.log(`user: ${filedata}`);
+                console.log(filedata);
                 // engrypt and compare paswword and check with user file
                 bcrypt.compare(req.body.Password, filedata.Private.password, (err, result) => {
                     if (err) {
@@ -104,17 +134,15 @@ app.post('/login',
                         error(res, err);
                     }
                     // result is true if password is the same
+                    console.log(result);
                     if (result) {
                         // same password
                         record('logging in', req.connection.remoteAddress, 3);
                         console.log('Bcrtpy same password');
                         // create jwt
-                        const token = jwt.sign({
-                            securitylevel: 'admin',
-                            name: req.body.Name,
-                        }, Keys.secretkey, {
-                            expiresIn: '30min',
-                        });
+                        console.log("attached");
+                        console.log(filedata.Public);
+                        const token = jwt.sign(filedata.Public, Keys.secretkey, { expiresIn: '30min', });
                         // set authorization cookie with jwt
                         res.cookie('token', token, {
                             // ms
@@ -130,7 +158,7 @@ app.post('/login',
                     } else {
                         // incorrect password
                         record('Failed login from', req.connection.remoteAddress, 3);
-                        record('password attempt', req.body.Password, 3);
+                        //record('password attempt', req.body.Password, 3);
                         console.log('not right');
                         return res.json({
                             message: 'error',

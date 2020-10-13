@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!-- Web Title -->
+    <title>Text to ASL</title>
+    <!-- css -->
+    <style>
+        body {
+            font-family: Calibri;
+        }
+        
+        div {
+            text-align: center;
+        }
+        
+        #background {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            left: 0px;
+            top: 0px;
+        }
+        
+        #whole {
+            z-index: 1;
+            position: absolute;
+            left: 12.5%;
+            top: 0%;
+            background-color: #2f709c;
+            width: 75%;
+            height: 210%;
+            border: 10px solid black;
+            border-style: none solid;
+        }
+        
+        #header {
+            color: black;
+            font-size: 115%;
+        }
+        
+        #title-line {
+            background-color: black;
+            width: 85%;
+            border: 5px solid black;
+            border-radius: 5px;
+        }
+        
+        #text {
+            height: 40px;
+            width: 45%;
+            background-color: #b5d9ff;
+            border: 5px solid black;
+            border-radius: 40px;
+            font-size: 140%;
+            text-align: center;
+        }
+        
+        #picture {
+            position: relative;
+            top: -230px;
+            width: 100%;
+        }
+        
+        #picture img {
+            border: 5px solid black;
+            border-radius: 20px;
+            height: 300px;
+            width: 350px;
+        }
+        
+        #info-Title {
+            display: block;
+            position: relative;
+            top: -50px;
+        }
+        
+        button {
+            text-align: center;
+            background-color: #b5d9ff;
+            border: 4px solid black;
+            border-radius: 20px;
+            color: black;
+        }
+        
+        #LeftButton {
+            position: relative;
+            top: 66px;
+            left: -175px;
+            cursor: pointer;
+        }
+        
+        #RightButton {
+            position: relative;
+            bottom: 66px;
+            right: -175px;
+            cursor: pointer;
+        }
+        
+        #info {
+            position: relative;
+            top: -110px;
+        }
+        
+        #input {
+            position: relative;
+            top: -250px;
+        }
+        
+        #play {
+            position: relative;
+            width: 100px;
+            top: -220px;
+            left: 50px;
+            cursor: pointer;
+            visibility: visible;
+        }
+        
+        #pause {
+            position: relative;
+            width: 100px;
+            top: -220px;
+            right: 53px;
+            cursor: pointer;
+            visibility: hidden;
+        }
+        
+        .arrow {
+            display: inline-block;
+            width: 0px;
+            height: 0px;
+            border-top: 50px solid transparent;
+            border-bottom: 50px solid transparent;
+        }
+        
+        #stepLeft {
+            position: relative;
+            top: -100px;
+            left: -10px;
+            border-right: 35px solid black;
+            cursor: pointer;
+            visibility: visible;
+        }
+        
+        #stepRight {
+            position: relative;
+            top: -100px;
+            right: -10px;
+            border-left: 35px solid black;
+            cursor: pointer;
+            visibility: visible;
+        }
+        
+        #speed {
+            position: relative;
+            -webkit-appearance: none;
+            top: -190px;
+            width: 400px;
+            height: 20px;
+            background-color: #b5d9ff;
+            border: 5px solid black;
+            border-radius: 10px;
+            visibility: hidden;
+        }
+        
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            border: 5px solid black;
+            height: 50px;
+            width: 50px;
+            border-radius: 25px;
+            background: #b5d9ff;
+            cursor: pointer;
+        }
+        
+        .content {
+            position: relative;
+            font-size: 18px;
+            left: 10%;
+            width: 80%;
+        }
+        
+        #howtodes {
+            visibility: visible;
+        }
+        
+        #aboutdes {
+            visibility: hidden;
+            top: -150px;
+        }
+        
+        #creditdes {
+            visibility: hidden;
+            top: -220px;
+            line-height: 8px;
+        }
+        
+        .cover {
+            display: inline-block;
+            width: 100px;
+            height: 100px;
+            z-index: 1;
+        }
+        
+        #leftone {
+            position: relative;
+            top: -100px;
+            left: 40px;
+        }
+        
+        #rightone {
+            position: relative;
+            top: -100px;
+            right: 40px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Fixed Background  -->
+    <div>
+        <img id="background" src="https://images.wallpaperscraft.com/image/leaves_texture_patterns_130419_1366x768.jpg">
+    </div>
+    <!-- Content Center -->
+    <div id="whole">
+        <!-- Title -->
+        <div id="header">
+            <h1>Text to American Sign Language</h1>
+        </div>
+        <hr id="title-line">
+        <!-- Holds the buttons and facts title -->
+        <div id="info-Title">
+            <button id="LeftButton" onclick=leftscroll()><h2>⮜</h2></button>
+            <h3 id="Facts">How To Use</h3>
+            <button id="RightButton" onclick=rightscroll()><h2>⮞</h2></button>
+        </div>
+        <!-- Holds the content of the facts and buttons -->
+        <div id="info">
+            <p id="contentbox">
+                <!-- How to description -->
+                <p class="content" id="howtodes">Simply type in the sentence below without any punctuation or numbers. Only insert letters into the converter. Once the sentence has been inserted, press enter and click out of the area. The starting image will pop up. From that point,
+                    click on the left and right arrows around the picture to increment the sequence by one forward or backward. The other option is to press the play button below the image. This will move the sequence forward on a timer. Move the slider
+                    bar to the left to slow the process down, or to the right to speed it up. </p>
+                <!-- About description -->
+                <div class="content" id="aboutdes">
+                    <p>This translator only supports letters. The translator spells out the phrase given to it in sign language and does not recognize words.</p>
+                </div>
+                <!-- Credit description -->
+                <div class="content" id="creditdes">
+                    <h3>Website references</h3>
+                    <h5>The owner of this website gave me permission to use the photos of the man with the hand signals. Check them out!</h5>
+                    <a href="http://www.signlanguage101.com/"> Sign Language 101</a> </br>
+                    <h5>This website provides facts and instructions about sign language and how to begin learning.</h5>
+                    <a href="https://www.startasl.com/american-sign-language/"> Start ASL</a>
+                </div>
+        </div>
+        <!-- The input box -->
+        <div id="input">
+            <h3>Input Text here!</h3>
+            <input type="text" placeholder="Example: Hello" id="text" onchange=changeup()></input>
+        </div>
+        <!-- Holds the picture, picture buttons, and the hitboxes -->
+        <div id="picture">
+            <div class="cover" id="leftone" onclick=slideleft()></div>
+            <div class="arrow" id="stepLeft"></div>
+            <img id="signimg" src="https://codehs.com/uploads/1003d3424c3a11ef476410b60203233b">
+            <div class="arrow" id="stepRight"></div>
+            <div class="cover" id="rightone" onclick=slideright()></div>
+            <h2 id="word">Enter To Begin!</h2>
+        </div>
+        <!-- Holds the play and pause button -->
+        <div id="play-pause">
+            <button id="play" onclick=change()><h1>⯈</h1></button>
+            <button id="pause" onclick=change()><h1>❚❚</h1></button>
+        </div>
+        <!-- Holds the slider bar -->
+        <div id="speedarea">
+            <input type="range" min="1000" max="10000" value="5500" id="speed" onchange="switchspeed()">
+        </div>
+    </div>
+    <!-- Javascript -->
+    <script>
+        /*variables for elements in html portion*/
+        var play = document.getElementById("play");
+        var pause = document.getElementById("pause");
+        var speed = document.getElementById("speed");
+        var alltimer = window.setInterval(doornotdo, speed.value);
+        var stepLeft = document.getElementById("stepLeft");
+        var stepRight = document.getElementById("stepRight");
+        var facts = document.getElementById("Facts");
+        var contentbox = document.getElementById("contentbox");
+        var howtodes = document.getElementById("howtodes");
+        var aboutdes = document.getElementById("aboutdes");
+        var creditdes = document.getElementById("creditdes");
+        var signimg = document.getElementById("signimg");
+        var word = document.getElementById("word");
+        /*variables for other uses*/
+        var playvisible = true;
+        var incrimenttimer = false;
+        var titles = ["How To Use", "About", "Credits"];
+        var current = 0;
+        var speedval = speed.value;
+        var pictures = [
+            "https://codehs.com/uploads/29c629dc5889b735b542e977a3f2d631",
+            "https://codehs.com/uploads/b3d6c728b6eb9aa22eeedb9774ad50e7",
+            "https://codehs.com/uploads/92ac5b34f2c910c358f525fd2346ddb8",
+            "https://codehs.com/uploads/4a90f524664a68913f1b69035a86235e",
+            "https://codehs.com/uploads/98b27289f248bcbf37240240ada2fa38",
+            "https://codehs.com/uploads/36872a8176cc05b8a9352354be78df3a",
+            "https://codehs.com/uploads/f0f6f42ed529f6dffaa6c52dde7ff866",
+            "https://codehs.com/uploads/b4736de1bd2f9e0547e369a2ebb26afb",
+            "https://codehs.com/uploads/e7d83ed65bd256f63c0f2785e053f65c",
+            "https://codehs.com/uploads/62bfa342cf7e32e352a88be634079620",
+            "https://codehs.com/uploads/7b367074556a1690727d9865db992bb5",
+            "https://codehs.com/uploads/f7478a9d9055046126dfd3de2555af3a",
+            "https://codehs.com/uploads/24ddd373de8cc1797e821c8d1505d156",
+            "https://codehs.com/uploads/0708d51401d689b84a1e895fbb87df6d",
+            "https://codehs.com/uploads/6e5f7ccfd19e7e5e62c368b9b489eddf",
+            "https://codehs.com/uploads/fddac425ed1aa862346a953f44f05d9f",
+            "https://codehs.com/uploads/dbbcbb8f2bcb45662ce539abc865a77f",
+            "https://codehs.com/uploads/6d53257b4a00a1cebf0b83d17813fb8e",
+            "https://codehs.com/uploads/eb2d296e9e1c624519163e32f38a2e94",
+            "https://codehs.com/uploads/dfdce10bcb0577a0a20b70914e0dfb59",
+            "https://codehs.com/uploads/8411f48f7c53b0f03b46dcc749eb27ff",
+            "https://codehs.com/uploads/c7c44bb1d7a12877c792bb98b1ad7145",
+            "https://codehs.com/uploads/0462d02e82c2c7bd47168053d3b2f988",
+            "https://codehs.com/uploads/a0e1c9c7fbacb73e32426b6bf6ea4521",
+            "https://codehs.com/uploads/c1dd4e82d1f886c774cb13ac3b3dc764",
+            "https://codehs.com/uploads/e0fd745fcfe31e3c462911be1cb0b2aa",
+            "https://codehs.com/uploads/7c335e307d6e7f7e424a4771b7972e38",
+            "https://codehs.com/uploads/c189f0271ab9ebd1070eb16d83c73383",
+            "https://codehs.com/uploads/87de3fea7f8b7616433bd7d6d1cf98f0",
+            "https://codehs.com/uploads/d252edb361d9fe161a8cfe1ea504244c",
+
+        ];
+        var translations = [
+            "Begin",
+            "End",
+            "a",
+            "b",
+            "c",
+            "d",
+            "e",
+            "f",
+            "g",
+            "h",
+            "i",
+            "j",
+            "k",
+            "l",
+            "m",
+            "n",
+            "o",
+            "p",
+            "q",
+            "r",
+            "s",
+            "t",
+            "u",
+            "v",
+            "w",
+            "x",
+            "y",
+            "z",
+            "NOT FOUND",
+            " ",
+        ];
+        var presentation = [];
+        var presentationcurrent = 0;
+        /*
+        changes play and pause button settings 
+        for visibility based on what is on 
+        */
+        function change() {
+            if (playvisible) {
+                /*Play*/
+                play.style.visibility = "hidden";
+                pause.style.visibility = "visible";
+                speed.style.visibility = "visible";
+                stepLeft.style.visibility = "hidden";
+                stepRight.style.visibility = "hidden";
+                playvisible = !playvisible
+                incrimenttimer = true;
+            } else {
+                /*pause*/
+                play.style.visibility = "visible";
+                pause.style.visibility = "hidden";
+                speed.style.visibility = "hidden";
+                stepLeft.style.visibility = "visible";
+                stepRight.style.visibility = "visible";
+                playvisible = !playvisible;
+                incrimenttimer = false;
+            }
+        }
+        /*
+        timer function 
+        checks to see if the picture 
+        needs to be incrimented forward
+        */
+        function doornotdo() {
+            if (incrimenttimer) {
+                slideright();
+            }
+        }
+        /*
+        clears and updates the timer with the new speed
+        changes whenever the slider is changed
+        */
+        function switchspeed() {
+            window.clearInterval(alltimer);
+            alltimer = window.setInterval(doornotdo, speed.value);
+        }
+        /*changes the descriptions of the content descriptions*/
+        function changeinfo() {
+            switch (current) {
+                case 0:
+                    howtodes.style.visibility = "visible";
+                    aboutdes.style.visibility = "hidden";
+                    creditdes.style.visibility = "hidden";
+                    break;
+                case 1:
+                    howtodes.style.visibility = "hidden";
+                    aboutdes.style.visibility = "visible";
+                    creditdes.style.visibility = "hidden";
+                    break;
+                case 2:
+                    howtodes.style.visibility = "hidden";
+                    aboutdes.style.visibility = "hidden";
+                    creditdes.style.visibility = "visible";
+                    break;
+            }
+        }
+
+        /*
+        checks to see the direction the number is heading
+        if id is at its end then it rolls to the opposite side
+        if not then it decreses or increases the current number
+        */
+        function scroll(number, direction) {
+            if (direction == "forwards") {
+                if (current == 2) {
+                    current = 0;
+                } else {
+                    current++;
+                }
+            } else if (direction == "backwards") {
+                if (number == 0) {
+                    current = 2;
+                } else {
+                    current--;
+                }
+            }
+        }
+
+        function leftscroll() {
+            scroll(current, "backwards");
+            facts.innerHTML = titles[current];
+            changeinfo();
+        }
+        /*
+        gets the direction of the current number 
+        then it changes the description and title
+        */
+        function rightscroll() {
+            scroll(current, "forwards");
+            facts.innerHTML = titles[current];
+            changeinfo();
+        }
+        /*
+        changes the current picture and picture description
+        given the index number
+        */
+        function changepic(number) {
+            signimg.src = pictures[number];
+            word.innerHTML = translations[number];
+        }
+        /*
+        checks to see if the presentation is not at the beggining and that there is an array
+        if so then it decreses the current presentation picture
+        then it changes the picture and presntation index
+        */
+        function slideleft() {
+            if (presentation.length != 0) {
+                if (presentationcurrent > 0) {
+                    presentationcurrent--;
+                }
+                changepic(presentation[presentationcurrent]);
+            }
+        }
+        /*
+        checks to see if the presentation is not at the end and that there is an array
+        if so then it increases the current presentation picture
+        then it changes the picture and presntation index
+        */
+        function slideright() {
+            if (presentation.length != 0) {
+                if (presentationcurrent < presentation.length - 1) {
+                    presentationcurrent++;
+                } else {
+                    incrimenttimer = false;
+                }
+                changepic(presentation[presentationcurrent]);
+            }
+        }
+        /*
+        gets the text from the input box 
+        formats it into all lowercase
+        turns it into an array with each letter
+        */
+        function findtext() {
+            var text = document.getElementById("text").value;
+            var text = text.toLowerCase();
+            var textarray = text.split("");
+            return textarray;
+        }
+        /*
+        empties the presentation
+        sets the index at 0
+        adds the beginning slide
+        translates from the text into a sequence of picture indexes
+        adds the ending slide
+        starts the presentation
+        */
+        function changeup() {
+            presentation = [];
+            presentationcurrent = 0;
+            var textarray = findtext();
+            presentation.push(0);
+            for (var e = 0; e < textarray.length; e++) {
+                if (translations.includes(textarray[e])) {
+                    presentation.push(translations.indexOf(textarray[e]));
+                } else {
+                    presentation.push(translations.indexOf("NOT FOUND"));
+                }
+            }
+            presentation.push(1);
+            changepic(presentation[presentationcurrent]);
+        }
+    </script>
+</body>
+
+</html>

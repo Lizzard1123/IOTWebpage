@@ -1,0 +1,1639 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>FBLA Trivia (Snake Game)</title>
+    <style>
+        /* CSS is used to make everything prettier and style it in different ways */
+        /* Changes height and margins of the body */
+        
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+        }
+        /* changes background color*/
+        
+        body {
+            background-color: rgb(0, 125, 0);
+            display: flex;
+        }
+        /* styles the canvas */
+        
+        Canvas {
+            position: absolute;
+            right: 0px;
+            z-index: -1;
+            border: 2px solid black;
+            Background-color: White;
+            height: 99.5%;
+            width: 93.5%;
+        }
+        /* styles the scoreboard's data cell with the score on top left */
+        
+        #demo {
+            align-items: center;
+            justify-content: center;
+            height: 6%;
+            width: 6%;
+            border: 2px solid black;
+        }
+        /* changes and styles the up button */
+        
+        #up {
+            position: absolute;
+            left: 0px;
+            bottom: 1%;
+            height: 5%;
+            width: 6%;
+            text-align: center;
+            font-size: 100%;
+            background-color: black;
+            color: white;
+        }
+        /* changes and styles the left button */
+        
+        #left {
+            position: absolute;
+            left: 0px;
+            bottom: 6.5%;
+            height: 5%;
+            width: 6%;
+            text-align: center;
+            font-size: 100%;
+            background-color: black;
+            color: white;
+        }
+        /* changes and styles the right button*/
+        
+        #right {
+            position: absolute;
+            left: 0px;
+            bottom: 12%;
+            height: 5%;
+            width: 6%;
+            text-align: center;
+            font-size: 100%;
+            background-color: black;
+            color: white;
+        }
+        /* changes and styles the down button */
+        
+        #down {
+            position: absolute;
+            left: 0px;
+            bottom: 17.5%;
+            height: 5%;
+            width: 6%;
+            text-align: center;
+            font-size: 100%;
+            background-color: black;
+            color: white;
+        }
+        /* styles the table with the score on the top left*/
+        
+        #table {
+            text-align: center;
+            color: black;
+            background-color: blue;
+            border: 2px solid black;
+            height: 6%;
+            width: 5.75%;
+        }
+        /* first heart style*/
+        
+        #life1 {
+            visibility: visible;
+            height: 7.5%;
+            width: 6%;
+            position: absolute;
+            bottom: 25%;
+        }
+        /* 2nd heart style*/
+        
+        #life2 {
+            visibility: visible;
+            height: 7.5%;
+            width: 6%;
+            position: absolute;
+            bottom: 35%;
+        }
+        /*3rd heart style*/
+        
+        #life3 {
+            visibility: visible;
+            height: 7.5%;
+            width: 6%;
+            position: absolute;
+            bottom: 45%;
+        }
+        /*4th heart style */
+        
+        #life4 {
+            visibility: visible;
+            height: 7.5%;
+            width: 6%;
+            position: absolute;
+            bottom: 55%;
+        }
+        /*5th heart style */
+        
+        #life5 {
+            visibility: visible;
+            height: 7.5%;
+            width: 6%;
+            position: absolute;
+            bottom: 65%;
+        }
+        /* first regen point rectangle */
+        
+        #regen1 {
+            background-color: red;
+            visibility: hidden;
+            height: 1.75%;
+            width: 6%;
+            position: absolute;
+            bottom: 82%;
+        }
+        /* second regen point rectangle */
+        
+        #regen2 {
+            background-color: red;
+            visibility: hidden;
+            height: 1.75%;
+            width: 6%;
+            position: absolute;
+            bottom: 80%;
+        }
+        /* third regen point*/
+        
+        #regen3 {
+            background-color: red;
+            visibility: hidden;
+            height: 1.75%;
+            width: 6%;
+            position: absolute;
+            bottom: 78%;
+        }
+        /* blue box that holds the questions and answer */
+        
+        #Box {
+            position: absolute;
+            bottom: 50%;
+            left: 7%;
+            z-index: -1;
+            visibility: hidden;
+        }
+        /* question that appears in the box */
+        
+        #Qt {
+            position: absolute;
+            left: 10%;
+            bottom: 68.5%;
+            color: White;
+            font-size: 200%;
+            visibility: hidden;
+        }
+        /* the first green button */
+        
+        #Btn1 {
+            position: absolute;
+            left: 10%;
+            bottom: 55%;
+            color: Black;
+            font-size: 100%;
+            visibility: hidden;
+        }
+        /* second green button */
+        
+        #Btn2 {
+            position: absolute;
+            left: 33%;
+            bottom: 55%;
+            color: Black;
+            font-size: 100%;
+            visibility: hidden;
+        }
+        /* third green button */
+        
+        #Btn3 {
+            position: absolute;
+            left: 56%;
+            bottom: 55%;
+            color: Black;
+            font-size: 100%;
+            visibility: hidden;
+        }
+        /* fourth green button*/
+        
+        #Btn4 {
+            position: absolute;
+            left: 79%;
+            bottom: 55%;
+            color: Black;
+            font-size: 100%;
+            visibility: hidden;
+        }
+        /* first answer box*/
+        
+        #Qt1 {
+            position: absolute;
+            left: 10.5%;
+            bottom: 55.75%;
+            color: White;
+            font-size: 100%;
+            max-width: 15%;
+            max-height: 7%;
+        }
+        /* second answer box */
+        
+        #Qt2 {
+            position: absolute;
+            left: 33.5%;
+            bottom: 55.75%;
+            color: White;
+            font-size: 100%;
+            max-width: 15%;
+            max-height: 7%;
+        }
+        /* third answer box */
+        
+        #Qt3 {
+            position: absolute;
+            left: 56.5%;
+            bottom: 55.75%;
+            color: White;
+            font-size: 100%;
+            max-width: 15%;
+            max-height: 7%;
+        }
+        /* fourth answer box*/
+        
+        #Qt4 {
+            position: absolute;
+            left: 79.5%;
+            bottom: 55.75%;
+            color: White;
+            font-size: 100%;
+            max-width: 15%;
+            max-height: 7%;
+        }
+        /* correct text*/
+        
+        #Cor {
+            position: absolute;
+            left: 33%;
+            bottom: 50%;
+            color: Green;
+            font-size: 800%;
+            visibility: hidden;
+        }
+        /* incorrect text*/
+        
+        #Inc {
+            position: absolute;
+            left: 33%;
+            bottom: 50%;
+            color: red;
+            font-size: 800%;
+            visibility: hidden;
+        }
+        /* pause text */
+        
+        #Pause {
+            Position: absolute;
+            left: 25%;
+            bottom: 45%;
+            Color: Black;
+            font-size: 800%;
+            visibility: hidden;
+        }
+        /* timer text (1)*/
+        
+        #Timer1 {
+            position: absolute;
+            Left: 50%;
+            Bottom: 46%;
+            Color: black;
+            font-size: 400%;
+            visibility: hidden;
+        }
+        /* timer text (2)*/
+        
+        #Timer2 {
+            position: absolute;
+            Left: 50%;
+            Bottom: 46%;
+            Color: black;
+            font-size: 400%;
+            visibility: hidden;
+        }
+        /* timer text (3)*/
+        
+        #Timer3 {
+            position: absolute;
+            Left: 50%;
+            Bottom: 46%;
+            Color: black;
+            font-size: 400%;
+            visibility: hidden;
+        }
+    </style>
+</head>
+<!-- starts the start function when the page loads -->
+
+<body onload="Startgame()" id="Body">
+    <!-- functions for the move buttons -->
+    <script>
+        var move = 0;
+
+        function upmove() {
+            move = 1;
+        }
+
+        function downmove() {
+            move = 2;
+        }
+
+        function leftmove() {
+            move = 3;
+        }
+
+        function rightmove() {
+            move = 4;
+        }
+    </script>
+    <!-- #1 regen point -->
+    <div id="regen1"></div>
+    <!-- #2 regen point -->
+    <div id="regen2"></div>
+    <!-- #3 regen point -->
+    <div id="regen3"></div>
+    <!-- up button -->
+    <button id="up" onclick="upmove()">UP</button>
+    <!-- left button -->
+    <button id="left" onclick="leftmove()">Left</button>
+    <!-- right button -->
+    <button id="right" onclick="rightmove()">Right</button>
+    <!-- down button -->
+    <button id="down" onclick="downmove()">Down</button>
+    <!-- first heart -->
+    <img id="life1" src="https://codehs.com/uploads/a0a755c0a05c8454eda291a2826bcb10">
+    <!-- second heart -->
+    <img id="life2" src="https://codehs.com/uploads/a0a755c0a05c8454eda291a2826bcb10">
+    <!-- third heart -->
+    <img id="life3" src="https://codehs.com/uploads/a0a755c0a05c8454eda291a2826bcb10">
+    <!-- fourth heart -->
+    <img id="life4" src="https://codehs.com/uploads/a0a755c0a05c8454eda291a2826bcb10">
+    <!-- fifth heart -->
+    <img id="life5" src="https://codehs.com/uploads/a0a755c0a05c8454eda291a2826bcb10">
+    <!-- score table -->
+    <table id="table">
+        <!-- title -->
+        <th>Score</th>
+        <!-- current score -->
+        <tr id="demo"></tr>
+        <!-- goal score -->
+        <tr id="win"></tr>
+        <!-- highschore -->
+        <tr id="HSs"></tr>
+    </table>
+    <!-- canvas -->
+    <canvas id="game"></canvas>
+    <!--Big box for questions-->
+    <svg id="Box" width="92%" height="33%">
+<rect height="100%" width="100%" rx="40" ry="40" style="fill:rgb(0,0,255);"></rect>
+</svg>
+    <!--1st answer box-->
+    <svg id="Btn1" width="15%" height="7%">
+<rect height="100%" width="100%" rx="20" ry="20" style="fill:rgb(0, 94, 28);"></rect>
+</svg>
+    <!--2nd answer box-->
+    <svg id="Btn2" width="15%" height="7%">
+<rect height="100%" width="100%" rx="20" ry="20" style="fill:rgb(0, 94, 28);"></rect>
+</svg>
+    <!--3rd answer box-->
+    <svg id="Btn3" width="15%" height="7%">
+<rect height="100%" width="100%" rx="20" ry="20" style="fill:rgb(0, 94, 28);"></rect>
+</svg>
+    <!--4th answer box-->
+    <svg id="Btn4" width="15%" height="7%">
+<rect height="100%" width="100%" rx="20" ry="20" style="fill:rgb(0, 94, 28);"></rect>
+</svg>
+    <!-- question text box -->
+    <h1 id="Qt"></h1>
+    <!-- answer 1 text box -->
+    <h1 id="Qt1"></h1>
+    <!-- answer 2 text box -->
+    <h1 id="Qt2"></h1>
+    <!-- answer 3 text box -->
+    <h1 id="Qt3"></h1>
+    <!-- answer 4 text box -->
+    <h1 id="Qt4"></h1>
+    <!-- correct text box -->
+    <h1 id="Cor"> Correct!</h1>
+    <!-- incorrect text box -->
+    <h1 id="Inc"> Incorrect</h1>
+    <!-- paused text box -->
+    <h1 id="Pause">Game Paused</h1>
+    <!-- #1 coundown text box -->
+    <h1 id="Timer1">1</h1>
+    <!-- #2 countdown text box -->
+    <h1 id="Timer2">2</h1>
+    <!-- 3# countdown text box -->
+    <h1 id="Timer3">3</h1>
+    <script>
+        // variables 
+        // local storage is from the starting page custom colors
+        // canvas color
+        var CanvasColor = localStorage.getItem("Canvascolor");
+        //  background color of buttons 
+        var ButtonColors = localStorage.getItem("ButtonColors");
+        // background color of score board
+        var ScoreColor = localStorage.getItem("ScoreColor");
+        // bonus size default
+        var bonus = 5;
+        // wining size default
+        var winsize = 25;
+        // color scheme 
+        var Scheme = localStorage.getItem("Scheme");
+        // snake color
+        var SC = localStorage.getItem("SnakeColor");
+        // apple color
+        var AC = localStorage.getItem("AppleColor");
+        // background of body color
+        var BC = localStorage.getItem("BackColor");
+        // questions on or off switch imported
+        var Questionson = localStorage.getItem("Questionsoof");
+        // moving apple on or off switch imported
+        var MovingApple = localStorage.getItem("AppleMove");
+        // defines html element to a javascript variable 
+        var canvas = document.getElementById('game');
+        // defines the canvas as 2d and enables it to be drawn on 
+        var context = canvas.getContext('2d');
+        // variable for how many pixels are in a grid space
+        var grid = 20;
+        // snake variable
+        var snake = {
+            //starting x position
+            x: 160,
+            // starting y position
+            y: 160,
+            // x movent
+            dx: 0,
+            // y movement
+            dy: 0,
+            // defines that it can be added onto
+            cells: [],
+            // starting length length gets added into the bracket above at start
+            maxCells: 1
+        };
+        // defines the speed of the loop that runs the snake and everything else important
+        var count = 1;
+        // defines that the apple has an x and y position
+        var apple = {
+            x: 320,
+            y: 320
+        };
+        // easy callback function for getting a random number with a max and min
+        function getRandomInt(min, max) {
+            return Math.floor(Math.random() * (max - min)) + min;
+        }
+        // ugly x grid size 
+        var SizeXl;
+        // ugly y grid size 
+        var SizeYl;
+        // rounded down x grid size
+        var SizeX;
+        // rounded down y grid size
+        var SizeY;
+        // resizes the size of the canvas in accordance to the window size, and finds how many blocks of 20x20px it can fit
+        function resizeCanvas() {
+            var canvs = document.getElementById("game");
+            canvs.width = window.innerWidth;
+            canvs.height = window.innerHeight;
+            SizeXl = (canvs.width / 20);
+            SizeYl = (canvs.height / 20);
+        }
+        // rounds down the x and y grid size
+        function SizeofApple() {
+            SizeX = Math.floor(SizeXl);
+            SizeY = Math.floor(SizeYl);
+        }
+        // function that runs when the page loads
+        function Startgame() {
+            //resizes canvas
+            resizeCanvas();
+            // rounds down grid
+            SizeofApple();
+            alert('Start Game?');
+            //randomizes apple spawn
+            apple.x = getRandomInt(0, SizeX) * grid;
+            apple.y = getRandomInt(0, SizeY) * grid;
+            //adds all questions to the array
+            Add();
+            // randomizes order of questions
+            sort();
+            // sets the snake direction to none in either way
+            snake.dx = 0;
+            snake.dy = 0;
+            // makes snake moving
+            r = 1;
+            // ddetermines how many points you get per apple
+            Lengthper();
+            // direction after question , meaning that you havent moved yet
+            daq = 0;
+            // sets color scheme
+            ColorScheme();
+            // sets custom colors
+            document.getElementById("Body").style.backgroundColor = BC;
+            document.getElementById("table").style.backgroundColor = ScoreColor;
+            document.getElementById("game").style.backgroundColor = CanvasColor;
+            document.getElementById("up").style.backgroundColor = ButtonColors;
+            document.getElementById("left").style.backgroundColor = ButtonColors;
+            document.getElementById("right").style.backgroundColor = ButtonColors;
+            document.getElementById("down").style.backgroundColor = ButtonColors;
+            // determines if there should be a winning size if the questions are on
+            if (Questionson == 1) {
+                document.getElementById("win").innerHTML = winsize;
+            } else if (Questionson == 0) {
+                document.getElementById("win").innerHTML = "Infinite";
+            }
+        }
+        //lifecount set to beginning 
+        var lifecount = 1;
+        // regen cound set to beginning
+        var regencount = 1;
+        // function for whenever the snake dies, basically resets everything 
+        function restart() {
+            alert("Restart Game?");
+            snake.x = 160;
+            snake.y = 160;
+            snake.cells = [];
+            snake.maxCells = 1;
+            snake.dx = 0;
+            snake.dy = 0;
+            apple.x = getRandomInt(0, SizeX) * grid;
+            apple.y = getRandomInt(0, SizeY) * grid;
+            document.getElementById("life1").style.visibility = "visible";
+            document.getElementById("life2").style.visibility = "visible";
+            document.getElementById("life3").style.visibility = "visible";
+            document.getElementById("life4").style.visibility = "visible";
+            document.getElementById("life5").style.visibility = "visible";
+            document.getElementById("regen1").style.visibility = "hidden";
+            document.getElementById("regen2").style.visibility = "hidden";
+            document.getElementById("regen3").style.visibility = "hidden";
+            lifecount = 1;
+            regencount = 1;
+            next = 0;
+            sort();
+            Popoff();
+            r = 1;
+            S = 0
+            Safe = 0;
+            daq = 0;
+        }
+        // makes snake move
+        var r = 1;
+        // remembers which way you were going previously 0 meaning nowhere
+        var daq = 0;
+        // prevents you from moving during a question
+        var Safe = 0;
+        //Questions 
+        var Questions = []
+            // randomizes the questions order
+        function sort() {
+            Questions.sort(function(a, b) {
+                return 0.5 - Math.random()
+            });
+        }
+        //variables for the questions, answer choices, and answer
+        //key 
+        // var Q# = question number and question
+        // var Q#A = answer choice A for same question
+        // var Q#B = answer choice B for same question 
+        // var Q#C = answer choice C for same question 
+        // var Q#D = answer choice D for same question
+        // var AQ# = answer meaning 1 = A, 2 = B, 3 = C, 4 = D
+        // var next is the number question it presents, it goes up as you answer them correctly
+        var next = 0;
+        var Q1 = "What are the official FBLA colors?";
+        var Q1A = "A) Navy Blue, and Gold";
+        var Q1B = "B) Blue, Green, and Black";
+        var AQ1 = 1;
+        var Q2 = "How many members does FBLA have?";
+        var Q2A = "A)230,000 members";
+        var Q2B = "B) 150,000 members";
+        var AQ2 = 1;
+        var Q3 = "What does FCCLA stand for?";
+        var Q3A = "A) Family, career, and community leaders of America.";
+        var Q3B = "B) Family and class conservation leaders of America.";
+        var AQ3 = 1;
+        var Q4 = "What is the purpose of FBLA?";
+        var Q4A = "A) To provide";
+        var Q4B = "B) To not provide";
+        var AQ4 = 1;
+        var Q5 = "The first FBLA State Chapter was?";
+        var Q5A = "A) Florida";
+        var Q5B = "B) Wisconsin";
+        var Q5C = "C) Iowa";
+        var Q5D = "D) Ohio";
+        var AQ5 = 3;
+        var Q6 = "The FBLA_PBL National Center is located where?";
+        var Q6A = "A) Reston, VA";
+        var Q6B = "B) Washington, DC";
+        var Q6C = "C) Baltimore, MD";
+        var Q6D = "D) Arlington, VA";
+        var AQ6 = 1;
+        var Q7 = "When will the term of office begin for a National Officer?";
+        var Q7A = "A) At the close of the National Leadership Conference in which they were elected.";
+        var Q7B = "B) At the beginning of the new school year.";
+        var Q7C = "C) At the beginning of the National Fall Leadership Conferences.";
+        var Q7D = "D) Immediately upon election.";
+        var AQ7 = 1;
+        var Q8 = "In debate, each member has the right to speak __________ on a motion.";
+        var Q8A = "A) twice";
+        var Q8B = "B) once";
+        var Q8C = "C) three times";
+        var Q8D = "D) four times";
+        var AQ8 = 1;
+        var Q9 = "The Parliamentary Procedure Event is named after";
+        var Q9A = "A) Hollis and Kitty Guy";
+        var Q9B = "B) Dorothy L. Travis";
+        var Q9C = "C) Lorraine Missling";
+        var Q9D = "D) Hamden Forkner";
+        var AQ9 = 2;
+        var Q10 = "The Gold Seal Award of Merit is named after";
+        var Q10A = "A) Jean Buckley";
+        var Q10B = "B) Hamden Forkner";
+        var Q10C = "C) Hollis and Kitty Guy";
+        var Q10D = "D) Dorothy Travis";
+        var AQ10 = 3;
+        var Q11 = "FBLA-PBL is divided into _______ administrative regions.";
+        var Q11A = "A) four";
+        var Q11B = "B) five";
+        var Q11C = "C) six";
+        var Q11D = "D) seven";
+        var AQ11 = 2;
+        var Q12 = "The three words on the FBLA and PBL emblems are?";
+        var Q12A = "A) Service, Education, and Leadership";
+        var Q12B = "B) Service, Leadership, and Prosperity";
+        var Q12C = "C) Service, Education, and Progress";
+        var Q12D = "D) Progress, Leadership, and Education";
+        var AQ12 = 3;
+        var Q13 = "Which of the following is not an official publication of FBLA-PBL?";
+        var Q13A = "A) Tomorrow's Business Leader";
+        var Q13B = "B) FBLA Adviser's Hotline";
+        var Q13C = "C) Business Leaders of Tomorrow";
+        var Q13D = "D) The PBL Business Leader";
+        var AQ13 = 3;
+        var Q14 = "The land for the FBLA-PBL National Center was purchased through a grant from the?";
+        var Q14A = "A) General Motors Corporation";
+        var Q14B = "B) Conrad Hilton Foundation";
+        var Q14C = "C) McDonald's Corporation";
+        var Q14D = "D) Ford Motor Company Foundation ";
+        var AQ14 = 2;
+        var Q15 = "A local chapter with 50 members would be entitled to how many local voting delegates?";
+        var Q15A = "A) Two";
+        var Q15B = "B) Three";
+        var Q15C = "C) Four";
+        var Q15D = "D) Five";
+        var AQ15 = 2;
+        var Q16 = "FBLA-PBL Week is held each year during the month of?";
+        var Q16A = "A) November";
+        var Q16B = "B) March";
+        var Q16C = "C) February";
+        var Q16D = "D) May";
+        var AQ16 = 3;
+        var Q17 = "What is FBLA-PBL's official parliamentary authority?";
+        var Q17A = "A) Robert's Rules of Order";
+        var Q17B = "B) Robert's Rules of Order - Newly Revised";
+        var Q17C = "C) The Chapter Management Handbook";
+        var Q17D = "D) The Meeting Guide";
+        var AQ17 = 2;
+        var Q18 = "What is the first stanza of the FBLA-PBL Creed?";
+        var Q18A = "A) I believe education is the right of every man";
+        var Q18B = "B) I believe education is the right of every person";
+        var Q18C = "C) I believe education is important";
+        var Q18D = "D) I believe education should be free";
+        var AQ18 = 2;
+        var Q19 = "What is the name of the program offered in conjunction with the National Leadership Conference that is offered to national, state, and local FBLA-PBL officers, members, and advisers for Leadership Development and Training?";
+        var Q19A = "A) Management Series 2000";
+        var Q19B = "B) Institute for Leaders";
+        var Q19C = "C) Leadership Training 2000";
+        var Q19D = "D) The Institute";
+        var AQ19 = 2;
+        var Q20 = "What are the three categories of competitive events?";
+        var Q20A = "A) Individual, Group, and Chapter";
+        var Q20B = "B) Chapter, Member, and Team";
+        var Q20C = "C) Individual, Team, and Chapter";
+        var Q20D = "D) Group, Member, and Team";
+        var AQ20 = 3;
+        var Q21 = "What is the official national web site address?";
+        var Q21A = "A) www.fbla-pbl.org";
+        var Q21B = "B) www.fbla-pbl.com";
+        var Q21C = "C) www.fbla.org";
+        var Q21D = "D) www.fbla-pbl.net";
+        var AQ21 = 1;
+        var Q22 = "Where was the first FBLA local chapter organized?";
+        var Q22A = "A) Knoxville, TN";
+        var Q22B = "B) Cedar Rapids, IA";
+        var Q22C = "C) Johnson City, TN";
+        var Q22D = "D) Miami, FL";
+        var AQ22 = 3;
+        var Q23 = "FBLA Middle level membership is open to students in what grades?";
+        var Q23A = "A) 9-12";
+        var Q23B = "B) 7-12";
+        var Q23C = "C) 8-9";
+        var Q23D = "D) 5-9";
+        var AQ23 = 4;
+        var Q24 = "In order to qualify for participation in the competitive events program for FBLA, dues must be received in the National Center by what date?";
+        var Q24A = "A) April 1";
+        var Q24B = "B) March 1";
+        var Q24C = "C) April 15";
+        var Q24D = "D) March 15";
+        var AQ24 = 2;
+        var Q25 = "What is the name of the nationally endorsed fundraising program developed especially for 'cookie-loving' FBLA-PBL chapters?";
+        var Q25A = "A) Otis Spunkmeyer, Inc";
+        var Q25B = "B) Champion Challenge";
+        var Q25C = "C) Mission LIFT";
+        var Q25D = "D) World's Finest Chocolate";
+        var AQ25 = 1;
+        // adds all of the questions to the randomizer array
+        function Add() {
+            Questions.push(Q1);
+            Questions.push(Q2);
+            Questions.push(Q3);
+            Questions.push(Q4);
+            Questions.push(Q5);
+            Questions.push(Q6);
+            Questions.push(Q7);
+            Questions.push(Q8);
+            Questions.push(Q9);
+            Questions.push(Q10);
+            Questions.push(Q11);
+            Questions.push(Q12);
+            Questions.push(Q13);
+            Questions.push(Q14);
+            Questions.push(Q15);
+            Questions.push(Q16);
+            Questions.push(Q17);
+            Questions.push(Q18);
+            Questions.push(Q19);
+            Questions.push(Q20);
+            Questions.push(Q21);
+            Questions.push(Q22);
+            Questions.push(Q23);
+            Questions.push(Q24);
+            Questions.push(Q25);
+        }
+        // states if the games paused or not
+        var g = 1;
+        // makes the question popup only occur once in the loop
+        var S = 0;
+        // function for after the pause occurs, it turns off the pause screen, and resets variables
+        function AfterPause() {
+            if (g === 0) {
+                if (r === 0) {
+                    document.getElementById("Pause").style.visibility = "hidden";
+                    r = 1;
+                    g = 1;
+                }
+            }
+        }
+        // variable for how many points you gain per apple
+        var AppleLength = 0;
+        // brings in the custom data from the starting page and sets it to a number here
+        // along with setting winzise to 25x the ammount +1 and changing the bonus gain to 10%
+        function Lengthper() {
+            if (localStorage.getItem("AppleLengthPerApple") == 0) {
+                AppleLength = 0;
+                winsize = 2;
+                bonus = 0;
+            } else if (localStorage.getItem("AppleLengthPerApple") == 1) {
+                AppleLength = 1;
+                winsize = 26;
+                bonus = 2;
+            } else if (localStorage.getItem("AppleLengthPerApple") == 2) {
+                AppleLength = 2;
+                winsize = 51;
+                bonus = 5;
+            } else if (localStorage.getItem("AppleLengthPerApple") == 3) {
+                AppleLength = 3;
+                winsize = 76;
+                bonus = 8;
+            } else if (localStorage.getItem("AppleLengthPerApple") == 4) {
+                AppleLength = 4;
+                winsize = 101;
+                bonus = 10;
+            } else if (localStorage.getItem("AppleLengthPerApple") == 5) {
+                AppleLength = 5;
+                winsize = 126;
+                bonus = 12;
+            } else if (localStorage.getItem("AppleLengthPerApple") == 6) {
+                AppleLength = 6;
+                winsize = 151;
+                bonus = 15;
+            } else if (localStorage.getItem("AppleLengthPerApple") == 7) {
+                AppleLength = 7;
+                winsize = 176;
+                bonus = 17;
+            } else if (localStorage.getItem("AppleLengthPerApple") == 8) {
+                AppleLength = 8;
+                winsize = 201;
+                bonus = 20;
+            } else if (localStorage.getItem("AppleLengthPerApple") == 9) {
+                AppleLength = 9;
+                winsize = 226;
+                bonus = 22;
+            } else if (localStorage.getItem("AppleLengthPerApple") == 10) {
+                AppleLength = 10;
+                winsize = 251;
+                bonus = 25;
+            } else if (localStorage.getItem("AppleLengthPerApple") == 11) {
+                AppleLength = 11;
+                winsize = 276;
+                bonus = 27;
+            } else if (localStorage.getItem("AppleLengthPerApple") == 12) {
+                AppleLength = 12;
+                winsize = 301;
+                bonus = 30;
+            } else if (localStorage.getItem("AppleLengthPerApple") == 13) {
+                AppleLength = 13;
+                winsize = 326;
+                bonus = 32;
+            } else if (localStorage.getItem("AppleLengthPerApple") == 14) {
+                AppleLength = 14;
+                winsize = 351;
+                bonus = 35;
+            } else if (localStorage.getItem("AppleLengthPerApple") == 15) {
+                AppleLength = 15;
+                winsize = 376;
+                bonus = 37;
+            } else if (localStorage.getItem("AppleLengthPerApple") == 16) {
+                AppleLength = 16;
+                winsize = 401;
+                bonus = 40;
+            } else if (localStorage.getItem("AppleLengthPerApple") == 17) {
+                AppleLength = 17;
+                winsize = 426;
+                bonus = 42;
+            } else if (localStorage.getItem("AppleLengthPerApple") == 18) {
+                AppleLength = 18;
+                winsize = 451;
+                bonus = 45;
+            } else if (localStorage.getItem("AppleLengthPerApple") == 19) {
+                AppleLength = 19;
+                winsize = 476;
+                bonus = 47;
+            } else if (localStorage.getItem("AppleLengthPerApple") == 20) {
+                AppleLength = 20;
+                winsize = 501;
+                bonus = 50;
+            }
+
+
+        }
+        //loop for everything important
+        // imports the speed of how fast the loop should be running 
+        var speed = localStorage.getItem("SnakeSpeed");
+        console.log(Questions);
+
+        function loop() {
+            requestAnimationFrame(loop);
+
+            // slow game loop to 15 fps instead of 60 - 60/15 = 4
+            if (++count < speed) {
+                return;
+            }
+            //resets var
+            count = 0;
+            // clears canvas 
+            context.clearRect(0, 0, canvas.width, canvas.height);
+            // increases snake x by grid (20px)
+            snake.x += snake.dx;
+            // increases the snake y by grid (20px)
+            snake.y += snake.dy;
+            //Quit function linked to escape key and pause linked to space bar
+            window.onkeyup = function(event) {
+                    //escape key programed to quit
+                    if (event.keyCode == 27) {
+                        window.close();
+                    }
+                    //pause function, checks to see if youre not in a question, and if its ok to pause
+                    // then pauses, and makes the text appear and stops snake
+                    // if hit again then itll continue going in the same direction
+                    else if (event.keyCode == 32) {
+                        if (g === 1) {
+                            if (r === 1) {
+                                document.getElementById("Pause").style.visibility = "visible";
+                                r = 0;
+                                snake.dx = 0;
+                                snake.dy = 0;
+                                g = 0;
+                            }
+                        } else if (g === 0) {
+                            AfterPause();
+                            DirectionAfter();
+                        }
+                    }
+                }
+                //snake death when touching sides
+            if (snake.x < 0 || snake.x >= canvas.width || snake.y < 0 || snake.y >= canvas.height) {
+                restart();
+            }
+            // keep track of where snake has been. front of the array is always the head
+            function SnakeUnshift() {
+                snake.cells.unshift({
+                    x: snake.x,
+                    y: snake.y
+                });
+                // remove cells as we move away from them
+                if (snake.cells.length > snake.maxCells) {
+                    snake.cells.pop();
+                }
+            };
+            // checks to see if the snake needs to be moving, then adds onto the front of the snake
+            if (r === 1) {
+                SnakeUnshift();
+            }
+            // draw apple
+            context.fillStyle = AC;
+            context.fillRect(apple.x, apple.y, grid, grid);
+            // draw snake
+            context.fillStyle = SC;
+            snake.cells.forEach(function(cell, index) {
+                context.fillRect(cell.x, cell.y, grid, grid);
+                // snake ate apple
+                //score
+                var Score2 = snake.cells.length;
+                document.getElementById("demo").innerHTML = Score2;
+                // highscore function, checks to see if there is one, if not then it sets one,
+                // then everytime the snake is bigger than that score it changes to that new highscore
+                function recordScore() {
+                    var highScore = localStorage.HS;
+                    if (highScore == undefined) localStorage.setItem('HS', snake.cells.length);
+                    if (snake.cells.length > highScore) {
+                        localStorage.setItem('HS', snake.cells.length);
+                    }
+                }
+                recordScore();
+                //changes the table
+                document.getElementById("HSs").innerHTML = localStorage.HS;
+                // when snake hits apple checks to see if questions are on , then either pops up a question or adds score
+                if (cell.x === apple.x && cell.y === apple.y) {
+                    if (Questionson == 1) {
+                        r = 0;
+                        if (S === 0) {
+                            Questionpopup();
+                        }
+                    } else if (Questionson == 0) {
+                        snake.maxCells += AppleLength;
+                        apple.x = getRandomInt(0, SizeX) * grid;
+                        apple.y = getRandomInt(0, SizeY) * grid;
+                    }
+                }
+                // makes the game winnable when the questions are on
+                if (Questionson == 1) {
+                    if (snake.cells.length == winsize) {
+                        window.location.replace("/privatestatic/Extra/Ethan/Snake_Game/End.html");
+                    }
+                }
+
+                // check collision with all cells after this one (modified bubble sort)
+                for (var i = index + 1; i < snake.cells.length; i++) {
+
+                    // collision. reset game
+                    if (cell.x ==
+                        snake.cells[i].x && cell.y === snake.cells[i].y) {
+                        restart();
+                    }
+                }
+            });
+        }
+        // changes the colors of the snake background colors and apple colors depending on scheme
+        function ColorScheme() {
+            if (Scheme == 1) {
+                BC = "#007d00";
+                SC = "#007d00";
+                AC = "#ff0000";
+            } else if (Scheme == 2) {
+                BC = "#000080";
+                SC = "#ffdf00";
+                AC = "#ff0000";
+            } else if (Scheme == 3) {
+                BC = "#000000";
+                SC = "#ffffff";
+                AC = "#727272";
+            } else if (Scheme == 4) {
+                BC = "#ffffff";
+                SC = "#66ff75";
+                AC = "#ffc0cb";
+            } else if (Scheme == 5) {
+                SC = localStorage.getItem("SnakeColor");
+                AC = localStorage.getItem("AppleColor");
+                BC = localStorage.getItem("BackColor");
+            }
+        }
+        // determines of apple goes left right up or down when it moves
+        var RandomMovenumber = 0;
+
+        function RandomMove() {
+            RandomMovenumber = Math.floor(Math.random() * 4) + 1;
+        }
+        // checks to see if apple moving is enabled then which way to go, then goes 5 blocks in that direction
+        // if it goes out of the canvas it comes back into the same position
+        function AppleMovingFunc() {
+            if (MovingApple == 1) {
+                if (r === 1) {
+                    RandomMove();
+                    if (RandomMovenumber === 1) {
+                        for (i = 0; i < 5; i++) {
+                            apple.x -= 20;
+                            if (apple.x < 0) {
+                                apple.x += 100;
+                            }
+                        }
+                    } else if (RandomMovenumber === 2) {
+                        for (i = 0; i < 5; i++) {
+                            apple.y += 20;
+                            if (apple.y >= canvas.height) {
+                                apple.y -= 100;
+                            }
+                        }
+                    } else if (RandomMovenumber === 3) {
+                        for (i = 0; i < 5; i++) {
+                            apple.x += 20;
+                            if (apple.x >= canvas.width) {
+                                apple.x -= 100
+                            }
+                        }
+                    } else if (RandomMovenumber === 4) {
+                        for (i = 0; i < 5; i++) {
+                            apple.y -= 20;
+                            if (apple.y < 0) {
+                                apple.y += 100;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        // repeates every 2 seconds
+        window.setInterval(AppleMovingFunc, 2000);
+        // adds another regen point and makes it visible
+        function regenlife() {
+            if (regencount === 1) {
+                document.getElementById("regen1").style.visibility = "visible";
+                regencount = 2;
+            } else if (regencount === 2) {
+                document.getElementById("regen2").style.visibility = "visible";
+                regencount = 3;
+            } else if (regencount === 3) {
+                document.getElementById("regen3").style.visibility = "visible";
+                regencount = 4;
+            }
+            // when you get to 4, the three dissapear, you regen a heart, and if you havent lost a heart, you get a bonus
+            else if (regencount === 4) {
+                document.getElementById("regen1").style.visibility = "hidden";
+                document.getElementById("regen2").style.visibility = "hidden";
+                document.getElementById("regen3").style.visibility = "hidden";
+                if (lifecount === 1) {
+                    snake.maxCells += bonus;
+                }
+                regenlife2();
+                regencount = 1;
+            }
+        }
+        // function that takes away a heart depending on how many youve gotten wrong
+        function Life() {
+            if (lifecount === 1) {
+                document.getElementById("life1").style.visibility = "hidden";
+                lifecount = 2;
+
+            } else if (lifecount === 2) {
+                document.getElementById("life2").style.visibility = "hidden";
+                lifecount = 3;
+            } else if (lifecount === 3) {
+                document.getElementById("life3").style.visibility = "hidden";
+                lifecount = 4;
+            } else if (lifecount === 4) {
+                document.getElementById("life4").style.visibility = "hidden";
+                lifecount = 5;
+            } else if (lifecount === 5) {
+                document.getElementById("life5").style.visibility = "hidden";
+                lifecount = 6;
+            }
+            // ends game if youve gotten to no hearts
+            else if (lifecount === 6) {
+                restart();
+                lifecount = 1;
+            }
+        }
+        // function that gains you back a life and makes it visible again
+        function regenlife2() {
+            if (lifecount === 2) {
+                document.getElementById("life1").style.visibility = "visible";
+                lifecount = 1;
+            } else if (lifecount === 3) {
+                document.getElementById("life2").style.visibility = "visible";
+                lifecount = 2;
+            } else if (lifecount === 4) {
+                document.getElementById("life3").style.visibility = "visible";
+                lifecount = 3;
+            } else if (lifecount === 5) {
+                document.getElementById("life4").style.visibility = "visible";
+                lifecount = 4;
+            } else if (lifecount === 6) {
+                document.getElementById("life5").style.visibility = "visible";
+                lifecount = 5;
+            }
+        }
+        // determines which question to popup, makes everything visible, and then increases the var next to the next question
+        function Questionpopup() {
+            S = 1;
+            Safe = 1;
+            if (Questions[(next)] === Q1) {
+                Popup();
+                document.getElementById("Qt").innerHTML = Q1;
+                document.getElementById("Qt1").innerHTML = Q1A;
+                document.getElementById("Qt2").innerHTML = Q1B;
+                document.getElementById("Qt3").innerHTML = "";
+                document.getElementById("Qt4").innerHTML = "";
+
+                one();
+            } else if (Questions[(next)] === Q2) {
+                Popup();
+                document.getElementById("Qt").innerHTML = Q2;
+                document.getElementById("Qt1").innerHTML = Q2A;
+                document.getElementById("Qt2").innerHTML = Q2B;
+                document.getElementById("Qt3").innerHTML = "";
+                document.getElementById("Qt4").innerHTML = "";
+                one();
+            } else if (Questions[(next)] === Q3) {
+                Popup();
+                document.getElementById("Qt").innerHTML = Q3;
+                document.getElementById("Qt1").innerHTML = Q3A;
+                document.getElementById("Qt2").innerHTML = Q3B;
+                document.getElementById("Qt3").innerHTML = "";
+                document.getElementById("Qt4").innerHTML = "";
+                one();
+            } else if (Questions[(next)] === Q4) {
+                Popup();
+                document.getElementById("Qt").innerHTML = Q4;
+                document.getElementById("Qt1").innerHTML = Q4A;
+                document.getElementById("Qt2").innerHTML = Q4B;
+                document.getElementById("Qt3").innerHTML = "";
+                document.getElementById("Qt4").innerHTML = "";
+                one();
+            } else if (Questions[(next)] === Q5) {
+                Popup();
+                document.getElementById("Qt").innerHTML = Q5;
+                document.getElementById("Qt1").innerHTML = Q5A;
+                document.getElementById("Qt2").innerHTML = Q5B;
+                document.getElementById("Qt3").innerHTML = Q5C;
+                document.getElementById("Qt4").innerHTML = Q5D;
+                three();
+            } else if (Questions[(next)] === Q6) {
+                Popup();
+                document.getElementById("Qt").innerHTML = Q6;
+                document.getElementById("Qt1").innerHTML = Q6A;
+                document.getElementById("Qt2").innerHTML = Q6B;
+                document.getElementById("Qt3").innerHTML = Q6C;
+                document.getElementById("Qt4").innerHTML = Q6D;
+                one();
+            } else if (Questions[(next)] === Q7) {
+                Popup();
+                document.getElementById("Qt").innerHTML = Q7;
+                document.getElementById("Qt1").innerHTML = Q7A;
+                document.getElementById("Qt2").innerHTML = Q7B;
+                document.getElementById("Qt3").innerHTML = Q7C;
+                document.getElementById("Qt4").innerHTML = Q7D;
+                one();
+            } else if (Questions[(next)] === Q8) {
+                Popup();
+                document.getElementById("Qt").innerHTML = Q8;
+                document.getElementById("Qt1").innerHTML = Q8A;
+                document.getElementById("Qt2").innerHTML = Q8B;
+                document.getElementById("Qt3").innerHTML = Q8C;
+                document.getElementById("Qt4").innerHTML = Q8D;
+                one();
+            } else if (Questions[(next)] === Q9) {
+                Popup();
+                document.getElementById("Qt").innerHTML = Q9;
+                document.getElementById("Qt1").innerHTML = Q9A;
+                document.getElementById("Qt2").innerHTML = Q9B;
+                document.getElementById("Qt3").innerHTML = Q9C;
+                document.getElementById("Qt4").innerHTML = Q9D;
+                two();
+            } else if (Questions[(next)] === Q10) {
+                Popup();
+                document.getElementById("Qt").innerHTML = Q10;
+                document.getElementById("Qt1").innerHTML = Q10A;
+                document.getElementById("Qt2").innerHTML = Q10B;
+                document.getElementById("Qt3").innerHTML = Q10C;
+                document.getElementById("Qt4").innerHTML = Q10D;
+                three();
+            } else if (Questions[(next)] === Q11) {
+                Popup();
+                document.getElementById("Qt").innerHTML = Q11;
+                document.getElementById("Qt1").innerHTML = Q11A;
+                document.getElementById("Qt2").innerHTML = Q11B;
+                document.getElementById("Qt3").innerHTML = Q11C;
+                document.getElementById("Qt4").innerHTML = Q11D;
+                two();
+            } else if (Questions[(next)] === Q12) {
+                Popup();
+                document.getElementById("Qt").innerHTML = Q12;
+                document.getElementById("Qt1").innerHTML = Q12A;
+                document.getElementById("Qt2").innerHTML = Q12B;
+                document.getElementById("Qt3").innerHTML = Q12C;
+                document.getElementById("Qt4").innerHTML = Q12D;
+                three();
+            } else if (Questions[(next)] === Q13) {
+                Popup();
+                document.getElementById("Qt").innerHTML = Q13;
+                document.getElementById("Qt1").innerHTML = Q13A;
+                document.getElementById("Qt2").innerHTML = Q13B;
+                document.getElementById("Qt3").innerHTML = Q13C;
+                document.getElementById("Qt4").innerHTML = Q13D;
+                three();
+            } else if (Questions[(next)] === Q14) {
+                Popup();
+                document.getElementById("Qt").innerHTML = Q14;
+                document.getElementById("Qt1").innerHTML = Q14A;
+                document.getElementById("Qt2").innerHTML = Q14B;
+                document.getElementById("Qt3").innerHTML = Q14C;
+                document.getElementById("Qt4").innerHTML = Q14D;
+                two();
+            } else if (Questions[(next)] === Q15) {
+                Popup();
+                document.getElementById("Qt").innerHTML = Q15;
+                document.getElementById("Qt1").innerHTML = Q15A;
+                document.getElementById("Qt2").innerHTML = Q15B;
+                document.getElementById("Qt3").innerHTML = Q15C;
+                document.getElementById("Qt4").innerHTML = Q15D;
+                two();
+            } else if (Questions[(next)] === Q16) {
+                Popup();
+                document.getElementById("Qt").innerHTML = Q16;
+                document.getElementById("Qt1").innerHTML = Q16A;
+                document.getElementById("Qt2").innerHTML = Q16B;
+                document.getElementById("Qt3").innerHTML = Q16C;
+                document.getElementById("Qt4").innerHTML = Q16D;
+                three();
+            } else if (Questions[(next)] === Q17) {
+                Popup();
+                document.getElementById("Qt").innerHTML = Q17;
+                document.getElementById("Qt1").innerHTML = Q17A;
+                document.getElementById("Qt2").innerHTML = Q17B;
+                document.getElementById("Qt3").innerHTML = Q17C;
+                document.getElementById("Qt4").innerHTML = Q17D;
+                two();
+            } else if (Questions[(next)] === Q18) {
+                Popup();
+                document.getElementById("Qt").innerHTML = Q18;
+                document.getElementById("Qt1").innerHTML = Q18A;
+                document.getElementById("Qt2").innerHTML = Q18B;
+                document.getElementById("Qt3").innerHTML = Q18C;
+                document.getElementById("Qt4").innerHTML = Q18D;
+                two();
+            } else if (Questions[(next)] === Q19) {
+                Popup();
+                document.getElementById("Qt").innerHTML = Q19;
+                document.getElementById("Qt1").innerHTML = Q19A;
+                document.getElementById("Qt2").innerHTML = Q19B;
+                document.getElementById("Qt3").innerHTML = Q19C;
+                document.getElementById("Qt4").innerHTML = Q19D;
+                two();
+            } else if (Questions[(next)] === Q20) {
+                Popup();
+                document.getElementById("Qt").innerHTML = Q20;
+                document.getElementById("Qt1").innerHTML = Q20A;
+                document.getElementById("Qt2").innerHTML = Q20B;
+                document.getElementById("Qt3").innerHTML = Q20C;
+                document.getElementById("Qt4").innerHTML = Q20D;
+                three();
+            } else if (Questions[(next)] === Q21) {
+                Popup();
+                document.getElementById("Qt").innerHTML = Q21;
+                document.getElementById("Qt1").innerHTML = Q21A;
+                document.getElementById("Qt2").innerHTML = Q21B;
+                document.getElementById("Qt3").innerHTML = Q21C;
+                document.getElementById("Qt4").innerHTML = Q21D;
+                one();
+            } else if (Questions[(next)] === Q22) {
+                Popup();
+                document.getElementById("Qt").innerHTML = Q22;
+                document.getElementById("Qt1").innerHTML = Q22A;
+                document.getElementById("Qt2").innerHTML = Q22B;
+                document.getElementById("Qt3").innerHTML = Q22C;
+                document.getElementById("Qt4").innerHTML = Q22D;
+                three();
+            } else if (Questions[(next)] === Q23) {
+                Popup();
+                document.getElementById("Qt").innerHTML = Q23;
+                document.getElementById("Qt1").innerHTML = Q23A;
+                document.getElementById("Qt2").innerHTML = Q23B;
+                document.getElementById("Qt3").innerHTML = Q23C;
+                document.getElementById("Qt4").innerHTML = Q23D;
+                four();
+            } else if (Questions[(next)] === Q24) {
+                Popup();
+                document.getElementById("Qt").innerHTML = Q24;
+                document.getElementById("Qt1").innerHTML = Q24A;
+                document.getElementById("Qt2").innerHTML = Q24B;
+                document.getElementById("Qt3").innerHTML = Q24C;
+                document.getElementById("Qt4").innerHTML = Q24D;
+                two();
+            } else if (Questions[(next)] === Q25) {
+                Popup();
+                document.getElementById("Qt").innerHTML = Q25;
+                document.getElementById("Qt1").innerHTML = Q25A;
+                document.getElementById("Qt2").innerHTML = Q25B;
+                document.getElementById("Qt3").innerHTML = Q25C;
+                document.getElementById("Qt4").innerHTML = Q25D;
+                one();
+            }
+        };
+        // makes the timer function work, it delays the visible hidden commands until the previous one is done, then proceeds
+        function TimerOn() {
+            document.getElementById("Timer3").style.visibility = "visible";
+            window.setTimeout(function() {
+                document.getElementById("Timer3").style.visibility = "hidden";
+                document.getElementById("Timer2").style.visibility = "visible";
+            }, 1000);
+            window.setTimeout(function() {
+                document.getElementById("Timer2").style.visibility = "hidden";
+                document.getElementById("Timer1").style.visibility = "visible";
+            }, 2000);
+            window.setTimeout(function() {
+                document.getElementById("Timer1").style.visibility = "hidden";
+            }, 3000);
+        }
+        //turns the correct text box on
+        function Con() {
+            document.getElementById("Cor").style.visibility = "visible";
+        }
+        // turns the correct text box and box off
+        function Coff() {
+            document.getElementById("Cor").style.visibility = "hidden";
+            document.getElementById("Box").style.visibility = "hidden";
+        }
+        //turns the incorrect text box on
+        function Ion() {
+            document.getElementById("Inc").style.visibility = "visible";
+        }
+        //turns the incorrect text box and box off
+        function Ioff() {
+            document.getElementById("Inc").style.visibility = "hidden";
+            document.getElementById("Box").style.visibility = "hidden";
+        }
+        // correct function when you answer a question correctly
+        function Correct() {
+            //makes question box invisible
+            Popoff();
+            // turns just the box on
+            document.getElementById("Box").style.visibility = "visible";
+            //turns the timer on
+            TimerOn();
+            // turns the correct thing on
+            Con();
+            // turns the correct function off and continues the correct function
+            window.setTimeout(Coff, 3000);
+            window.setTimeout(RestofCorrect, 3000);
+        }
+        // everything after the correct box pops off 
+        function RestofCorrect() {
+            // to next question 
+            next++;
+            // moves the snake in the direction it was moving before
+            DirectionAfter();
+            // adds score depending on how much the length per apple is set to
+            snake.maxCells += AppleLength;
+            //randomizes apple
+            apple.x = getRandomInt(0, SizeX) * grid;
+            apple.y = getRandomInt(0, SizeY) * grid;
+            // gets a regen point
+            regenlife();
+            // moves snake
+            r = 1;
+            S = 0;
+            Timer = 2;
+        }
+        // incorrect function when you get a question incorrect
+        function Incorrect() {
+            //takes everything off
+            Popoff();
+            // makes the box visible
+            document.getElementById("Box").style.visibility = "visible";
+            //turns timer on
+            TimerOn();
+            // turns icorrect on
+            Ion();
+            // waits three seconds to continue the incorrect function
+            window.setTimeout(Ioff, 3000);
+            window.setTimeout(RestofIncorrect, 3000);
+        }
+        //
+        function RestofIncorrect() {
+            //continues in previous direction
+            DirectionAfter();
+            //takes away a life
+            Life();
+            //randomizes apple
+            apple.x = getRandomInt(0, SizeX) * grid;
+            apple.y = getRandomInt(0, SizeY) * grid;
+            //moves snake
+            r = 1;
+            S = 0;
+            Timer = 2;
+        }
+        // takes away all of the event listeners on the questions
+        function Takeall() {
+            //
+            document.getElementById("Btn1").removeEventListener("click", Incorrect);
+            document.getElementById("Btn2").removeEventListener("click", Incorrect);
+            document.getElementById("Btn3").removeEventListener("click", Incorrect);
+            document.getElementById("Btn4").removeEventListener("click", Incorrect);
+            //
+            document.getElementById("Btn1").removeEventListener("click", Correct);
+            document.getElementById("Btn2").removeEventListener("click", Correct);
+            document.getElementById("Btn3").removeEventListener("click", Correct);
+            document.getElementById("Btn4").removeEventListener("click", Correct);
+            //
+            document.getElementById("Qt1").removeEventListener("click", Incorrect);
+            document.getElementById("Qt2").removeEventListener("click", Incorrect);
+            document.getElementById("Qt3").removeEventListener("click", Incorrect);
+            document.getElementById("Qt4").removeEventListener("click", Incorrect);
+            //
+            document.getElementById("Qt1").removeEventListener("click", Correct);
+            document.getElementById("Qt2").removeEventListener("click", Correct);
+            document.getElementById("Qt3").removeEventListener("click", Correct);
+            document.getElementById("Qt4").removeEventListener("click", Correct);
+
+
+        }
+        // makes the first answer box correct and the others incorrect
+        function one() {
+            Takeall();
+            document.getElementById("Btn1").addEventListener("click", Correct);
+            document.getElementById("Btn2").addEventListener("click", Incorrect);
+            document.getElementById("Btn3").addEventListener("click", Incorrect);
+            document.getElementById("Btn4").addEventListener("click", Incorrect);
+            //
+            document.getElementById("Qt1").addEventListener("click", Correct);
+            document.getElementById("Qt2").addEventListener("click", Incorrect);
+            document.getElementById("Qt3").addEventListener("click", Incorrect);
+            document.getElementById("Qt4").addEventListener("click", Incorrect);
+        }
+        // makes the second answer box correct and the others incorrect
+        function two() {
+            Takeall();
+            document.getElementById("Btn1").addEventListener("click", Incorrect);
+            document.getElementById("Btn2").addEventListener("click", Correct);
+            document.getElementById("Btn3").addEventListener("click", Incorrect);
+            document.getElementById("Btn4").addEventListener("click", Incorrect);
+            //
+            document.getElementById("Qt1").addEventListener("click", Incorrect);
+            document.getElementById("Qt2").addEventListener("click", Correct);
+            document.getElementById("Qt3").addEventListener("click", Incorrect);
+            document.getElementById("Qt4").addEventListener("click", Incorrect);
+        }
+        // makes the third answer box correct and the others incorrect
+        function three() {
+            Takeall();
+            document.getElementById("Btn1").addEventListener("click", Incorrect);
+            document.getElementById("Btn2").addEventListener("click", Incorrect);
+            document.getElementById("Btn3").addEventListener("click", Correct);
+            document.getElementById("Btn4").addEventListener("click", Incorrect);
+            //
+            document.getElementById("Qt1").addEventListener("click", Incorrect);
+            document.getElementById("Qt2").addEventListener("click", Incorrect);
+            document.getElementById("Qt3").addEventListener("click", Correct);
+            document.getElementById("Qt4").addEventListener("click", Incorrect);
+        }
+        // makes the fourth answer box correct and the others incorrect
+        function four() {
+            Takeall();
+            document.getElementById("Btn1").addEventListener("click", Incorrect);
+            document.getElementById("Btn2").addEventListener("click", Incorrect);
+            document.getElementById("Btn3").addEventListener("click", Incorrect);
+            document.getElementById("Btn4").addEventListener("click", Correct);
+            //
+            document.getElementById("Qt1").addEventListener("click", Incorrect);
+            document.getElementById("Qt2").addEventListener("click", Incorrect);
+            document.getElementById("Qt3").addEventListener("click", Incorrect);
+            document.getElementById("Qt4").addEventListener("click", Correct);
+        }
+        // stops snake and makes the question + answers appear
+        function Popup() {
+            document.getElementById("Box").style.visibility = "visible";
+            document.getElementById("Qt").style.visibility = "visible";
+            document.getElementById("Btn1").style.visibility = "visible";
+            document.getElementById("Btn2").style.visibility = "visible";
+            document.getElementById("Btn3").style.visibility = "visible";
+            document.getElementById("Btn4").style.visibility = "visible";
+            document.getElementById("Qt1").style.visibility = "visible";
+            document.getElementById("Qt2").style.visibility = "visible";
+            document.getElementById("Qt3").style.visibility = "visible";
+            document.getElementById("Qt4").style.visibility = "visible";
+            snake.dx = 0;
+            snake.dy = 0;
+        }
+        // takes away the question
+        function Popoff() {
+            document.getElementById("Box").style.visibility = "hidden";
+            document.getElementById("Qt").style.visibility = "hidden";
+            document.getElementById("Btn1").style.visibility = "hidden";
+            document.getElementById("Btn2").style.visibility = "hidden";
+            document.getElementById("Btn3").style.visibility = "hidden";
+            document.getElementById("Btn4").style.visibility = "hidden";
+            document.getElementById("Qt1").style.visibility = "hidden";
+            document.getElementById("Qt2").style.visibility = "hidden";
+            document.getElementById("Qt3").style.visibility = "hidden";
+            document.getElementById("Qt4").style.visibility = "hidden";
+        }
+        //remembers the way that the snake was going 
+        function DirectionAfter() {
+            Safe = 0;
+            if (daq === 4) {
+                snake.dx = -grid;
+                snake.dy = 0;
+            } else if (daq === 8) {
+                snake.dx = 0;
+                snake.dy = -grid;
+            } else if (daq === 6) {
+                snake.dx = grid;
+                snake.dy = 0;
+            } else if (daq === 2) {
+                snake.dy = grid;
+                snake.dx = 0;
+            }
+        }
+        // makes the snake move in the corresponding directions
+        document.addEventListener('keydown', function(e) {
+
+            // prevent snake from backtracking on itself
+            // up is 38 left is 37 right is 39 down is 40
+            //37 38 39 40
+            if (Safe === 0) {
+                //left
+                if ((e.which === 37 || e.which === 65 || e.which === 100) && snake.dx === 0) {
+                    snake.dx = -grid;
+                    snake.dy = 0;
+                    daq = 4;
+                    AfterPause();
+                }
+                //up
+                else if ((e.which === 38 || e.which === 87 || e.which === 104) && snake.dy === 0) {
+                    snake.dy = -grid;
+                    snake.dx = 0;
+                    daq = 8;
+                    AfterPause();
+                }
+                //right
+                else if ((e.which === 39 || e.which === 68 || e.which === 102) && snake.dx === 0) {
+                    snake.dx = grid;
+                    snake.dy = 0;
+                    daq = 6;
+                    AfterPause();
+                }
+                //down
+                else if ((e.which === 40 || e.which === 83 || e.which === 98) && snake.dy === 0) {
+                    snake.dy = grid;
+                    snake.dx = 0;
+                    daq = 2;
+                    AfterPause();
+                }
+            }
+        });
+        // moves the snake based on the clicking of the buttons
+        document.addEventListener("click", function() {
+            if (Safe === 0) {
+                if (move === 3 && snake.dx === 0) {
+                    snake.dx = -grid;
+                    snake.dy = 0;
+                }
+                //up
+                else if (move === 1 && snake.dy === 0) {
+                    snake.dy = -grid;
+                    snake.dx = 0;
+                }
+                //right
+                else if (move == 4 && snake.dx === 0) {
+                    snake.dx = grid;
+                    snake.dy = 0;
+                }
+                //down
+                else if (move === 2 && snake.dy === 0) {
+                    snake.dy = grid;
+                    snake.dx = 0;
+                }
+            }
+        });
+        window.requestAnimationFrame(loop);
+    </script>
+</body>
+
+</html>

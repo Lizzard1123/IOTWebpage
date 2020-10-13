@@ -1,0 +1,134 @@
+body {
+	background-color: #8e1719;
+	font-family: "Arial";
+}
+
+h1,h2{
+	text-align: center;
+}
+
+p{
+	width: 20%;
+}
+
+.sky {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	position: relative;
+	top:-350px;
+  	height: 600px;
+  	width: 40%;
+  	background-color: #00b7ff;
+}
+
+.ground {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	position: relative;
+	top:-450px;
+  	height: 100px;
+  	width: 40%;
+  	background-color: #0f5400;
+}
+
+.parabola{
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	position: relative;
+	top:-980px;
+  	height: 450px;
+  	width: 450px;
+}
+
+.rocket{
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	position: relative;
+	top:-1115px;
+	left:210px;
+  	height: 150px;
+  	width: 150px;
+}
+
+.apogee{
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	position: relative;
+	top:-2310px;
+	left: 57px;
+  	height: 150px;
+  	width: 150px;
+}
+
+.equation{
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	position: relative;
+	top:-1550px;
+	left:550px;
+  	height: 300px;
+  	width: 300px;
+}
+
+.equationexp{
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	position: relative;
+	top:-2000px;
+	left:525px;
+  	height: 300px;
+  	width: 300px;
+}
+
+@keyframes launch{
+	10%{
+		top:-1243.3px;
+		left:160px;
+	}
+	20%{
+		top:-1371.6px;
+		left:100px;
+	}
+	30%{
+		top:-1500px;
+		left:8px;
+	}
+	40%{
+		top:-1371.6px;
+		left:-100px;
+	}
+	50%{
+		top:-1250px;
+		left:-130px;
+	}
+	60%{
+		top:-1210px;
+		left:-150px;
+	}
+	70%{
+		top:-1180px;
+		left:-170px;
+	}
+	80%{
+		top:-1115px;
+		left:-180px;
+	}
+	100%{
+		top:-1115px;
+		left:-180px;
+	}
+}
+
+.launchAnimation{
+	animation-timing-function: linear;
+	animation-duration: 4s;
+  	animation-name: launch;
+  	animation-fill-mode: forwards;
+}
