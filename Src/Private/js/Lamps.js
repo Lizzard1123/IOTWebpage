@@ -25,6 +25,14 @@ const deskLamp = {
         }
         this.HTMLnode.setAttribute("onchange", "buttonChange(this)");
     },
+    clickWithoutChange: function(newState) {
+        this.HTMLnode.removeAttribute("onchange");
+        if (this.buttonState != newState) {
+            this.HTMLnode.click();
+            this.changeState(newState);
+        }
+        this.HTMLnode.setAttribute("onchange", "buttonChange(this)");
+    },
     noComsSpecific: function() {
         this.lampTitle.innerHTML = "No Connection";
         this.noComsPic.style.visibility = "visible";
@@ -55,11 +63,33 @@ const bedLamp = {
         }
         this.HTMLnode.setAttribute("onchange", "buttonChange(this)");
     },
+    clickWithoutChange: function(newState) {
+        this.HTMLnode.removeAttribute("onchange");
+        if (this.buttonState != newState) {
+            this.HTMLnode.click();
+            this.changeState(newState);
+        }
+        this.HTMLnode.setAttribute("onchange", "buttonChange(this)");
+    },
     noComsSpecific: function() {
         this.lampTitle.innerHTML = "No Connection";
         this.noComsPic.style.visibility = "visible";
         this.buttonBox.style.visibility = "hidden";
         loader.style.visibility = "hidden";
+    }
+}
+const all = {
+    name: "all",
+    buttonState: "Off",
+    allOffButton: document.getElementById('allOff'),
+    allOnButton: document.getElementById('allOn'),
+    noComsSpecific: function() {
+        this.allOffButton.disabled = true;
+        this.allOnButton.disabled = true;
+    },
+    enable: function() {
+        this.allOffButton.disabled = false;
+        this.allOnButton.disabled = false;
     }
 }
 
@@ -186,8 +216,10 @@ function checkForConnection() {
         for (let i = 0; i < length; i++) {
             if (objKeys[i] == 'desk') {
                 deskLamp.changeItself();
+                all.enable();
             } else if (objKeys[i] == 'bed') {
                 bedLamp.changeItself();
+                all.enable();
             } else {
                 console.log("no button found fuck here");
             }
@@ -200,4 +232,26 @@ function startupLamps() {
     bedLamp.HTMLnode.disabled = true;
     //handles if no connection found
     checkForConnection();
+}
+
+function allOff() {
+    all.buttonState = "Off";
+    setLamp(all, (res) => {
+        if (res == "noComs") {
+            noComsSetup(all);
+        }
+        deskLamp.clickWithoutChange(all.buttonState);
+        bedLamp.clickWithoutChange(all.buttonState);
+    });
+}
+
+function allOn() {
+    all.buttonState = "On";
+    setLamp(all, (res) => {
+        if (res == "noComs") {
+            noComsSetup(all);
+        }
+        deskLamp.clickWithoutChange(all.buttonState);
+        bedLamp.clickWithoutChange(all.buttonState);
+    });
 }

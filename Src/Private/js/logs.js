@@ -1,19 +1,19 @@
 import fs from 'fs';
 import path from 'path';
 const keeplogsfor = 7;
-const d = new Date();
-const month = d.getMonth();
+const date = new Date();
+const month = date.getMonth();
 let monthActual = month + 1;
 if (monthActual < 10) {
     monthActual = '0' + monthActual;
 }
 
-let dayVal = d.getDate();
+let dayVal = date.getDate();
 if (dayVal < 10) {
     dayVal = '0' + dayVal;
 }
-const title = `${monthActual}${dayVal}${d.getFullYear()}`;
-const time = `${d.getHours()}${d.getMinutes()}${d.getSeconds()}`;
+const title = `${monthActual}${dayVal}${date.getFullYear()}`;
+const time = `${date.getHours()}${date.getMinutes()}${date.getSeconds()}`;
 let logspath;
 // "C:\\Users\\ethan_lbv4wic\\Desktop\\IOTwebpage\\Src\\Private\\logs";
 

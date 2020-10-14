@@ -29,7 +29,7 @@
         }
         
         .button-13 .checkbox:checked+.knobs span {
-            background-color: #F44336;
+            background-color: #63001f;
         }
         
         .button-13 .checkbox:checked~.layer {
@@ -148,6 +148,33 @@
         #collumFour {
             left: 75%;
         }
+        
+        button {
+            width: 50px;
+            height: 50px;
+            box-sizing: border-box;
+            outline: none;
+            border: 3px solid black;
+            border-radius: 40px;
+            font-family: 'Archivo Black';
+        }
+        
+        button:hover {
+            transition: transform 3s;
+            transform: scale(1.2);
+        }
+        
+        #allOff {
+            background-color: #63001f;
+            position: absolute;
+            left: 2%;
+        }
+        
+        #allOn {
+            background-color: #0e5e36;
+            position: absolute;
+            right: 2%;
+        }
     </style>
 
 </head>
@@ -156,6 +183,8 @@
     <!--Title-->
     <div id="titleBox">
         <h1>Lamps!</h1>
+        <button type="button" id="allOff" onclick="allOff()">Off</button>
+        <button type="button" id="allOn" onclick="allOn()">On</button>
     </div>
 
 

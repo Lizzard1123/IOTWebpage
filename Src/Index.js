@@ -14,6 +14,18 @@ const __dirname = path.resolve();
 const port = 3000;
 const app = express();
 const Keys = JSON.parse(fs.readFileSync('./Private/codes.json', 'utf8'));
+const date = new Date();
+const month = date.getMonth();
+let monthActual = month + 1;
+if (monthActual < 10) {
+    monthActual = '0' + monthActual;
+}
+let dayVal = date.getDate();
+if (dayVal < 10) {
+    dayVal = '0' + dayVal;
+}
+const title = `${monthActual}${dayVal}${date.getFullYear()}`;
+const time = `${date.getHours()}${date.getMinutes()}${date.getSeconds()}`;
 checkDaily(__dirname);
 app.use(cookieParser());
 app.use(bodyParser.json());
@@ -88,7 +100,8 @@ app.post('/createAccount', (req, res, next) => {
             "securityLevel": "stranger"
         },
         "Private": {
-            "password": bcryptPassword
+            "password": bcryptPassword,
+            "lastLog": ""
         }
     }), (err) => {
         if (err) {
@@ -139,6 +152,14 @@ app.post('/login',
                         // same password
                         record('logging in', req.connection.remoteAddress, 3);
                         console.log('Bcrtpy same password');
+                        //set LAst login
+                        filedata.Private.lastLog = `${title}_${time}`;
+                        fs.writeFile(path.join(__dirname, `/users/${req.body.Name}.json`), JSON.stringify(filedata), (err) => {
+                            if (err) {
+                                console.log("err writng new tie log");
+                                return;
+                            }
+                        });
                         // create jwt
                         console.log("attached");
                         console.log(filedata.Public);
