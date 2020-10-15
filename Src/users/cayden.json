@@ -1,10 +1,1 @@
-{
-    "Public": {
-        "name": "cayden",
-        "securityLevel": "stranger"
-    },
-    "Private": {
-        "password": "$2b$12$zoxgi2YPWdeUWPzmbvLSGOOxRVbO4MJwy8Q4aR0NUxSoqxQsNWX1W",
-        "lastLog": ""
-    }
-}
+{"Public":{"name":"cayden","securityLevel":"stranger"},"Private":{"password":"$2b$12$zoxgi2YPWdeUWPzmbvLSGOOxRVbO4MJwy8Q4aR0NUxSoqxQsNWX1W","lastLog":"10142020_222449"}}
