@@ -51,6 +51,7 @@ const bedLamp = {
         this.buttonState = state;
     },
     changeItself: function() {
+        console.log("hereee");
         this.noComsPic.style.visibility = "hidden";
         loader.style.visibility = "hidden";
         console.log("hiya");
