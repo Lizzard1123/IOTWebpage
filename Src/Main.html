@@ -29,11 +29,11 @@
         </div>
         <div class="scrollbar" id="scrollbar_middle">
             <input type="range" min="1" max="100" value="50" class="slider" id="switcherselector" oninput="updateslider()" onchange="updatesliderbar()">
-            <div class="switchpages" id="switchone"></div>
-            <div class="switchpages" id="switchtwo"></div>
-            <div class="switchpages" id="switchthree"></div>
-            <div class="switchpages" id="switchfour"></div>
-            <div class="switchpages" id="switchfive"></div>
+            <div class="switchpages" id="switchone" onclick="updatesliderbar('One')"></div>
+            <div class="switchpages" id="switchtwo" onclick="updatesliderbar('Two')"></div>
+            <div class="switchpages" id="switchthree" onclick="updatesliderbar('Three')"></div>
+            <div class="switchpages" id="switchfour" onclick="updatesliderbar('Four')"></div>
+            <div class="switchpages" id="switchfive" onclick="updatesliderbar('Five')"></div>
         </div>
         <div class="scrollbarcontent" id="rightscrollbarcontent" style="bottom: 86%;">
             <div class="contentcollum" style="left:0%">
@@ -172,7 +172,7 @@
                 s.parentNode.insertBefore(script, s);
             })();
         </script>
-
+        <script src="privatestatic/js/PageInfo.js"></script>
         <script src="publicstatic/js/Global.js"></script>
         <script src="publicstatic/js/backSource.js"></script>
         <script>

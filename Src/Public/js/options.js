@@ -20,8 +20,8 @@ let custom;
 const normal = ['true', 'true', 'true', 'true', 'true', 'true', 'false', 'true', 'true'];
 const slider = document.getElementById('switcherselector');
 const switches = document.getElementsByClassName('switchpages');
-const titles = ['Extra', 'content one', 'Home', 'Lamps', 'TODO'];
-const pagelink = ['Extra', 'content_1', 'Home', 'Lamps', 'ToDo'];
+const titles = ['Extra', 'Remote', 'Home', 'Lamps', 'To-Do'];
+const pagelink = ['Extra', 'Remote', 'Home', 'Lamps', 'To-Do'];
 const numberofpages = titles.length;
 const maxdivbox = 100 / numberofpages;
 
@@ -32,8 +32,15 @@ function givetitles() {
 }
 
 function setintoplace() {
+    const middle = numberofpages / 2 - .5;
+    console.log(middle);
     for (let i = 0; i < numberofpages; i++) {
         switches[i].style.left = `${maxdivbox * i}%`;
+        if (i != middle) {
+            switches[i].style.zIndex = 5;
+        } else {
+            switches[i].style.zIndex = -1;
+        }
     }
     givetitles();
 }
@@ -62,9 +69,14 @@ function updateslider() {
 }
 
 // eslint-disable-next-line no-unused-vars
-function updatesliderbar() {
+function updatesliderbar(name) {
     slider.value = 50;
-    const targetmiddle = titles[closesttomiddle()];
+    let targetmiddle;
+    if (name == undefined) {
+        targetmiddle = titles[closesttomiddle()];
+    } else {
+        targetmiddle = titles[numbers.indexOf(name)];
+    }
     while (titles[2] != targetmiddle) {
         titles.unshift(titles.pop());
         pagelink.unshift(pagelink.pop());
@@ -77,7 +89,7 @@ function updatesliderbar() {
 
 function getinfo(number) {
     let thisValue;
-    if (typeof number == "string") {
+    if (typeof number == 'string') {
         numbertoreturn = numbers.indexOf(number);
         thisValue = custom[numbertoreturn];
     } else {

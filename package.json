@@ -27,8 +27,7 @@
         "jsonwebtoken": "^8.5.1",
         "node-schedule": "^1.3.2",
         "request": "^2.88.2",
-        "validator": "^13.1.1",
-        "vue": "^2.6.11"
+        "validator": "^13.1.1"
     },
     "eslintConfig": {
         "env": {
@@ -37,15 +36,12 @@
             "es2020": true
         },
         "extends": [
-            "plugin:vue/essential",
             "google"
         ],
         "parserOptions": {
-            "ecmaVersion": 11
+            "ecmaVersion": 11,
+            "sourceType": "module"
         },
-        "plugins": [
-            "vue"
-        ],
         "rules": {
             "no-unused-vars": "warn",
             "linebreak-style": [
