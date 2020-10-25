@@ -42,7 +42,6 @@ svg {
 
  ::-webkit-scrollbar-thumb {
     background: rgb(53, 147, 184);
-    border-radius: 8px;
 }
 
  ::-webkit-scrollbar-thumb:hover {

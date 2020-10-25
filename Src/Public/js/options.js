@@ -38,11 +38,23 @@ function setintoplace() {
         switches[i].style.left = `${maxdivbox * i}%`;
         if (i != middle) {
             switches[i].style.zIndex = 5;
+            switches[i].style.cursor = 'pointer';
         } else {
             switches[i].style.zIndex = -1;
+            switches[i].style.cursor = 'grab';
         }
     }
     givetitles();
+}
+
+// eslint-disable-next-line no-unused-vars
+function grab(elm) {
+    elm.style.cursor = 'grabbing';
+}
+
+// eslint-disable-next-line no-unused-vars
+function unGrab(elm, thing) {
+    elm.style.cursor = thing;
 }
 
 function closesttomiddle() {

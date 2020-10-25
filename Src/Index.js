@@ -25,7 +25,7 @@ if (dayVal < 10) {
     dayVal = '0' + dayVal;
 }
 const title = `${monthActual}${dayVal}${date.getFullYear()}`;
-const time = `${date.getHours()}${date.getMinutes()}${date.getSeconds()}`;
+const time = `${date.getHours()}.${date.getMinutes()}.${date.getSeconds()}`;
 checkDaily(__dirname);
 app.use(cookieParser());
 app.use(bodyParser.json());
@@ -80,7 +80,7 @@ app.get('/home', (req, res, next) => {
 });
 
 app.post('/createAccount', (req, res, next) => {
-    console.log(req.body)
+    console.log(req.body);
     console.log('Authenticating with whitelist');
     // request to login
     // check validity again through whitelist
@@ -92,17 +92,17 @@ app.post('/createAccount', (req, res, next) => {
         next();
     }
 }, (req, res) => {
-    let bcryptPassword = bcrypt.hashSync(req.body.password, 12);
+    const bcryptPassword = bcrypt.hashSync(req.body.password, 12);
     console.log('Creating user');
     fs.writeFile(`${__dirname}\\users\\${req.body.name}.json`, JSON.stringify({
-        "Public": {
-            "name": req.body.name,
-            "securityLevel": "stranger"
+        'Public': {
+            'name': req.body.name,
+            'securityLevel': 'stranger',
         },
-        "Private": {
-            "password": bcryptPassword,
-            "lastLog": ""
-        }
+        'Private': {
+            'password': bcryptPassword,
+            'lastLog': '',
+        },
     }), (err) => {
         if (err) {
             console.log(err);
@@ -152,18 +152,18 @@ app.post('/login',
                         // same password
                         record('logging in', req.connection.remoteAddress, 3);
                         console.log('Bcrtpy same password');
-                        //set LAst login
+                        // set LAst login
                         filedata.Private.lastLog = `${title}_${time}`;
                         fs.writeFile(path.join(__dirname, `/users/${req.body.Name}.json`), JSON.stringify(filedata), (err) => {
                             if (err) {
-                                console.log("err writng new tie log");
+                                console.log('err writng new tie log');
                                 return;
                             }
                         });
                         // create jwt
-                        console.log("attached");
+                        console.log('attached');
                         console.log(filedata.Public);
-                        const token = jwt.sign(filedata.Public, Keys.secretkey, { expiresIn: '30min', });
+                        const token = jwt.sign(filedata.Public, Keys.secretkey, { expiresIn: '30min' });
                         // set authorization cookie with jwt
                         res.cookie('token', token, {
                             // ms
@@ -179,7 +179,7 @@ app.post('/login',
                     } else {
                         // incorrect password
                         record('Failed login from', req.connection.remoteAddress, 3);
-                        //record('password attempt', req.body.Password, 3);
+                        // record('password attempt', req.body.Password, 3);
                         console.log('not right');
                         return res.json({
                             message: 'error',
@@ -266,81 +266,81 @@ app.get('/userinfo', (req, res, next) => {
     });
 });
 
-//esp local ip
-const espLightsIP = "http://192.168.1.110:80/ESPLights";
+// esp local ip
+const espLightsIP = 'http://192.168.1.110:80/ESPLights';
 
 function sendMessageToESPLights(name, mes, callback) {
-    let propperMes = {};
+    const propperMes = {};
     propperMes[name] = mes;
-    request.post(espLightsIP, {
+    request.post(
+        espLightsIP, {
             headers: {
-                "content-type": "text/plain",
+                'content-type': 'text/plain',
             },
-            //message it sends
-            body: JSON.stringify(propperMes)
+            // message it sends
+            body: JSON.stringify(propperMes),
         },
         (error, response) => {
             if (error || (response.statusCode == 500)) {
                 console.log(error);
-                console.log("req error");
+                console.log('req error');
                 callback(error);
                 return;
             }
             if (response.statusCode != 200) {
-                console.log("fix status code dumbass");
+                console.log('fix status code dumbass');
             }
             callback(error, response.body);
             return response;
-        }
-
+        },
     );
 }
-//turn on lights
+// turn on lights
 /* (req, res, next) => {
     auth(req, res, next);
 },
 */
 
-function ESPPostErr(err, res) {
+function eSPPostErr(err, res) {
     if (err) {
-        console.log("Post err");
+        console.log('Post err');
         console.log(err);
-        res.json({ status: "noComs" });
+        res.json({ status: 'noComs' });
     } else {
         res.json({ status: 'Got it' });
     }
 }
 
 app.post('/espLights_Update', (req, res) => {
-    let reqMessage = req.body;
+    const reqMessage = req.body;
     console.log(reqMessage);
-    let firstObj = Object.keys(reqMessage)[0];
-    if (reqMessage[firstObj] == "On") {
-        console.log("pointy on");
-        sendMessageToESPLights(firstObj, "On", (err) => {
-            console.log("pointyq");
-            ESPPostErr(err, res);
+    const firstObj = Object.keys(reqMessage)[0];
+    if (reqMessage[firstObj] == 'On') {
+        console.log('pointy on');
+        sendMessageToESPLights(firstObj, 'On', (err) => {
+            console.log('pointyq');
+            eSPPostErr(err, res);
         });
-    } else if (reqMessage[firstObj] == "Off") {
-        console.log("pointy off");
-        sendMessageToESPLights(firstObj, "Off", (err) => {
-            console.log("pointyw");
-            ESPPostErr(err, res);
+    } else if (reqMessage[firstObj] == 'Off') {
+        console.log('pointy off');
+        sendMessageToESPLights(firstObj, 'Off', (err) => {
+            console.log('pointyw');
+            eSPPostErr(err, res);
         });
     } else {
         console.log(res.body);
-        console.log("unknown res");
+        console.log('unknown res');
     }
     return;
 });
 
-//get lights status
+// get lights status
 app.get('/espLights_Status', (req, res) => {
-    sendMessageToESPLights("status", "question", (err, mes) => {
+    sendMessageToESPLights('status', 'question', (err, mes) => {
         if (err) {
             if (err.errno == 'ETIMEDOUT') {
-                console.log("timeout err");
-                res.json({ status: "noComs" });
+                console.log('timeout err');
+                res.json({ status: 'noComs' });
             }
         } else {
             res.json(mes);

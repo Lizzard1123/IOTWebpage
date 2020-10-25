@@ -19,7 +19,6 @@
 
  ::-webkit-scrollbar-thumb {
     background: rgb(53, 147, 184);
-    border-radius: 8px;
 }
 
  ::-webkit-scrollbar-thumb:hover {
@@ -82,6 +81,7 @@
     width: calc(25% - 3px);
     position: fixed;
     border-right: 3px solid black;
+    cursor: pointer;
 }
 
 #scrollbar_left:hover,
@@ -104,6 +104,7 @@
     width: calc(25% - 3px);
     position: fixed;
     border-left: 3px solid black;
+    cursor: pointer;
 }
 
 .scrollbarcontent {
@@ -133,6 +134,7 @@
     border-top: 3px solid rgb(0, 0, 0);
     border-left: 3px solid rgb(0, 0, 0);
     border-right: 3px solid rgb(0, 0, 0);
+    cursor: pointer;
 }
 
 svg {
@@ -159,6 +161,7 @@ svg {
     left: 22.5%;
     border-left: 3px solid rgb(0, 0, 0);
     border-right: 3px solid rgb(0, 0, 0);
+    overflow: hidden;
 }
 
 #openweathermap-widget-21 {
@@ -190,10 +193,15 @@ iframe {
 }
 
 #logout {
-    width: 5%;
+    width: 6%;
     height: 100%;
     position: absolute;
-    right: 1%;
+    right: 0%;
     top: 0%;
     z-index: 2;
+}
+
+#logout:hover {
+    background-color: #73a2c2;
+    cursor: pointer;
 }
