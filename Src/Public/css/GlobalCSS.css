@@ -56,8 +56,11 @@
 }
 
 #Title {
+    font-family: 'Archivo Black';
     position: relative;
-    top: -25%;
+    top: 0%;
+    font-size: 2em;
+    font-weight: bold;
 }
 
 .scrollbar {

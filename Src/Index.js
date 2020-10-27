@@ -348,4 +348,23 @@ app.get('/espLights_Status', (req, res) => {
     });
 });
 
+/*
+backend
+-api key check postman for headers
+-makes sure you have proper headers very specific
+-parse sets of 25 commits
+-include name, time, message
+-send res to frontend
+
+frontend
+-send req to back for page number of 25
+-recive json
+-format them into dynamic table
+-js clone for each row
+-format time
+
+-make look pretty
+
+*/
+
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));

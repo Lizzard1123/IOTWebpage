@@ -1,3 +1,4 @@
+/* eslint-disable prefer-const */
 /*
 There is a lot of ignoring eslint commets bc i used a system of variable varibles which in turn uses eval()
 which i know is bad practice, but there shouldnt be a way to use it mallicously
