@@ -4,12 +4,147 @@
 <head>
     <link href='https://fonts.googleapis.com/css?family=Archivo Black' rel='stylesheet'>
     <link rel="stylesheet" type="text/css" href="../css/Home.css">
+    <style>
+        #changeTable {
+            position: absolute;
+            left: 0;
+            height: 500px;
+            bottom: 3.5%;
+            width: 100%;
+            border-top: 5px solid black;
+        }
+        
+        #nameTable {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 20%;
+            height: 100%;
+            border-right: 5px solid black;
+        }
+        
+        #timeTable {
+            position: absolute;
+            left: calc(20% + 5px);
+            top: 0;
+            width: 20%;
+            height: 100%;
+            border-right: 5px solid black;
+        }
+        
+        #messageTable {
+            position: absolute;
+            left: calc(40% + 10px);
+            top: 0;
+            width: calc(60% - 10px);
+            height: 100%;
+        }
+        
+        .namecell {
+            width: 100%;
+            height: 20px;
+            position: relative;
+            font-size: 1em;
+            font-family: 'Archivo Black';
+            text-align: center;
+        }
+        
+        .timecell {
+            width: 100%;
+            height: 20px;
+            position: relative;
+            font-size: .5em;
+            font-family: 'Archivo Black';
+            text-align: center;
+            vertical-align: bottom;
+        }
+        
+        .messagecell {
+            width: 100%;
+            height: 20px;
+            position: relative;
+            font-size: .7em;
+            font-family: 'Archivo Black';
+            text-align: left;
+        }
+        
+        #nameCell1 {
+            font-size: 1em;
+        }
+        
+        #timeCell1 {
+            font-size: 1em;
+        }
+        
+        #messageCell1 {
+            font-size: 1em;
+        }
+    </style>
 </head>
 
 <body style="width:397px; height:1000px">
     <div id="bodytitle">Welcome!</div>
 
+    <div id="changeTable">
+        <div id="nameTable">
+            <div class="namecell" id="nameCell1">Name</div>
+        </div>
+        <div id="timeTable">
+            <div class="timecell" id="timeCell1">Time</div>
+        </div>
+        <div id="messageTable">
+            <div class="messagecell" id="messageCell1">Message</div>
+        </div>
+    </div>
 
 </body>
+<script>
+    const nameTable = document.getElementById('nameTable');
+    const timeTable = document.getElementById('timeTable');
+    const messageTable = document.getElementById('messageTable');
+
+    const nameExample = document.getElementById("nameCell1");
+    const titleExample = document.getElementById("timeCell1");
+    const messageExample = document.getElementById("messageCell1");
+
+    var page = 1;
+
+    function getGithub(pagenum, callback) {
+        const githubCommits = new XMLHttpRequest();
+        githubCommits.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                const obj = JSON.parse(this.responseText);
+                console.log("hiyahere");
+                console.log(obj);
+                callback(obj);
+            }
+        };
+        githubCommits.open('POST', '/githubCommits', true);
+        githubCommits.setRequestHeader('Content-type', 'application/json');
+        githubCommits.send(JSON.stringify({
+            "page": pagenum
+        }));
+    }
+
+    function cloneRow(name, example, parent, id) {
+        const cln = example.cloneNode(true);
+        cln.id = id;
+        cln.innerHTML = name;
+        parent.appendChild(cln);
+    }
+
+    function setupPage(pagenum) {
+        getGithub(pagenum, (obj) => {
+            for (var i = 0; i < obj.length; i++) {
+                let current = obj[i];
+                cloneRow(current.name, nameExample, nameTable, `nameCell${i+2}`);
+                cloneRow(current.date, titleExample, timeTable, `timeCell${i+2}`);
+                cloneRow(current.message, messageExample, messageTable, `messageCell${i+2}`);
+            }
+        });
+    }
+    console.log("re");
+    setupPage(page);
+</script>
 
 </html>

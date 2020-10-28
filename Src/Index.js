@@ -290,7 +290,7 @@ function sendMessageToESPLights(name, mes, callback) {
             if (response.statusCode != 200) {
                 console.log('fix status code dumbass');
             }
-            callback(error, response.body);
+            callback(error);
             return response;
         },
     );
@@ -366,5 +366,48 @@ frontend
 -make look pretty
 
 */
+const githubLink = 'https://api.github.com/repos/Lizzard1123/IOTWebpage/commits';
+
+function getGithubCommits(callback) {
+    request.get(
+        githubLink, {
+            headers: {
+                'User-Agent': 'EthanIOTBACKEND',
+                'Accept': 'application/vnd.github.v3+json',
+                'Authorization': `${Keys.GithubAcsess}`,
+            },
+        },
+        (error, response) => {
+            if (error || (response.statusCode == 500)) {
+                console.log(error);
+                console.log('get req error');
+                callback(error);
+                return;
+            }
+            if (response.statusCode != 200) {
+                console.log('fix status code dumbass');
+            }
+            callback(error, response.body);
+            return response;
+        },
+    );
+}
+
+app.post('/githubCommits', (req, res) => {
+    const sendMess = [];
+    getGithubCommits((err, responsething) => {
+        const page = req.body.page;
+        const github = JSON.parse(responsething);
+        for (let i = 25 * (page - 1); i < 25 * page; i++) {
+            const currentmes = {
+                'name': github[i].commit.committer.name,
+                'date': github[i].commit.committer.date,
+                'message': github[i].commit.message,
+            };
+            sendMess.push(currentmes);
+        }
+        res.send(sendMess);
+    });
+});
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
