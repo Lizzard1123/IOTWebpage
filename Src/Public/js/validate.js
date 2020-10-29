@@ -75,6 +75,7 @@ function ajaxSend() {
     };
     logincheck.open('POST', '/login', true);
     logincheck.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+    logincheck.setRequestHeader('type', 'ajax');
     logincheck.send(`Name=${nameinput.value}&Password=${passwordinput.value}`);
 }
 

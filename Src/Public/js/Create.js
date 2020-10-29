@@ -45,6 +45,7 @@ function submitNewInfo() {
     const sendAccountInfo = new XMLHttpRequest();
     sendAccountInfo.open('POST', '/createAccount', true);
     sendAccountInfo.setRequestHeader('Content-type', 'application/json');
+    sendAccountInfo.setRequestHeader('type', 'ajax');
     sendAccountInfo.send(JSON.stringify(submitInfo));
     submitInfo = {};
 }

@@ -238,13 +238,18 @@ app.post('/timer', (req, res, next) => {
     } catch {
         lastkeyarrayval = {};
     } finally {
-        const timerpath = path.join(__dirname, 'Private\\timers.json');
-        fs.writeFile(timerpath, JSON.stringify(req.body), (err) => {
+        const userTimer = getUserInfo(req);
+        const userPath = `/users/${userTimer.name}.json`;
+        const timerpath = path.join(__dirname, userPath);
+        let userJSON = fs.readFileSync(timerpath);
+        userJSON = JSON.parse(userJSON);
+        userJSON.timers = req.body;
+        fs.writeFile(timerpath, JSON.stringify(userJSON), (err) => {
             if (err) {
                 consoleLog('Timer set failed', err);
-                return false;
+                return;
             }
-            consoleLog('Updated timer for');
+            consoleLog('Updated timer for', userTimer.name);
             return res.send('done');
         });
     }
@@ -252,13 +257,15 @@ app.post('/timer', (req, res, next) => {
 app.get('/timer', (req, res, next) => {
     auth('stranger', req, res, next);
 }, (req, res) => {
-    const timerpath = path.join(__dirname, 'Private\\timers.json');
+    const userTimer = getUserInfo(req);
+    const userPath = `/users/${userTimer.name}.json`;
+    const timerpath = path.join(__dirname, userPath);
     fs.readFile(timerpath, (err, data) => {
         if (err) {
             consoleLog('Timer get failed', err);
             return false;
         }
-        return res.json(JSON.parse(data));
+        return res.json(JSON.parse(data).timers);
     });
 });
 

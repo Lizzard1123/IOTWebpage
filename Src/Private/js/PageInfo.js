@@ -15,6 +15,7 @@ function getCookie(cname) {
     }
     return '';
 }
+
 const cookieToken = getCookie('token');
 // eslint-disable-next-line no-unused-vars
 const globalUserData = JSON.parse(window.atob(cookieToken.split('.')[1]));
@@ -76,7 +77,9 @@ function getLamp(callback) {
             }
         }
     };
+
     lampCheck.open('GET', '/espLights_Status', true);
+    lampCheck.setRequestHeader('type', 'ajax');
     lampCheck.send();
 }
 

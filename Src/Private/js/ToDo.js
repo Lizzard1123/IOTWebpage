@@ -129,7 +129,7 @@ function recivefrombackend() {
     const gettimerlogs = new XMLHttpRequest();
     gettimerlogs.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
-            console.log(typeof this.responseText);
+            console.log(this.responseText);
             const res = JSON.parse(this.responseText);
             currenttaskobj = res;
             updatepagetimers();

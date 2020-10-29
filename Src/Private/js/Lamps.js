@@ -112,6 +112,7 @@ function setLamp(currentButton, callback) {
     sendMes[currentButton.name] = currentButton.buttonState;
     console.log(sendMes);
     console.log(JSON.stringify(sendMes));
+    lampChange.setRequestHeader('type', 'ajax');
     lampChange.send(JSON.stringify(sendMes));
 }
 
@@ -176,46 +177,6 @@ function buttonChange(currentButton) {
     }
 }
 
-/*
-function getLamp(callback) {
-    const lampCheck = new XMLHttpRequest();
-    lampCheck.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-            //idfk
-            let obj = JSON.parse(this.responseText);
-            if (typeof obj == "string") {
-                obj = JSON.parse(obj);
-            }
-            if (obj.status == "noComs") {
-                console.log(obj);
-                noComsSetup(allLampObj);
-                return;
-            }
-            let objKeys = Object.keys(obj);
-            let length = Object.keys(obj).length;
-            console.log(obj);
-            console.log(typeof obj);
-            console.log(objKeys);
-            console.log(length);
-            //add more state change ehre
-            for (let i = 0; i < length; i++) {
-                if (objKeys[i] == 'desk') {
-                    deskLamp.changeState(obj[objKeys[i]]);
-                } else if (objKeys[i] == 'bed') {
-                    bedLamp.changeState(obj[objKeys[i]]);
-                } else {
-                    console.log(obj);
-                    console.log("no button found fuck");
-                }
-            }
-            if (callback !== undefined) {
-                callback(objKeys, length);
-            }
-        }
-    };
-    lampCheck.open('GET', '/espLights_Status', true);
-    lampCheck.send();
-}*/
 let timerCount = 0;
 const timerLimit = 30;
 // thx to w3 schools for this oen
