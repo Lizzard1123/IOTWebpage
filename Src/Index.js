@@ -9,11 +9,12 @@ import cookieParser from 'cookie-parser';
 import { record } from './Private/js/logs.js';
 import { checkDaily } from './Private/js/logs.js';
 import request from 'request';
+import dotenv from 'dotenv';
 
+dotenv.config();
 const __dirname = path.resolve();
 const port = 3000;
 const app = express();
-const Keys = JSON.parse(fs.readFileSync('./Private/codes.json', 'utf8'));
 const date = new Date();
 const month = date.getMonth();
 let monthActual = month + 1;
@@ -49,7 +50,7 @@ function error(res, errorthing = 'default') {
 function auth(req, res, next) {
     console.log('Authenticating');
     try {
-        const decoded = jwt.verify(req.cookies.token, Keys.secretkey);
+        const decoded = jwt.verify(req.cookies.token, process.env.secretkey);
         req.params.userData = decoded;
         next();
     } catch (err) {
@@ -84,7 +85,7 @@ app.post('/createAccount', (req, res, next) => {
     console.log('Authenticating with whitelist');
     // request to login
     // check validity again through whitelist
-    if (!validator.isWhitelisted(req.body.password, Keys.whitelist)) {
+    if (!validator.isWhitelisted(req.body.password, process.env.whitelist)) {
         record('Invalid Characters on backend from account', req.connection.remoteAddress, 5);
         console.log('invalid characters on createaccount');
         error(res, 'validator account ');
@@ -116,7 +117,7 @@ app.post('/login',
         console.log('Authenticating with whitelist');
         // request to login
         // check validity again through whitelist
-        if (!validator.isWhitelisted(req.body.Password, Keys.whitelist)) {
+        if (!validator.isWhitelisted(req.body.Password, process.env.whitelist)) {
             record('Invalid Characters on backend from', req.connection.remoteAddress, 5);
             console.log('invalid characters');
             error(res, 'validator');
@@ -163,7 +164,7 @@ app.post('/login',
                         // create jwt
                         console.log('attached');
                         console.log(filedata.Public);
-                        const token = jwt.sign(filedata.Public, Keys.secretkey, { expiresIn: '30min' });
+                        const token = jwt.sign(filedata.Public, process.env.secretkey, { expiresIn: '30min' });
                         // set authorization cookie with jwt
                         res.cookie('token', token, {
                             // ms
@@ -210,7 +211,7 @@ app.post('/timer', (req, res, next) => {
     let lastkeyarrayval;
     try {
         lastkeyarrayval = req.body[keysarray[(keysarray.length - 1)]][2];
-        if (!validator.isWhitelisted(lastkeyarrayval, Keys.whitelist)) {
+        if (!validator.isWhitelisted(lastkeyarrayval, process.env.whitelist)) {
             record('Invalid Characters on backend from', req.connection.remoteAddress, 5);
             console.log('invalid character in timer post');
             error(res, 'validator for timer post');
@@ -374,7 +375,7 @@ function getGithubCommits(callback) {
             headers: {
                 'User-Agent': 'EthanIOTBACKEND',
                 'Accept': 'application/vnd.github.v3+json',
-                'Authorization': `${Keys.GithubAcsess}`,
+                'Authorization': `${process.env.GithubAcsess}`,
             },
         },
         (error, response) => {
@@ -398,15 +399,21 @@ app.post('/githubCommits', (req, res) => {
     getGithubCommits((err, responsething) => {
         const page = req.body.page;
         const github = JSON.parse(responsething);
-        for (let i = 25 * (page - 1); i < 25 * page; i++) {
-            const currentmes = {
-                'name': github[i].commit.committer.name,
-                'date': github[i].commit.committer.date,
-                'message': github[i].commit.message,
-            };
-            sendMess.push(currentmes);
+        console.log(github);
+        if (github == undefined || github.message == 'Not Found') {
+            console.log('no github');
+            res.send('[]');
+        } else {
+            for (let i = 25 * (page - 1); i < 25 * page; i++) {
+                const currentmes = {
+                    'name': github[i].commit.committer.name,
+                    'date': github[i].commit.committer.date,
+                    'message': github[i].commit.message,
+                };
+                sendMess.push(currentmes);
+            }
+            res.send(sendMess);
         }
-        res.send(sendMess);
     });
 });
 
