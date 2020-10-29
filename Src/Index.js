@@ -11,8 +11,13 @@ import { checkDaily } from './Private/js/logs.js';
 import request from 'request';
 import dotenv from 'dotenv';
 
-dotenv.config();
 const __dirname = path.resolve();
+const result = dotenv.config({ path: `${path.join(__dirname, 'secretCodes.env')}` });
+
+if (result.error) {
+    console.log(result.error);
+}
+
 const port = 3000;
 const app = express();
 const date = new Date();
