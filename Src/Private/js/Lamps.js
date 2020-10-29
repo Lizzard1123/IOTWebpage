@@ -1,6 +1,20 @@
 const loader = document.getElementById('loadingg');
 const allButtons = ['deskLampButton', 'bedLampButton'];
 const allLampObj = ['desk', 'bed', 'all'];
+const all = {
+    name: 'all',
+    buttonState: 'Off',
+    allOffButton: document.getElementById('allOff'),
+    allOnButton: document.getElementById('allOn'),
+    noComsSpecific: function() {
+        this.allOffButton.disabled = true;
+        this.allOnButton.disabled = true;
+    },
+    enable: function() {
+        this.allOffButton.disabled = false;
+        this.allOnButton.disabled = false;
+    },
+};
 const deskLamp = {
     name: 'desk',
     HTMLnode: document.getElementsByName('deskLampButton')[0],
@@ -39,6 +53,11 @@ const deskLamp = {
         this.noComsPic.style.visibility = 'visible';
         this.buttonBox.style.visibility = 'hidden';
         loader.style.visibility = 'hidden';
+        document.cookie = `globalDeskState=noComs`;
+        all.noComsSpecific();
+    },
+    click: function() {
+        this.HTMLnode.click();
     },
 };
 const bedLamp = {
@@ -80,40 +99,53 @@ const bedLamp = {
         this.noComsPic.style.visibility = 'visible';
         this.buttonBox.style.visibility = 'hidden';
         loader.style.visibility = 'hidden';
+        document.cookie = `globalBedState=noComs`;
+        all.noComsSpecific();
+    },
+    click: function() {
+        this.HTMLnode.click();
     },
 };
-const all = {
-    name: 'all',
-    buttonState: 'Off',
-    allOffButton: document.getElementById('allOff'),
-    allOnButton: document.getElementById('allOn'),
-    noComsSpecific: function() {
-        this.allOffButton.disabled = true;
-        this.allOnButton.disabled = true;
-    },
-    enable: function() {
-        this.allOffButton.disabled = false;
-        this.allOnButton.disabled = false;
-    },
-};
+// thx to w3 schools for this oen
+function getCookie(cname) {
+    const name = cname + '=';
+    const decodedCookie = decodeURIComponent(window.parent.document.cookie);
+    const ca = decodedCookie.split(';');
+    for (let i = 0; i < ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+        }
+    }
+    return '';
+}
+const cookieToken = getCookie('token');
+const UserData = JSON.parse(window.atob(cookieToken.split('.')[1]));
 
 function setLamp(currentButton, callback) {
-    const lampChange = new XMLHttpRequest();
-    lampChange.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-            const obj = JSON.parse(this.responseText);
-            callback(obj.status);
-        }
-    };
-    lampChange.open('POST', '/espLights_Update', true);
-    lampChange.setRequestHeader('Content-type', 'application/json');
-    // string JSON currentButton.name currentButton.buttonState
-    const sendMes = {};
-    sendMes[currentButton.name] = currentButton.buttonState;
-    console.log(sendMes);
-    console.log(JSON.stringify(sendMes));
-    lampChange.setRequestHeader('type', 'ajax');
-    lampChange.send(JSON.stringify(sendMes));
+    if (UserData.securityLevel == 'admin') {
+        const lampChange = new XMLHttpRequest();
+        lampChange.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                const obj = JSON.parse(this.responseText);
+                callback(obj.status);
+            }
+        };
+        lampChange.open('POST', '/espLights_Update', true);
+        lampChange.setRequestHeader('Content-type', 'application/json');
+        // string JSON currentButton.name currentButton.buttonState
+        const sendMes = {};
+        sendMes[currentButton.name] = currentButton.buttonState;
+        console.log(sendMes);
+        console.log(JSON.stringify(sendMes));
+        lampChange.setRequestHeader('type', 'ajax');
+        lampChange.send(JSON.stringify(sendMes));
+    } else {
+        callback('Forbidden');
+    }
 }
 
 function noComsSetup(currentButton) {
@@ -144,57 +176,48 @@ function subButtonChange(currentButton) {
         currentButton.changeState('Off');
     }
     setLamp(currentButton, (mes) => {
-        console.log('kkk');
-        console.log(mes);
-        if (mes == 'noComs') {
-            noComsSetup(currentButton);
+        if (mes == 'Forbidden') {
+            console.log('Forbidden');
+        } else {
+            if (mes == 'noComs') {
+                noComsSetup(currentButton);
+            }
         }
     });
 }
 
 // eslint-disable-next-line no-unused-vars
 function buttonChange(currentButton) {
-    console.log(currentButton);
-    currentButton.disabled = true;
-    setTimeout(function() {
-        console.log('HAHHA');
-        currentButton.disabled = false;
-    }, 1500);
-    const buttonIdNum = allButtons.indexOf(currentButton.name);
-    console.log(currentButton.name);
-    console.log(buttonIdNum);
-    switch (buttonIdNum) {
-        case 0:
-            // desk lamp
-            console.log('desky');
-            subButtonChange(deskLamp);
-            break;
-        case 1:
-            // bed lamp
-            console.log('bedy');
-            subButtonChange(bedLamp);
-            break;
+    if (UserData.securityLevel != 'admin') {
+        currentButton.click();
+    } else {
+        console.log(currentButton);
+        currentButton.disabled = true;
+        setTimeout(function() {
+            console.log('HAHHA');
+            currentButton.disabled = false;
+        }, 1500);
+        const buttonIdNum = allButtons.indexOf(currentButton.name);
+        console.log(currentButton.name);
+        console.log(buttonIdNum);
+        switch (buttonIdNum) {
+            case 0:
+                // desk lamp
+                console.log('desky');
+                subButtonChange(deskLamp);
+                break;
+            case 1:
+                // bed lamp
+                console.log('bedy');
+                subButtonChange(bedLamp);
+                break;
+        }
     }
 }
 
+
 let timerCount = 0;
-const timerLimit = 30;
-// thx to w3 schools for this oen
-function getCookie(cname) {
-    const name = cname + '=';
-    const decodedCookie = decodeURIComponent(document.cookie);
-    const ca = decodedCookie.split(';');
-    for (let i = 0; i < ca.length; i++) {
-        let c = ca[i];
-        while (c.charAt(0) == ' ') {
-            c = c.substring(1);
-        }
-        if (c.indexOf(name) == 0) {
-            return c.substring(name.length, c.length);
-        }
-    }
-    return '';
-}
+const timerLimit = 60;
 // uses getLamp from pageinfo global
 function updateFromGlobal() {
     // do for each button
@@ -203,21 +226,20 @@ function updateFromGlobal() {
         const GlobaldeskState = getCookie('globalDeskState');
         const GlobalbedState = getCookie('globalBedState');
         if (GlobaldeskState == 'noComs') {
-            bedLamp.noComsSpecific();
+            deskLamp.noComsSpecific();
         } else {
-            console.log('deskg' + GlobaldeskState);
             deskLamp.changeState(GlobaldeskState);
             deskLamp.changeItself();
         }
         if (GlobalbedState == 'noComs') {
             bedLamp.noComsSpecific();
         } else {
-            console.log('bedg' + GlobalbedState);
             bedLamp.changeState(GlobalbedState);
             bedLamp.changeItself();
         }
-
-        all.enable();
+        if (GlobaldeskState != 'noComs' && GlobalbedState != 'noComs') {
+            all.enable();
+        }
     } else {
         // global has no response
         // call again in 1/2 sec
@@ -246,21 +268,31 @@ function startupLamps() {
 function allOff() {
     all.buttonState = 'Off';
     setLamp(all, (res) => {
-        if (res == 'noComs') {
-            noComsSetup(all);
+        if (mes == 'Forbidden') {
+            console.log('Forbidden');
+        } else {
+            if (res == 'noComs') {
+                noComsSetup(all);
+                return;
+            }
+            deskLamp.clickWithoutChange(all.buttonState);
+            bedLamp.clickWithoutChange(all.buttonState);
         }
-        deskLamp.clickWithoutChange(all.buttonState);
-        bedLamp.clickWithoutChange(all.buttonState);
     });
 }
 // eslint-disable-next-line no-unused-vars
 function allOn() {
     all.buttonState = 'On';
     setLamp(all, (res) => {
-        if (res == 'noComs') {
-            noComsSetup(all);
+        if (mes == 'Forbidden') {
+            console.log('Forbidden');
+        } else {
+            if (res == 'noComs') {
+                noComsSetup(all);
+                return;
+            }
+            deskLamp.clickWithoutChange(all.buttonState);
+            bedLamp.clickWithoutChange(all.buttonState);
         }
-        deskLamp.clickWithoutChange(all.buttonState);
-        bedLamp.clickWithoutChange(all.buttonState);
     });
 }

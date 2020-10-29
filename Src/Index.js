@@ -102,7 +102,7 @@ app.get('/home', (req, res, next) => {
 });
 
 app.post('/createAccount', (req, res, next) => {
-    consoleLog('Creating and checking Account:', req.body);
+    consoleLog('Creating and checking Account:', JSON.stringify(req.body));
     // request to login
     // check validity again through whitelist
     if (!validator.isWhitelisted(req.body.password, process.env.whitelist)) {
@@ -114,7 +114,7 @@ app.post('/createAccount', (req, res, next) => {
     }
 }, (req, res) => {
     const bcryptPassword = bcrypt.hashSync(req.body.password, 12);
-    consoleLog('Creating user:', req.body.Name);
+    consoleLog('Creating user:', req.body.name);
     fs.writeFile(`${__dirname}\\users\\${req.body.name}.json`, JSON.stringify({
         'Public': {
             'name': req.body.name,
@@ -308,7 +308,9 @@ function eSPPostErr(err, res) {
     }
 }
 
-app.post('/espLights_Update', (req, res) => {
+app.post('/espLights_Update', (req, res, next) => {
+    auth('admin', req, res, next);
+}, (req, res) => {
     const reqMessage = req.body;
     const firstObj = Object.keys(reqMessage)[0];
     if (reqMessage[firstObj] == 'On') {

@@ -29,14 +29,14 @@ function changeReady(input) {
 const deskLampGlobal = {
     buttonState: 'Off',
     changeState: function(state) {
-        document.cookie = `globalDeskState=${state}`;
+        document.cookie = `globalDeskState=` + state;
         this.buttonState = state;
     },
 };
 const bedLampGlobal = {
     buttonState: 'Off',
     changeState: function(state) {
-        document.cookie = `globalBedState=${state}`;
+        document.cookie = `globalBedState=` + state;
         this.buttonState = state;
     },
 };
@@ -91,6 +91,7 @@ function globalStartupLamps() {
 
 // global Startup
 function globalStartUp() {
+    document.cookie = `GLOALLAMPSREADY=false`;
     globalStartupLamps();
 }
 globalStartUp();
