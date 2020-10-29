@@ -216,6 +216,8 @@ function getLamp(callback) {
     lampCheck.open('GET', '/espLights_Status', true);
     lampCheck.send();
 }*/
+let timerCount = 0;
+const timerLimit = 30;
 // thx to w3 schools for this oen
 function getCookie(cname) {
     const name = cname + '=';
@@ -232,9 +234,7 @@ function getCookie(cname) {
     }
     return '';
 }
-let timerCount = 0;
-const timerLimit = 30;
-
+// uses getLamp from pageinfo global
 function updateFromGlobal() {
     // do for each button
     const GLOALLAMPSREADY = getCookie('GLOALLAMPSREADY') == 'true';

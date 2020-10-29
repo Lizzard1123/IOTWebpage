@@ -1,5 +1,23 @@
 // holds global info for js pages
-
+// thx to w3 schools for this oen
+function getCookie(cname) {
+    const name = cname + '=';
+    const decodedCookie = decodeURIComponent(document.cookie);
+    const ca = decodedCookie.split(';');
+    for (let i = 0; i < ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+        }
+    }
+    return '';
+}
+const cookieToken = getCookie('token');
+// eslint-disable-next-line no-unused-vars
+const globalUserData = JSON.parse(window.atob(cookieToken.split('.')[1]));
 
 // lamps
 function changeReady(input) {
@@ -26,6 +44,7 @@ function getLamp(callback) {
     const lampCheck = new XMLHttpRequest();
     lampCheck.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
+            console.log(this.responseText);
             let obj = JSON.parse(this.responseText);
             if (typeof obj == 'string') {
                 obj = JSON.parse(obj);

@@ -129,14 +129,6 @@ function recivefrombackend() {
     const gettimerlogs = new XMLHttpRequest();
     gettimerlogs.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
-            /*
-            if (typeof this.responseText == "string") {
-                console.log("helloweithrwr");
-                console.log(this.responseText);
-                window.top.location.href = this.responseText;
-                return;
-            }
-*/
             console.log(typeof this.responseText);
             const res = JSON.parse(this.responseText);
             currenttaskobj = res;

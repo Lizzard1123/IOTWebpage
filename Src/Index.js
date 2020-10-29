@@ -14,8 +14,11 @@ import dotenv from 'dotenv';
 const __dirname = path.resolve();
 const result = dotenv.config({ path: `${path.join(__dirname, 'secretCodes.env')}` });
 
+function consoleLog(string, data = '') {
+    console.log(string + ' ' + data);
+}
 if (result.error) {
-    console.log(result.error);
+    consoleLog('Dotnev Error Loading env', result.error);
 }
 
 const port = 3000;
@@ -38,68 +41,80 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use('/privatestatic', [(err, req, res, next) => {
-    auth(req, res, next);
+    auth('stranger', req, res, next);
 }, express.static('Private')]);
 app.use('/publicstatic', express.static('public'));
 
 function error(res, errorthing = 'default') {
-    console.log('error message lolzies  you');
-    console.log(errorthing);
+    consoleLog('Error function:', errorthing);
     record('Error', errorthing, 2);
     return res.sendStatus(401).end();
 }
 // userinfo
-
+function getUserInfo(req) {
+    const token = req.cookies.token;
+    try {
+        const data = jwt.verify(token, process.env.secretkey);
+        return data;
+    } catch (err) {
+        consoleLog('Invalid JWT', err);
+        return 'Invalid';
+    }
+}
 
 // auth function
-function auth(req, res, next) {
-    console.log('Authenticating');
+function auth(privlage, req, res, next) {
+    consoleLog('Authenticating user');
     try {
         const decoded = jwt.verify(req.cookies.token, process.env.secretkey);
-        req.params.userData = decoded;
-        next();
+        if (decoded.securityLevel == privlage || decoded.securityLevel == 'admin') {
+            next();
+        } else {
+            res.send('Forbidden');
+        }
     } catch (err) {
         record('Failed Auth ip', req.connection.remoteAddress, 3);
         const isAjaxRequest = req.header.type == 'ajax';
-        console.log(isAjaxRequest);
+        consoleLog('Is it an AJAX request:', isAjaxRequest);
         if (isAjaxRequest) {
-            console.log('tsednw');
+            consoleLog('It is');
             res.send('/login').end();
         } else {
+            consoleLog('Redirecting expired Token');
             res.redirect(302, '/login');
         }
     }
 }
 // get login page
 app.get('/login', (req, res) => {
-    console.log('login path freebie');
+    consoleLog('Served Login Page');
     record('Gave login page to', req.connection.remoteAddress, 3);
     res.sendFile(path.join(__dirname, 'Auth.html'));
 });
 
 app.get('/home', (req, res, next) => {
-    auth(req, res, next);
+    auth('stranger', req, res, next);
 }, (req, res) => {
-    record('Gave login page to', `${req.connection.remoteAddress} as ${req.params.userData.name}`, 4);
-    console.log('home path auth');
+    const userDat = getUserInfo(req);
+    record('Gave login page to', `${req.connection.remoteAddress} as ${userDat.name}`, 4);
+    consoleLog('Served Home Path');
     res.sendFile(path.join(__dirname, 'Main.html'));
 });
 
 app.post('/createAccount', (req, res, next) => {
-    console.log(req.body);
-    console.log('Authenticating with whitelist');
+    consoleLog('Creating and checking Account:', req.body);
     // request to login
     // check validity again through whitelist
     if (!validator.isWhitelisted(req.body.password, process.env.whitelist)) {
         record('Invalid Characters on backend from account', req.connection.remoteAddress, 5);
-        console.log('invalid characters on createaccount');
+        consoleLog('Invalid characters on createaccount');
         error(res, 'validator account ');
     } else {
         next();
     }
 }, (req, res) => {
     const bcryptPassword = bcrypt.hashSync(req.body.password, 12);
-    console.log('Creating user');
+    consoleLog('Creating user:', req.body.Name);
     fs.writeFile(`${__dirname}\\users\\${req.body.name}.json`, JSON.stringify({
         'Public': {
             'name': req.body.name,
@@ -109,22 +124,23 @@ app.post('/createAccount', (req, res, next) => {
             'password': bcryptPassword,
             'lastLog': '',
         },
+        'timers': {},
     }), (err) => {
         if (err) {
-            console.log(err);
+            consoleLog('Error writing user', err);
             return;
         }
-        console.log('Done writing user'); // Success
+        consoleLog('Done writing user'); // Success
     });
 });
 app.post('/login',
     (req, res, next) => {
-        console.log('Authenticating with whitelist');
+        consoleLog('Authenticating with whitelist for user', req.body.Name);
         // request to login
         // check validity again through whitelist
         if (!validator.isWhitelisted(req.body.Password, process.env.whitelist)) {
             record('Invalid Characters on backend from', req.connection.remoteAddress, 5);
-            console.log('invalid characters');
+            consoleLog('invalid characters in login');
             error(res, 'validator');
         } else {
             next();
@@ -133,51 +149,49 @@ app.post('/login',
     // main check
     (req, res, next) => {
         try {
-            console.log('Account check');
+            consoleLog('Checking if Account is there');
             // read from json file under username
             fs.readFile(path.join(__dirname, `/users/${req.body.Name}.json`), 'utf-8', (err, data) => {
                 if (err) {
                     // no file found/error reading json file
-                    console.log('read err no file present');
+                    consoleLog('No user found for', req.body.Name);
                     error(res, err);
                 }
-                console.log(req.body.Name);
+                consoleLog('User found:', req.body.Name);
                 // there is a file for user parse it
                 const filedata = JSON.parse(data);
-                console.log(filedata);
                 // engrypt and compare paswword and check with user file
                 bcrypt.compare(req.body.Password, filedata.Private.password, (err, result) => {
                     if (err) {
                         // general error with bcrpyt
-                        console.log('bcrypt error');
+                        consoleLog('General bcrypt error');
                         error(res, err);
                     }
                     // result is true if password is the same
-                    console.log(result);
+                    consoleLog('Password matches:', result);
                     if (result) {
                         // same password
                         record('logging in', req.connection.remoteAddress, 3);
-                        console.log('Bcrtpy same password');
+                        consoleLog('Bcrtpy same password');
                         // set LAst login
                         filedata.Private.lastLog = `${title}_${time}`;
                         fs.writeFile(path.join(__dirname, `/users/${req.body.Name}.json`), JSON.stringify(filedata), (err) => {
                             if (err) {
-                                console.log('err writng new tie log');
+                                consoleLog('Error writing lastLog');
                                 return;
                             }
                         });
                         // create jwt
-                        console.log('attached');
-                        console.log(filedata.Public);
                         const token = jwt.sign(filedata.Public, process.env.secretkey, { expiresIn: '30min' });
                         // set authorization cookie with jwt
                         res.cookie('token', token, {
                             // ms
                             // 30 min
-                            maxAge: 1800000,
+                            maxAge: process.env.timeoutTime,
                         });
                         // ajax redirect
-                        console.log('redirected');
+                        consoleLog('Validated and redirected');
+                        // parsed on frontend and rediredted there with credintials
                         return res.json({
                             message: 'redirect',
                             newpage: '/home',
@@ -186,7 +200,7 @@ app.post('/login',
                         // incorrect password
                         record('Failed login from', req.connection.remoteAddress, 3);
                         // record('password attempt', req.body.Password, 3);
-                        console.log('not right');
+                        consoleLog('Incorrect Password');
                         return res.json({
                             message: 'error',
                         });
@@ -195,8 +209,7 @@ app.post('/login',
             });
         } catch (errror) {
             // error up above in some statement
-            console.log('other fuckin error');
-            console.log(errror);
+            consoleLog('Weird error in Login', errror);
             error(res, err);
         } finally {
             // ends main segment
@@ -204,13 +217,13 @@ app.post('/login',
         }
     },
     (req, res) => {
-        console.log('loggin');
+        consoleLog('logging in:', req.body.Name);
         // logging pourposes
     });
 
 // keep timers
 app.post('/timer', (req, res, next) => {
-    auth(req, res, next);
+    auth('stranger', req, res, next);
 }, (req, res) => {
     const keysarray = Object.keys(req.body);
     let lastkeyarrayval;
@@ -218,7 +231,7 @@ app.post('/timer', (req, res, next) => {
         lastkeyarrayval = req.body[keysarray[(keysarray.length - 1)]][2];
         if (!validator.isWhitelisted(lastkeyarrayval, process.env.whitelist)) {
             record('Invalid Characters on backend from', req.connection.remoteAddress, 5);
-            console.log('invalid character in timer post');
+            consoleLog('Invalid character in timer post');
             error(res, 'validator for timer post');
             return;
         }
@@ -228,49 +241,27 @@ app.post('/timer', (req, res, next) => {
         const timerpath = path.join(__dirname, 'Private\\timers.json');
         fs.writeFile(timerpath, JSON.stringify(req.body), (err) => {
             if (err) {
-                console.log(err);
-                console.log('timer set failed');
+                consoleLog('Timer set failed', err);
                 return false;
             }
-            console.log('should work');
+            consoleLog('Updated timer for');
             return res.send('done');
         });
     }
 });
 app.get('/timer', (req, res, next) => {
-    auth(req, res, next);
+    auth('stranger', req, res, next);
 }, (req, res) => {
     const timerpath = path.join(__dirname, 'Private\\timers.json');
     fs.readFile(timerpath, (err, data) => {
         if (err) {
-            console.log(err);
-            console.log('timer get failed');
+            consoleLog('Timer get failed', err);
             return false;
         }
-        console.log('sent');
-        console.log(JSON.parse(data));
         return res.json(JSON.parse(data));
     });
 });
 
-app.get('/userinfo', (req, res, next) => {
-    auth(req, res, next);
-}, (req, res) => {
-    console.log(req.params.userData);
-    const timerpath = path.join(__dirname, `users\\${req.params.userData.name}.json`);
-    fs.readFile(timerpath, (err, data) => {
-        if (err) {
-            console.log(err);
-            console.log('user get failed');
-            return false;
-        }
-        console.log('user sent');
-        console.log(JSON.parse(data));
-        const obj = JSON.parse(data);
-        console.log(obj.Public);
-        return res.json(obj.Public);
-    });
-});
 
 // esp local ip
 const espLightsIP = 'http://192.168.1.110:80/ESPLights';
@@ -288,29 +279,22 @@ function sendMessageToESPLights(name, mes, callback) {
         },
         (error, response) => {
             if (error || (response.statusCode == 500)) {
-                console.log(error);
-                console.log('req error');
+                consoleLog('Req error to ESP', error);
                 callback(error);
                 return;
             }
             if (response.statusCode != 200) {
-                console.log('fix status code dumbass');
+                consoleLog('Not ok Status code ESP');
             }
-            callback(error);
-            return response;
+            callback(error, response.body);
+            return response.body;
         },
     );
 }
-// turn on lights
-/* (req, res, next) => {
-    auth(req, res, next);
-},
-*/
 
 function eSPPostErr(err, res) {
     if (err) {
-        console.log('Post err');
-        console.log(err);
+        consoleLog('ESP post err', err);
         res.json({ status: 'noComs' });
     } else {
         res.json({ status: 'Got it' });
@@ -319,23 +303,21 @@ function eSPPostErr(err, res) {
 
 app.post('/espLights_Update', (req, res) => {
     const reqMessage = req.body;
-    console.log(reqMessage);
     const firstObj = Object.keys(reqMessage)[0];
     if (reqMessage[firstObj] == 'On') {
-        console.log('pointy on');
+        consoleLog('Turning Light On:', firstObj);
         sendMessageToESPLights(firstObj, 'On', (err) => {
-            console.log('pointyq');
+            consoleLog('ESP send Error', err);
             eSPPostErr(err, res);
         });
     } else if (reqMessage[firstObj] == 'Off') {
-        console.log('pointy off');
+        consoleLog('Turning Light Off:', firstObj);
         sendMessageToESPLights(firstObj, 'Off', (err) => {
-            console.log('pointyw');
+            consoleLog('ESP send Error', err);
             eSPPostErr(err, res);
         });
     } else {
-        console.log(res.body);
-        console.log('unknown res');
+        consoleLog('Unknown body', req.body);
     }
     return;
 });
@@ -345,38 +327,19 @@ app.get('/espLights_Status', (req, res) => {
     sendMessageToESPLights('status', 'question', (err, mes) => {
         if (err) {
             if (err.errno == 'ETIMEDOUT') {
-                console.log('timeout err');
+                consoleLog('No response from ESP');
                 res.json({ status: 'noComs' });
             }
         } else {
-            res.json(mes);
+            res.json(JSON.parse(mes));
         }
     });
 });
 
-/*
-backend
--api key check postman for headers
--makes sure you have proper headers very specific
--parse sets of 25 commits
--include name, time, message
--send res to frontend
-
-frontend
--send req to back for page number of 25
--recive json
--format them into dynamic table
--js clone for each row
--format time
-
--make look pretty
-
-*/
-const githubLink = 'https://api.github.com/repos/Lizzard1123/IOTWebpage/commits';
 
 function getGithubCommits(callback) {
     request.get(
-        githubLink, {
+        process.env.githubLink, {
             headers: {
                 'User-Agent': 'EthanIOTBACKEND',
                 'Accept': 'application/vnd.github.v3+json',
@@ -385,13 +348,12 @@ function getGithubCommits(callback) {
         },
         (error, response) => {
             if (error || (response.statusCode == 500)) {
-                console.log(error);
-                console.log('get req error');
+                consoleLog('Github request error', error);
                 callback(error);
                 return;
             }
             if (response.statusCode != 200) {
-                console.log('fix status code dumbass');
+                consoleLog('Github not ok StatusCode');
             }
             callback(error, response.body);
             return response;
@@ -404,9 +366,8 @@ app.post('/githubCommits', (req, res) => {
     getGithubCommits((err, responsething) => {
         const page = req.body.page;
         const github = JSON.parse(responsething);
-        console.log(github);
         if (github == undefined || github.message == 'Not Found') {
-            console.log('no github');
+            consoleLog('No Github Acsess');
             res.send('[]');
         } else {
             for (let i = 25 * (page - 1); i < 25 * page; i++) {
@@ -422,4 +383,4 @@ app.post('/githubCommits', (req, res) => {
     });
 });
 
-app.listen(port, () => console.log(`Example app listening on port ${port}!`));
+app.listen(port, () => consoleLog(`IOTWebpage is listening on port ${port}!`));

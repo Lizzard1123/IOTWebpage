@@ -150,27 +150,6 @@ function resetPage() {
     }
 }
 
-let userinfo = {};
-
-function updatepageuser() {
-    console.log(userinfo);
-    document.getElementById('profilename').innerHTML = `Signed in as: ${userinfo.name}`;
-}
-
-function getuserinfo() {
-    const getuserinforeq = new XMLHttpRequest();
-    getuserinforeq.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-            const res = JSON.parse(this.responseText);
-            userinfo = res;
-            updatepageuser();
-        }
-    };
-    getuserinforeq.open('GET', '/userinfo', true);
-    getuserinforeq.setRequestHeader('Content-type', 'application/json');
-    getuserinforeq.send();
-}
-
 // eslint-disable-next-line no-unused-vars
 function loadsettings(titleset) {
     try {
@@ -191,7 +170,8 @@ function loadsettings(titleset) {
         resetPage();
         if (titleset) {
             // home
-            getuserinfo();
+            // set bottom bar to name
+            document.getElementById('profilename').innerHTML = `Signed in as: ${globalUserData.name}`;
             setintoplace();
         } else {
             // auth
@@ -220,11 +200,14 @@ function setsettings(button) {
     custom = localStorage.getItem('custom').split(',');
     resetPage();
 }
-const customcookies = ['token'];
 
 function clearcookies() {
-    for (let i = 0; i < customcookies.length; i++) {
-        document.cookie = `${customcookies[i]}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+    const cookies = document.cookie.split(';');
+    for (let i = 0; i < cookies.length; i++) {
+        const cookie = cookies[i];
+        const eqPos = cookie.indexOf('=');
+        const name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+        document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:00 GMT';
     }
 }
 
