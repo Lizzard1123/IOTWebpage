@@ -316,13 +316,11 @@ app.post('/espLights_Update', (req, res, next) => {
     if (reqMessage[firstObj] == 'On') {
         consoleLog('Turning Light On:', firstObj);
         sendMessageToESPLights(firstObj, 'On', (err) => {
-            consoleLog('ESP send Error', err);
             eSPPostErr(err, res);
         });
     } else if (reqMessage[firstObj] == 'Off') {
         consoleLog('Turning Light Off:', firstObj);
         sendMessageToESPLights(firstObj, 'Off', (err) => {
-            consoleLog('ESP send Error', err);
             eSPPostErr(err, res);
         });
     } else {

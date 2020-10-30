@@ -268,7 +268,7 @@ function startupLamps() {
 function allOff() {
     all.buttonState = 'Off';
     setLamp(all, (res) => {
-        if (mes == 'Forbidden') {
+        if (res == 'Forbidden') {
             console.log('Forbidden');
         } else {
             if (res == 'noComs') {
@@ -284,7 +284,7 @@ function allOff() {
 function allOn() {
     all.buttonState = 'On';
     setLamp(all, (res) => {
-        if (mes == 'Forbidden') {
+        if (res == 'Forbidden') {
             console.log('Forbidden');
         } else {
             if (res == 'noComs') {
