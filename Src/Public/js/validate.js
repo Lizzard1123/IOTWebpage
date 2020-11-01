@@ -53,6 +53,10 @@ function ajaxSend() {
         if (this.readyState == 4 && this.status == 200) {
             console.log('doneeeee');
             const obj = JSON.parse(this.responseText);
+            if (obj.message == 'busy') {
+                window.switchInfoPage('busy');
+                return;
+            }
             message.style.visibility = 'visible';
             form.style.visibility = 'hidden';
             title.style.visibility = 'hidden';

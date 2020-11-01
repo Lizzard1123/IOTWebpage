@@ -210,3 +210,16 @@ form {
     top: 20%;
     text-align: center;
 }
+
+#busyPic {
+    width: 100%;
+    position: relative;
+    top: 13%;
+    justify-content: center;
+}
+
+#stallimg {
+    width: 250px;
+    height: 250px;
+    position: absolute;
+}

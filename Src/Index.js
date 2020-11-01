@@ -11,6 +11,8 @@ import { checkDaily } from './Private/js/logs.js';
 import request from 'request';
 import dotenv from 'dotenv';
 
+const serverBusy = true;
+
 const __dirname = path.resolve();
 const result = dotenv.config({ path: `${path.join(__dirname, 'secretCodes.env')}` });
 
@@ -196,10 +198,16 @@ app.post('/login',
                         // ajax redirect
                         consoleLog('Validated and redirected');
                         // parsed on frontend and rediredted there with credintials
-                        return res.json({
-                            message: 'redirect',
-                            newpage: '/home',
-                        });
+                        if (serverBusy && filedata.Public.securityLevel != 'admin') {
+                            return res.json({
+                                message: 'busy',
+                            });
+                        } else {
+                            return res.json({
+                                message: 'redirect',
+                                newpage: '/home',
+                            });
+                        }
                     } else {
                         // incorrect password
                         record('Failed login from', req.connection.remoteAddress, 3);

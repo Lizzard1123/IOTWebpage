@@ -5,11 +5,15 @@ const createForm = document.getElementById('createForm');
 const bugTable = document.getElementById('bugTable');
 const parameterName = document.getElementById('parameterName');
 const parameter = document.getElementById('parameter');
+const bugButton = document.getElementById('bugBox');
+const createButton = document.getElementById('createBox');
+const busyPic = document.getElementById('busyPic');
 const feilds = ['Name', 'Password'];
 let currentPage = 'Login';
 let currentFeild = 1;
 let submitInfo = {};
 
+// eslint-disable-next-line no-unused-vars
 function switchInfoPage(page) {
     if (page == 'Login' || currentPage == 'createAccount' || currentPage == 'Bugs') {
         formTitle.innerHTML = 'Login';
@@ -29,6 +33,15 @@ function switchInfoPage(page) {
         createForm.style.display = 'none';
         bugTable.style.display = 'block';
         currentPage = 'Bugs';
+    } else if (page == 'busy') {
+        formTitle.innerHTML = 'Site is currently unavailible';
+        basicForm.style.display = 'none';
+        createForm.style.display = 'none';
+        bugTable.style.display = 'none';
+        busyPic.style.display = 'flex';
+        bugButton.style.visibility = 'hidden';
+        createButton.style.visibility = 'hidden';
+        currentPage = 'busy';
     }
 }
 
