@@ -171,7 +171,7 @@ function loadsettings(titleset) {
         if (titleset) {
             // home
             // set bottom bar to name
-            document.getElementById('profilename').innerHTML = `Signed in as: ${globalUserData.name}`;
+            document.getElementById('profilename').innerHTML = `Signed in as: ${globalUserData().name}`;
             setintoplace();
         } else {
             // auth
@@ -199,22 +199,4 @@ function setsettings(button) {
     localStorage.setItem('custom', newvarr);
     custom = localStorage.getItem('custom').split(',');
     resetPage();
-}
-
-function clearcookies() {
-    const cookies = document.cookie.split(';');
-    for (let i = 0; i < cookies.length; i++) {
-        const cookie = cookies[i];
-        const eqPos = cookie.indexOf('=');
-        const name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
-        document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:00 GMT';
-    }
-}
-
-// eslint-disable-next-line no-unused-vars
-function pageClose(reload) {
-    clearcookies();
-    if (reload) {
-        location.reload();
-    }
 }

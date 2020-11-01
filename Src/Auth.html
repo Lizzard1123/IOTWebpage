@@ -2,10 +2,14 @@
 <html>
 
 <head>
-    <link href='https://fonts.googleapis.com/css?family=Archivo Black' rel='stylesheet'>
-    <link rel="stylesheet" type="text/css" href="publicstatic/css/Auth.css">
-    <link rel="stylesheet" type="text/css" href="publicstatic/css/options.css">
-    <link rel="shortcut icon" href="publicstatic/img/favicon.png" />
+    <script type="text/javascript" src="publicstatic/js/errorHandler.js"></script>
+    <script>
+        clearcookies('sessionErrors');
+    </script>
+    <link href='https://fonts.googleapis.com/css?family=Archivo Black' rel='stylesheet' onerror="failedToLoad(this, false)">
+    <link rel="stylesheet" type="text/css" href="publicstatic/css/Auth.css" onerror="failedToLoad(this, true)">
+    <link rel="stylesheet" type="text/css" href="publicstatic/css/options.css" onerror="failedToLoad(this, true)">
+    <link rel="shortcut icon" href="publicstatic/img/favicon.png" onerror="failedToLoad(this, true)">
 </head>
 
 <body onload="loadsettings(false)" id="pagebody">
@@ -25,12 +29,32 @@
                 <input type="text" name="parameter" id="parameter" min="4" maxlength="25" required><br>
                 <button type="button" id="createFormBtn" onclick="nextInput()">Next</button>
             </form>
+            <div id="bugTable" style="display: none;">
+                <div id="bug"></div>
+                <script>
+                    document.getElementById('bug').innerHTML = document.cookie;
+                </script>
+            </div>
         </div>
-        <div id="createBox" class="not" onclick="createAccount()">
+        <div id="createBox" class="not" onclick="switchInfoPage('createAccount')">
             <svg id="create" xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-settings" width="32px" height="32px" viewBox="0 0 24 24" stroke-width="2.5" stroke="#000000" fill="none" stroke-linecap="round" stroke-linejoin="round">
                 <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
                 <path d="M10.325 4.317c.426 -1.756 2.924 -1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543 -.94 3.31 .826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756 .426 1.756 2.924 0 3.35a1.724 1.724 0 0 0 -1.066 2.573c.94 1.543 -.826 3.31 -2.37 2.37a1.724 1.724 0 0 0 -2.572 1.065c-.426 1.756 -2.924 1.756 -3.35 0a1.724 1.724 0 0 0 -2.573 -1.066c-1.543 .94 -3.31 -.826 -2.37 -2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756 -.426 -1.756 -2.924 0 -3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94 -1.543 .826 -3.31 2.37 -2.37c1 .608 2.296 .07 2.572 -1.065z" />
                 <circle cx="12" cy="12" r="3" />
+              </svg>
+        </div>
+        <div id="bugBox" class="not" onclick="switchInfoPage('Bugs')">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-bug" width="32" height="32" viewBox="0 0 24 24" stroke-width="2" stroke="#000000" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                <path d="M9 9v-1a3 3 0 0 1 6 0v1" />
+                <path d="M8 9h8a6 6 0 0 1 1 3v3a5 5 0 0 1 -10 0v-3a6 6 0 0 1 1 -3" />
+                <line x1="3" y1="13" x2="7" y2="13" />
+                <line x1="17" y1="13" x2="21" y2="13" />
+                <line x1="12" y1="20" x2="12" y2="14" />
+                <line x1="4" y1="19" x2="7.35" y2="17" />
+                <line x1="20" y1="19" x2="16.65" y2="17" />
+                <line x1="4" y1="7" x2="7.75" y2="9.4" />
+                <line x1="20" y1="7" x2="16.25" y2="9.4" />
               </svg>
         </div>
         <div id="scrollbar">
@@ -143,10 +167,10 @@
     <div id="backsplash">
         <svg id="parent"></svg>
     </div>
-    <script type="text/javascript" src="publicstatic/js/Global.js"></script>
-    <script type="text/javascript" src="publicstatic/js/backSource.js"></script>
-    <script type="text/javascript" src="publicstatic/js/validate.js"></script>
-    <script type="text/javascript" src="publicstatic/js/Create.js"></script>
+    <script type="text/javascript" src="publicstatic/js/Global.js" onerror="failedToLoad(this, true)"></script>
+    <script type="text/javascript" src="publicstatic/js/backSource.js" onerror="failedToLoad(this, true)"></script>
+    <script type="text/javascript" src="publicstatic/js/validate.js" onerror="failedToLoad(this, true)"></script>
+    <script type="text/javascript" src="publicstatic/js/Create.js" onerror="failedToLoad(this, true)"></script>
     <script>
         // multiple of 3
         var numberoftrianlgleshigh = 24;
@@ -155,7 +179,8 @@
         //abstracted make all triangles
         makeTriangleRows(randomizedList, numberoftrianlgleshigh);
     </script>
-    <script type="text/javascript" src="publicstatic/js/options.js"></script>
+    <script type="text/javascript" src="publicstatic/js/options.js" onerror="failedToLoad(this, true)"></script>
+
 </body>
 
 </html>

@@ -1,3 +1,4 @@
+const pageInfo = window.parent;
 const loader = document.getElementById('loadingg');
 const allButtons = ['deskLampButton', 'bedLampButton'];
 const allLampObj = ['desk', 'bed', 'all'];
@@ -107,29 +108,19 @@ const bedLamp = {
     },
 };
 // thx to w3 schools for this oen
-function getCookie(cname) {
-    const name = cname + '=';
-    const decodedCookie = decodeURIComponent(window.parent.document.cookie);
-    const ca = decodedCookie.split(';');
-    for (let i = 0; i < ca.length; i++) {
-        let c = ca[i];
-        while (c.charAt(0) == ' ') {
-            c = c.substring(1);
-        }
-        if (c.indexOf(name) == 0) {
-            return c.substring(name.length, c.length);
-        }
-    }
-    return '';
-}
-const cookieToken = getCookie('token');
-const UserData = JSON.parse(window.atob(cookieToken.split('.')[1]));
+const UserData = pageInfo.globalUserData();
+console.log(UserData);
 
 function setLamp(currentButton, callback) {
+    if (pageInfo.isEmpty(UserData)) {
+        pageInfo.pageClose(true, false);
+        return;
+    }
     if (UserData.securityLevel == 'admin') {
         const lampChange = new XMLHttpRequest();
         lampChange.onreadystatechange = function() {
             if (this.readyState == 4 && this.status == 200) {
+                console.log(this.responseText);
                 const obj = JSON.parse(this.responseText);
                 callback(obj.status);
             }
@@ -188,6 +179,10 @@ function subButtonChange(currentButton) {
 
 // eslint-disable-next-line no-unused-vars
 function buttonChange(currentButton) {
+    if (pageInfo.isEmpty(UserData)) {
+        pageInfo.pageClose(true, false);
+        return;
+    }
     if (UserData.securityLevel != 'admin') {
         currentButton.click();
     } else {
@@ -221,10 +216,10 @@ const timerLimit = 60;
 // uses getLamp from pageinfo global
 function updateFromGlobal() {
     // do for each button
-    const GLOALLAMPSREADY = getCookie('GLOALLAMPSREADY') == 'true';
+    const GLOALLAMPSREADY = pageInfo.getCookie('GLOALLAMPSREADY') == 'true';
     if (GLOALLAMPSREADY) {
-        const GlobaldeskState = getCookie('globalDeskState');
-        const GlobalbedState = getCookie('globalBedState');
+        const GlobaldeskState = pageInfo.getCookie('globalDeskState');
+        const GlobalbedState = pageInfo.getCookie('globalBedState');
         if (GlobaldeskState == 'noComs') {
             deskLamp.noComsSpecific();
         } else {

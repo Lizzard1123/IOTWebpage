@@ -110,3 +110,6 @@ function switchsubmit() {
     console.log(newbutton);
     console.log('tried');
 }
+
+// Errors
+console.log(document.cookie);

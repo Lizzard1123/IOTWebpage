@@ -15,7 +15,7 @@ const __dirname = path.resolve();
 const result = dotenv.config({ path: `${path.join(__dirname, 'secretCodes.env')}` });
 
 function consoleLog(string, data = '') {
-    console.log(string + ' ' + data);
+    console.log('\x1b[36m', string + ' ' + data);
 }
 if (result.error) {
     consoleLog('Dotnev Error Loading env', result.error);
@@ -39,11 +39,13 @@ checkDaily(__dirname);
 app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-
-app.use('/privatestatic', [(err, req, res, next) => {
-    auth('stranger', req, res, next);
-}, express.static('Private')]);
 app.use('/publicstatic', express.static('public'));
+app.use('/privatestatic', (req, res, next) => {
+    console.log('podkjhas ');
+    auth('stranger', req, res, next);
+});
+app.use('/privatestatic', express.static('Private'));
+
 
 function error(res, errorthing = 'default') {
     consoleLog('Error function:', errorthing);
@@ -85,6 +87,8 @@ function auth(privlage, req, res, next) {
         }
     }
 }
+// static file check
+
 // get login page
 app.get('/login', (req, res) => {
     consoleLog('Served Login Page');

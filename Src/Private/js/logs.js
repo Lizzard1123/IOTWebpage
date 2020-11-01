@@ -17,7 +17,7 @@ const time = `${date.getHours()}${date.getMinutes()}${date.getSeconds()}`;
 let logspath;
 
 function consoleLog(string, data = '') {
-    console.log(string + ' ' + data);
+    console.log('\x1b[34m', string + ' ' + data);
 }
 async function updateCurrentDir() {
     consoleLog('Updating Directory for Logs');
@@ -69,7 +69,7 @@ export async function checkDaily(paththing) {
     if (!currentdir.includes(testcase)) {
         createDay();
     }
-    if (currentdir.length >= keeplogsfor - 1) {
+    if (currentdir.length > keeplogsfor) {
         consoleLog('Deleting day', `${currentdir[0]}`);
         fs.unlink(`${logspath}/${currentdir[0]}`, (err) => {
             if (err) {

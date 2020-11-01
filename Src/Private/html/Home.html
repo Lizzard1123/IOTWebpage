@@ -113,10 +113,15 @@
         const githubCommits = new XMLHttpRequest();
         githubCommits.onreadystatechange = function() {
             if (this.readyState == 4 && this.status == 200) {
-                const obj = JSON.parse(this.responseText);
-                console.log("hiyahere");
-                console.log(obj);
-                callback(obj);
+                if (this.responseText == undefined) {
+                    console.error('Github failed');
+                } else {
+                    const obj = JSON.parse(this.responseText);
+                    console.log("hiyahere");
+                    console.log(obj);
+                    callback(obj);
+                }
+
             }
         };
         githubCommits.open('POST', '/githubCommits', true);
