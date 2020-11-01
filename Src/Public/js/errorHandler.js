@@ -39,10 +39,14 @@ function errorHandler(error) {
     }
     if (typeof sessionErrors == 'string') {
         sessionErrors = sessionErrors.split(',');
+        console.log(sessionErrors);
+        console.log(error);
         if (!sessionErrors.includes(error)) {
+            console.log('doenst inclide');
             sessionErrors.push(error);
         }
     } else {
+        console.log('else');
         sessionErrors.push(error);
     }
 
@@ -52,13 +56,15 @@ function errorHandler(error) {
 
 // eslint-disable-next-line no-unused-vars
 function failedToLoad(elm, reload) {
-    errorHandler(`Error loading: ${elm.src==null?encodeURIComponent(elm.href):encodeURIComponent(elm.src)}`);
-    console.log(`Error loading: ${elm.src==null?encodeURIComponent(elm.href):encodeURIComponent(elm.src)}`);
+    console.log('failedtoloaf.onerr');
+    errorHandler(`Error loading: ${elm.src==null?elm.href:elm.src}`);
+    console.log(`Error loading: ${elm.src==null?elm.href:elm.src}`);
     if (window.top.location.href != 'http://localhost:3000/login' && reload) {
         window.top.location.href = '/login';
         console.log(window.top.location.href);
     }
 }
 window.onerror = function(message, source, lineno, colno, error) {
+    console.log('Window.onerr');
     errorHandler(error);
 };

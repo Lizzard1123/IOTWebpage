@@ -24,14 +24,12 @@ const deskLamp = {
     buttonBox: document.getElementById('deskLampButton'),
     buttonState: 'Off',
     changeState: function(state) {
-        console.log('cs' + state);
         document.cookie = `globalDeskState=${state}`;
         this.buttonState = state;
     },
     changeItself: function() {
         this.noComsPic.style.visibility = 'hidden';
         loader.style.visibility = 'hidden';
-        console.log('hiya');
         this.lampTitle.innerHTML = 'Desk Lamp Status';
         this.HTMLnode.disabled = false;
         this.buttonBox.style.visibility = 'visible';
@@ -69,15 +67,12 @@ const bedLamp = {
     buttonBox: document.getElementById('bedLampButton'),
     buttonState: 'Off',
     changeState: function(state) {
-        console.log('cs' + state);
         document.cookie = `globalBedState=${state}`;
         this.buttonState = state;
     },
     changeItself: function() {
-        console.log('hereee');
         this.noComsPic.style.visibility = 'hidden';
         loader.style.visibility = 'hidden';
-        console.log('hiya');
         this.lampTitle.innerHTML = 'Bed Lamp Status';
         this.HTMLnode.disabled = false;
         this.buttonBox.style.visibility = 'visible';
@@ -120,7 +115,6 @@ function setLamp(currentButton, callback) {
         const lampChange = new XMLHttpRequest();
         lampChange.onreadystatechange = function() {
             if (this.readyState == 4 && this.status == 200) {
-                console.log(this.responseText);
                 const obj = JSON.parse(this.responseText);
                 callback(obj.status);
             }
@@ -130,8 +124,6 @@ function setLamp(currentButton, callback) {
         // string JSON currentButton.name currentButton.buttonState
         const sendMes = {};
         sendMes[currentButton.name] = currentButton.buttonState;
-        console.log(sendMes);
-        console.log(JSON.stringify(sendMes));
         lampChange.setRequestHeader('type', 'ajax');
         lampChange.send(JSON.stringify(sendMes));
     } else {
@@ -141,21 +133,16 @@ function setLamp(currentButton, callback) {
 
 function noComsSetup(currentButton) {
     if (Array.isArray(currentButton)) {
-        console.log('poog');
         for (let i = 0; i < currentButton.length; i++) {
             if (currentButton[i] == 'desk') {
-                console.log('poog desk');
                 deskLamp.noComsSpecific();
             } else if (currentButton[i] == 'bed') {
-                console.log('poog bed');
                 bedLamp.noComsSpecific();
             } else if (currentButton[i] == 'all') {
-                console.log('poog all');
                 all.noComsSpecific();
             }
         }
     } else {
-        console.log(currentButton);
         currentButton.noComsSpecific();
     }
 }
@@ -186,24 +173,18 @@ function buttonChange(currentButton) {
     if (UserData.securityLevel != 'admin') {
         currentButton.click();
     } else {
-        console.log(currentButton);
         currentButton.disabled = true;
         setTimeout(function() {
-            console.log('HAHHA');
             currentButton.disabled = false;
         }, 1500);
         const buttonIdNum = allButtons.indexOf(currentButton.name);
-        console.log(currentButton.name);
-        console.log(buttonIdNum);
         switch (buttonIdNum) {
             case 0:
                 // desk lamp
-                console.log('desky');
                 subButtonChange(deskLamp);
                 break;
             case 1:
                 // bed lamp
-                console.log('bedy');
                 subButtonChange(bedLamp);
                 break;
         }
@@ -241,10 +222,12 @@ function updateFromGlobal() {
         setTimeout(() => {
             if (timerCount == timerLimit) {
                 noComsSetup(allLampObj);
+                pageInfo.document.cookie = `globalDeskState=noComs`;
+                pageInfo.document.cookie = `globalBedState=noComs`;
+                pageInfo.document.cookie = `GLOALLAMPSREADY=true`;
                 timerCount = 0;
+                console.log('okkk');
             } else {
-                console.log(timerCount);
-                console.log('waiting');
                 updateFromGlobal();
             }
             timerCount++;

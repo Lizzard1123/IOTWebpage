@@ -31,12 +31,10 @@
             </form>
             <div id="bugTable" style="display: none;">
                 <div id="bug"></div>
-                <script>
-                    document.getElementById('bug').innerHTML = document.cookie;
-                </script>
+
             </div>
             <div id="busyPic" style="display: none;">
-                <img src='https://media3.giphy.com/media/kG1FSrXBMfxg2N20pT/giphy.gif' id="stallimg">
+                <img src='https://media3.giphy.com/media/kG1FSrXBMfxg2N20pT/giphy.gif' id="stallimg" onerror="failedToLoad(this, false)">
             </div>
         </div>
         <div id="createBox" class="not" onclick="switchInfoPage('createAccount')">

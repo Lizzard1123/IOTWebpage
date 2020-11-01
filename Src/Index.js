@@ -383,21 +383,31 @@ function getGithubCommits(callback) {
 app.post('/githubCommits', (req, res) => {
     const sendMess = [];
     getGithubCommits((err, responsething) => {
-        const page = req.body.page;
-        const github = JSON.parse(responsething);
-        if (github == undefined || github.message == 'Not Found') {
-            consoleLog('No Github Acsess');
-            res.send('[]');
+        if (err) {
+            console.log('err:' + err);
+            return res.send('[]');
         } else {
-            for (let i = 25 * (page - 1); i < 25 * page; i++) {
-                const currentmes = {
-                    'name': github[i].commit.committer.name,
-                    'date': github[i].commit.committer.date,
-                    'message': github[i].commit.message,
-                };
-                sendMess.push(currentmes);
+            const page = req.body.page;
+            console.log(responsething);
+            if (responsething == undefined) {
+                consoleLog('Github undefined');
+                return res.send('[]');
             }
-            res.send(sendMess);
+            const github = JSON.parse(responsething);
+            if (github.message == 'Not Found') {
+                consoleLog('No Github Acsess');
+                res.send('[]');
+            } else {
+                for (let i = 25 * (page - 1); i < 25 * page; i++) {
+                    const currentmes = {
+                        'name': github[i].commit.committer.name,
+                        'date': github[i].commit.committer.date,
+                        'message': github[i].commit.message,
+                    };
+                    sendMess.push(currentmes);
+                }
+                res.send(sendMess);
+            }
         }
     });
 });

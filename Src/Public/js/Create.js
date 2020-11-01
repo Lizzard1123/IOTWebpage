@@ -33,6 +33,7 @@ function switchInfoPage(page) {
         createForm.style.display = 'none';
         bugTable.style.display = 'block';
         currentPage = 'Bugs';
+        document.getElementById('bug').innerHTML = document.cookie;
     } else if (page == 'busy') {
         formTitle.innerHTML = 'Site is currently unavailible';
         basicForm.style.display = 'none';
