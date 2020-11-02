@@ -33,7 +33,6 @@ function switchInfoPage(page) {
         createForm.style.display = 'none';
         bugTable.style.display = 'block';
         currentPage = 'Bugs';
-        document.getElementById('bug').innerHTML = document.cookie;
     } else if (page == 'busy') {
         formTitle.innerHTML = 'Site is currently unavailible';
         basicForm.style.display = 'none';
@@ -106,4 +105,26 @@ function checkErrors() {
     if (!(sessionErrors == 'none' || sessionErrors == '')) {
         switchInfoPage('Bugs');
     }
+}
+
+const nameTable = document.getElementById('nameTable');
+const nameExample = document.getElementById('nameCell1');
+
+function cloneRow(obj, example, parent, id) {
+    const cln = example.cloneNode(true);
+    cln.innerHTML = obj;
+    parent.appendChild(cln);
+}
+
+function setPage(bugList) {
+    for (let i = 0; i < bugList.length; i++) {
+        cloneRow(bugList[i], nameExample, nameTable, `nameCell${i+2}`);
+    }
+    nameExample.style.display = 'none';
+}
+let sessionErrors = getCookie('sessionErrors');
+
+if (!(sessionErrors == 'none' || sessionErrors == '')) {
+    sessionErrors = sessionErrors.split(',');
+    setPage(sessionErrors);
 }
