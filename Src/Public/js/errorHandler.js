@@ -1,5 +1,5 @@
 // eslint-disable-next-line no-unused-vars
-function clearcookies(exeption) {
+function clearcookies(exeption = 'none') {
     console.log('clearing');
     console.log(document.cookie);
     const cookies = document.cookie.split(';');
@@ -7,9 +7,9 @@ function clearcookies(exeption) {
         const cookie = cookies[i];
         const eqPos = cookie.indexOf('=');
         const name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
-        console.log(name);
-        console.log(exeption);
-        if (name != exeption && name != ' ' + exeption) {
+        if (exeption == 'none') {
+            document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:00 GMT';
+        } else if (name != exeption && name != ' ' + exeption) {
             document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:00 GMT';
         }
     }

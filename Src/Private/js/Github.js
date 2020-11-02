@@ -1,12 +1,16 @@
 const nameTable = document.getElementById('nameTable');
-const timeTable = document.getElementById('timeTable');
-const messageTable = document.getElementById('messageTable');
-
 const nameExample = document.getElementById('nameCell1');
-const titleExample = document.getElementById('timeCell1');
-const messageExample = document.getElementById('messageCell1');
+let commitList;
+let currentNum = 0;
+const githubCommitNumber = 5;
+let hardLimit;
+let page = 1;
 
-const page = 1;
+function setLimit(length) {
+    if (length < 25) {
+        hardLimit = page;
+    }
+}
 
 function getGithub(pagenum, callback) {
     const githubCommits = new XMLHttpRequest();
@@ -16,8 +20,7 @@ function getGithub(pagenum, callback) {
                 console.error('Github failed');
             } else {
                 const obj = JSON.parse(this.responseText);
-                console.log('hiyahere');
-                console.log(obj);
+                setLimit(obj.length);
                 callback(obj);
             }
         }
@@ -29,22 +32,75 @@ function getGithub(pagenum, callback) {
     }));
 }
 
-function cloneRow(name, example, parent, id) {
+function cloneRow(obj, example, parent, id) {
     const cln = example.cloneNode(true);
     cln.id = id;
-    cln.innerHTML = name;
+    const d = new Date(obj.date);
+    const dateShort = (d.getMonth() + 1) + '/' + d.getDate() + '/' + d.getFullYear();
+    let timeOfDay;
+    let hour = d.getHours() + 1;
+    if (hour > 12) {
+        hour = hour - 12;
+        timeOfDay = 'pm';
+    } else {
+        timeOfDay = 'am';
+    }
+    let min = d.getMinutes();
+    if (min < 10) {
+        min = '0' + min;
+    }
+    const timeShort = hour + ':' + min + timeOfDay;
+    const content = obj.name + ' made a commit at ' + dateShort + ' at ' + timeShort + '<br />' + obj.message;
+    cln.innerHTML = content;
     parent.appendChild(cln);
+}
+
+function setPage(num) {
+    while (nameTable.firstChild) {
+        nameTable.removeChild(nameTable.lastChild);
+    }
+    const limit = (commitList.length == 25) ? 5 * (num + 1) : (commitList.length - 5 * num < 5) ? commitList.length : 5 * (num + 1);
+    for (let i = num * 5; i < limit; i++) {
+        cloneRow(commitList[i], nameExample, nameTable, `nameCell${i+2}`);
+    }
 }
 
 function setupPage(pagenum) {
     getGithub(pagenum, (obj) => {
-        for (let i = 0; i < obj.length; i++) {
-            const current = obj[i];
-            cloneRow(current.name, nameExample, nameTable, `nameCell${i+2}`);
-            cloneRow(current.date, titleExample, timeTable, `timeCell${i+2}`);
-            cloneRow(current.message, messageExample, messageTable, `messageCell${i+2}`);
-        }
+        commitList = obj;
+        setPage(currentNum);
     });
 }
-console.log('re');
+
+// eslint-disable-next-line no-unused-vars
+function increasePage(up) {
+    if (up) {
+        if (currentNum == githubCommitNumber - 1) {
+            if (page != hardLimit) {
+                page++;
+                currentNum = 0;
+                getGithub(page, (obj) => {
+                    commitList = obj;
+                    setPage(currentNum);
+                });
+            }
+        } else {
+            currentNum++;
+            setPage(currentNum);
+        }
+    } else {
+        if (currentNum == 0 && page != 1) {
+            page--;
+            currentNum = githubCommitNumber - 1;
+            getGithub(page, (obj) => {
+                commitList = obj;
+                setPage(currentNum);
+            });
+        } else if (currentNum != 0) {
+            currentNum--;
+            setPage(currentNum);
+        }
+    }
+}
+
 setupPage(page);

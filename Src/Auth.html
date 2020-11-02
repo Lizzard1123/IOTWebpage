@@ -12,7 +12,7 @@
     <link rel="shortcut icon" href="publicstatic/img/favicon.png" onerror="failedToLoad(this, true)">
 </head>
 
-<body onload="loadsettings(false)" id="pagebody">
+<body onload="loadsettings(false)" id="pagebody" onbeforeunload="clearcookies('token')">
     <div id="contentbody">
         <div id="message" style="visibility: visible; color: green;"></div>
         <div id="body">

@@ -12,77 +12,41 @@ body {
     font-family: 'Archivo Black';
 }
 
-#changeTable {
+.githubTable {
     position: absolute;
-    left: 0;
-    height: 500px;
     bottom: 3.5%;
-    width: 100%;
-    border-top: 5px solid black;
+    height: 400px;
+    border-top: 3px solid black;
 }
 
-#nameTable {
-    position: absolute;
+#changeTable {
+    left: 5%;
+    width: 90%;
+}
+
+#leftChangeTable {
     left: 0;
-    top: 0;
-    width: 20%;
-    height: 100%;
-    border-right: 5px solid black;
+    width: 5%;
 }
 
-#timeTable {
-    position: absolute;
-    left: calc(20% + 5px);
-    top: 0;
-    width: 20%;
-    height: 100%;
-    border-right: 5px solid black;
+#rightChangeTable {
+    right: 0;
+    width: 5%;
 }
 
-#messageTable {
-    position: absolute;
-    left: calc(40% + 10px);
-    top: 0;
-    width: calc(60% - 10px);
-    height: 100%;
+#leftIcon {
+    position: relative;
+    top: calc(50% - 16px);
+}
+
+#rightIcon {
+    position: relative;
+    top: calc(50% - 16px);
 }
 
 .namecell {
-    width: 100%;
-    height: 20px;
-    position: relative;
-    font-size: 1em;
     font-family: 'Archivo Black';
+    width: 100%;
+    height: 80px;
     text-align: center;
-}
-
-.timecell {
-    width: 100%;
-    height: 20px;
-    position: relative;
-    font-size: .5em;
-    font-family: 'Archivo Black';
-    text-align: center;
-    vertical-align: bottom;
-}
-
-.messagecell {
-    width: 100%;
-    height: 20px;
-    position: relative;
-    font-size: .7em;
-    font-family: 'Archivo Black';
-    text-align: left;
-}
-
-#nameCell1 {
-    font-size: 1em;
-}
-
-#timeCell1 {
-    font-size: 1em;
-}
-
-#messageCell1 {
-    font-size: 1em;
 }

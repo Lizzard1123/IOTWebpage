@@ -1,3 +1,4 @@
+const iframe = document.getElementById('embeded');
 // eslint-disable-next-line no-unused-vars
 const buttonOne = document.getElementsByName('buttonOne');
 const buttonTwo = document.getElementsByName('buttonTwo');
@@ -33,7 +34,6 @@ function givetitles() {
 
 function setintoplace() {
     const middle = numberofpages / 2 - .5;
-    console.log(middle);
     for (let i = 0; i < numberofpages; i++) {
         switches[i].style.left = `${maxdivbox * i}%`;
         if (i != middle) {
@@ -94,9 +94,20 @@ function updatesliderbar(name) {
         pagelink.unshift(pagelink.pop());
     }
     setintoplace();
-
-    document.getElementById('embeded').src = `privatestatic/html/${pagelink[2]}.html`;
+    iframe.src = `privatestatic/html/${pagelink[2]}.html`;
     document.getElementById('Title').innerHTML = titles[2];
+}
+
+// eslint-disable-next-line no-unused-vars
+function checkAuth() {
+    try {
+        console.log(iframe.contentDocument.getElementsByTagName('PRE')[0].innerHTML);
+        if (iframe.contentDocument.getElementsByTagName('PRE')[0].innerHTML == 'Unauthorized') {
+            failedToLoad(iframe, true);
+        }
+    } finally {
+        return;
+    }
 }
 
 function getinfo(number) {
@@ -177,6 +188,11 @@ function loadsettings(titleset) {
             // auth
 
             switchsubmit();
+        }
+        try {
+            checkErrors();
+        } finally {
+            return;
         }
     }
 }

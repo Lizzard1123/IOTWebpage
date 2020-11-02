@@ -9,18 +9,30 @@
 <body style="width:397px; height:1000px">
     <div id="bodytitle">Welcome!</div>
 
-    <div id="changeTable">
+    <div class="githubTable" id="leftChangeTable" onclick="increasePage(false)">
+        <svg id="leftIcon" xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-arrow-bar-left" width="32" height="32" viewBox="0 0 24 24" stroke-width="2" stroke="#000000" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+        <line x1="4" y1="12" x2="14" y2="12" />
+        <line x1="4" y1="12" x2="8" y2="16" />
+        <line x1="4" y1="12" x2="8" y2="8" />
+        <line x1="20" y1="4" x2="20" y2="20" />
+      </svg></div>
+    <div class="githubTable" id="changeTable">
         <div id="nameTable">
-            <div class="namecell" id="nameCell1">Name</div>
-        </div>
-        <div id="timeTable">
-            <div class="timecell" id="timeCell1">Time</div>
-        </div>
-        <div id="messageTable">
-            <div class="messagecell" id="messageCell1">Message</div>
+            <div class="namecell" id="nameCell1">
+                Unable to Connect to Github API
+            </div>
         </div>
     </div>
-
+    <div class="githubTable" id="rightChangeTable" onclick="increasePage(true)">
+        <svg id="rightIcon" xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-arrow-bar-right" width="32" height="32" viewBox="0 0 24 24" stroke-width="2" stroke="#000000" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+            <line x1="20" y1="12" x2="10" y2="12" />
+            <line x1="20" y1="12" x2="16" y2="16" />
+            <line x1="20" y1="12" x2="16" y2="8" />
+            <line x1="4" y1="4" x2="4" y2="20" />
+          </svg>
+    </div>
 </body>
 <script src="/privatestatic/js/Github.js"></script>
 

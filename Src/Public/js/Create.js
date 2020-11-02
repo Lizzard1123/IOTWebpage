@@ -99,4 +99,11 @@ function nextInput() {
     changeInput();
 }
 
-// Auth page error setup
+// eslint-disable-next-line no-unused-vars
+function checkErrors() {
+    const sessionErrors = getCookie('sessionErrors');
+    console.log(sessionErrors);
+    if (!(sessionErrors == 'none' || sessionErrors == '')) {
+        switchInfoPage('Bugs');
+    }
+}

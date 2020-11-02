@@ -82,10 +82,14 @@ function auth(privlage, req, res, next) {
         consoleLog('Is it an AJAX request:', isAjaxRequest);
         if (isAjaxRequest) {
             consoleLog('It is');
-            res.send('/login').end();
+            res.sendStatus(401).end();
         } else {
             consoleLog('Redirecting expired Token');
-            res.redirect(302, '/login');
+            if (req.path == '/home') {
+                res.redirect(302, '/login');
+            } else {
+                res.sendStatus(401).end();
+            }
         }
     }
 }
@@ -356,9 +360,15 @@ app.get('/espLights_Status', (req, res) => {
 });
 
 
-function getGithubCommits(callback) {
+function getGithubCommits(pagenum, callback) {
     request.get(
-        process.env.githubLink, {
+
+        {
+            url: process.env.githubLink,
+            qs: {
+                per_page: 25,
+                page: pagenum,
+            },
             headers: {
                 'User-Agent': 'EthanIOTBACKEND',
                 'Accept': 'application/vnd.github.v3+json',
@@ -382,13 +392,12 @@ function getGithubCommits(callback) {
 
 app.post('/githubCommits', (req, res) => {
     const sendMess = [];
-    getGithubCommits((err, responsething) => {
+    consoleLog('Github Page sent:', req.body.page);
+    getGithubCommits(req.body.page, (err, responsething) => {
         if (err) {
-            console.log('err:' + err);
+            consoleLog('GithubCommits Error', err);
             return res.send('[]');
         } else {
-            const page = req.body.page;
-            console.log(responsething);
             if (responsething == undefined) {
                 consoleLog('Github undefined');
                 return res.send('[]');
@@ -398,7 +407,7 @@ app.post('/githubCommits', (req, res) => {
                 consoleLog('No Github Acsess');
                 res.send('[]');
             } else {
-                for (let i = 25 * (page - 1); i < 25 * page; i++) {
+                for (let i = 0; i < github.length; i++) {
                     const currentmes = {
                         'name': github[i].commit.committer.name,
                         'date': github[i].commit.committer.date,
