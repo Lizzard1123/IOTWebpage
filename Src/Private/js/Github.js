@@ -38,10 +38,13 @@ function cloneRow(obj, example, parent, id) {
     const d = new Date(obj.date);
     const dateShort = (d.getMonth() + 1) + '/' + d.getDate() + '/' + d.getFullYear();
     let timeOfDay;
-    let hour = d.getHours() + 1;
+    let hour = d.getHours();
     if (hour > 12) {
         hour = hour - 12;
         timeOfDay = 'pm';
+    } else if (hour == 0) {
+        hour = 12;
+        timeOfDay = 'am';
     } else {
         timeOfDay = 'am';
     }
