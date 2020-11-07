@@ -9,7 +9,9 @@ import { record } from './Private/js/logs.js';
 import { checkDaily } from './Private/js/logs.js';
 import request from 'request';
 import dotenv from 'dotenv';
+import ical from 'node-ical';
 import formidable from 'formidable';
+
 
 const serverBusy = true;
 
@@ -38,10 +40,11 @@ if (dayVal < 10) {
 const title = `${monthActual}${dayVal}${date.getFullYear()}`;
 const time = `${date.getHours()}.${date.getMinutes()}.${date.getSeconds()}`;
 checkDaily(__dirname);
+
 app.use(cookieParser());
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(express.raw({ type: 'multipart/form-data', limit: '10mb' }));
+app.use(express.json({ type: 'application/json' }));
+app.use(express.urlencoded({ type: 'application/x-www-form-urlencoded', extended: true }));
+
 app.use('/publicstatic', express.static('public'));
 app.use('/privatestatic', (req, res, next) => {
     console.log('podkjhas ');
@@ -78,7 +81,7 @@ function auth(privlage, req, res, next) {
             res.send('Forbidden');
         }
     } catch (err) {
-        record('Failed Auth ip', req.connection.remoteAddress, 3);
+        // record('Failed Auth ip', (req.connection.remoteAddress).toString(), 3);
         const isAjaxRequest = req.header.type == 'ajax';
         consoleLog('Is it an AJAX request:', isAjaxRequest);
         if (isAjaxRequest) {
@@ -238,37 +241,66 @@ app.post('/login',
         // logging pourposes
     });
 
+function checkForDup(original, lookFor) {
+    for (const property in original) {
+        if (original[property][2] == lookFor) {
+            consoleLog('duplicate entry');
+            return false;
+        }
+    }
+    return true;
+}
 // keep timers
+function updateTimers(userTimer, addto, add = {}) {
+    const userPath = `/users/${userTimer.name}.json`;
+    const timerpath = path.join(__dirname, userPath);
+    let userJSON = fs.readFileSync(timerpath);
+    userJSON = JSON.parse(userJSON);
+    if (addto) {
+        const keys = Object.keys(userJSON.timers);
+        let count = keys.length;
+        for (const property in add) {
+            if (checkForDup(userJSON.timers, add[property][2])) {
+                console.log('hereQ');
+                count++;
+                userJSON.timers[`task${count}`] = add[property];
+            }
+        }
+    } else {
+        userJSON.timers = add;
+    }
+    fs.writeFile(timerpath, JSON.stringify(userJSON), (err) => {
+        if (err) {
+            consoleLog('Timer set failed', err);
+            return;
+        }
+        consoleLog('Updated timer for', userTimer.name);
+    });
+}
+
 app.post('/timer', (req, res, next) => {
     auth('stranger', req, res, next);
 }, (req, res) => {
     const keysarray = Object.keys(req.body);
     let lastkeyarrayval;
     try {
-        lastkeyarrayval = req.body[keysarray[(keysarray.length - 1)]][2];
-        if (!validator.isWhitelisted(lastkeyarrayval, process.env.whitelist)) {
-            record('Invalid Characters on backend from', req.connection.remoteAddress, 5);
-            consoleLog('Invalid character in timer post');
-            error(res, 'validator for timer post');
-            return;
+        for (let i = 0; i < keysarray.length; i++) {
+            lastkeyarrayval = req.body[keysarray[(keysarray.length - (i + 1))]][2];
+            console.log(lastkeyarrayval);
+            if (!validator.isWhitelisted(lastkeyarrayval, process.env.whitelist)) {
+                // record('Invalid Characters on backend from', req.connection.remoteAddress, 5);
+                consoleLog('Invalid character in timer post');
+                error(res, 'validator for timer post');
+                return;
+            }
         }
     } catch {
         lastkeyarrayval = {};
     } finally {
         const userTimer = getUserInfo(req);
-        const userPath = `/users/${userTimer.name}.json`;
-        const timerpath = path.join(__dirname, userPath);
-        let userJSON = fs.readFileSync(timerpath);
-        userJSON = JSON.parse(userJSON);
-        userJSON.timers = req.body;
-        fs.writeFile(timerpath, JSON.stringify(userJSON), (err) => {
-            if (err) {
-                consoleLog('Timer set failed', err);
-                return;
-            }
-            consoleLog('Updated timer for', userTimer.name);
-            return res.send('done');
-        });
+        console.log(req.body);
+        updateTimers(userTimer, false, req.body);
+        return;
     }
 });
 app.get('/timer', (req, res, next) => {
@@ -423,24 +455,38 @@ app.post('/githubCommits', (req, res) => {
 });
 
 // upload calender
+
+
 app.post('/ToDo/uploadCal', (req, res) => {
-    console.log('hihihljkfsdifih');
     const form = new formidable.IncomingForm();
+    // eslint-disable-next-line space-before-function-paren
     form.parse(req, (err, fields, files) => {
-        console.log('here');
         if (err) {
             console.log(err);
             console.log('Submited error');
             return;
         }
-        console.log('received fields:');
-        console.log(fields);
-        console.log('received files:');
-        console.log(files);
-        console.log(JSON.stringify({ fields, files }));
+        console.log(files.calender.path);
+        const newData = ical.sync.parseFile(files.calender.path.toString());
+        const keys = Object.keys(newData);
+        const finalNewData = {};
+        for (let i = 0; i < keys.length; i++) {
+            console.log(i);
+            console.log(newData[keys[i]]);
+            const now = Date.now();
+            if (newData[keys[i]].end > now) {
+                finalNewData[keys[i]] = [
+                    Date.now(),
+                    newData[keys[i]].end,
+                    newData[keys[i]].summary,
+                ];
+            }
+        }
+        console.log(finalNewData);
+        const userTimer = getUserInfo(req);
+        updateTimers(userTimer, true, finalNewData);
         res.end();
     });
-    console.log('ererer');
 });
 
 app.listen(port, () => consoleLog(`IOTWebpage is listening on port ${port}!`));

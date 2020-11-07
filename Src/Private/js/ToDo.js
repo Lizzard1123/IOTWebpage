@@ -42,6 +42,9 @@ function getbgcolor(colora, colorb, t) {
 function setbackground(obj, dateone, datetwo) {
     const totaltime = timeinbetween(datetwo, dateone);
     const currenttime = timeinbetween(Date.now(), dateone);
+    console.log(obj);
+    console.log(totaltime);
+    console.log(currenttime);
     if (totaltime < 0 || currenttime < 0) {
         obj.style.backgroundColor = `rgb(${redcolor[0]}, ${redcolor[1]}, ${redcolor[2]})`;
         return;
