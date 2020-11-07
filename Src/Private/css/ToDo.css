@@ -151,3 +151,15 @@ body {
 .datething::placeholder {
     color: black;
 }
+
+#upload {
+    width: 32px;
+    height: 32px;
+    position: absolute;
+    right: 3px;
+    top: 3px;
+}
+
+#fileInput {
+    display: none;
+}

@@ -1,7 +1,6 @@
 import fs from 'fs';
 import express from 'express';
 import path from 'path';
-import bodyParser from 'body-parser';
 import validator from 'validator';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
@@ -10,6 +9,7 @@ import { record } from './Private/js/logs.js';
 import { checkDaily } from './Private/js/logs.js';
 import request from 'request';
 import dotenv from 'dotenv';
+import formidable from 'formidable';
 
 const serverBusy = true;
 
@@ -39,8 +39,9 @@ const title = `${monthActual}${dayVal}${date.getFullYear()}`;
 const time = `${date.getHours()}.${date.getMinutes()}.${date.getSeconds()}`;
 checkDaily(__dirname);
 app.use(cookieParser());
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.raw({ type: 'multipart/form-data', limit: '10mb' }));
 app.use('/publicstatic', express.static('public'));
 app.use('/privatestatic', (req, res, next) => {
     console.log('podkjhas ');
@@ -419,6 +420,27 @@ app.post('/githubCommits', (req, res) => {
             }
         }
     });
+});
+
+// upload calender
+app.post('/ToDo/uploadCal', (req, res) => {
+    console.log('hihihljkfsdifih');
+    const form = new formidable.IncomingForm();
+    form.parse(req, (err, fields, files) => {
+        console.log('here');
+        if (err) {
+            console.log(err);
+            console.log('Submited error');
+            return;
+        }
+        console.log('received fields:');
+        console.log(fields);
+        console.log('received files:');
+        console.log(files);
+        console.log(JSON.stringify({ fields, files }));
+        res.end();
+    });
+    console.log('ererer');
 });
 
 app.listen(port, () => consoleLog(`IOTWebpage is listening on port ${port}!`));

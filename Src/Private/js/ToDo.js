@@ -154,3 +154,14 @@ function updatepagetimers(obj = currenttaskobj) {
         thisobj.getElementsByTagName('INPUT')[1].value = obj[object[i]][1].slice(0, 10);
     }
 }
+
+// Uploading calender
+// eslint-disable-next-line no-unused-vars
+function getFile() {
+    document.getElementById('fileInput').click();
+}
+
+// eslint-disable-next-line no-unused-vars
+function uploadCalander() {
+    document.getElementById('uploadFileForm').submit();
+}
