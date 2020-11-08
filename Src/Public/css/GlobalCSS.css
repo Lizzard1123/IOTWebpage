@@ -93,6 +93,7 @@
 }
 
 #scrollbar_middle {
+    font-family: 'Archivo Black';
     z-index: 1;
     left: calc(25% - 3px);
     width: 50%;
@@ -128,6 +129,8 @@
 }
 
 #footer {
+    font-family: 'Archivo Black';
+    font-size: .9em;
     z-index: 3;
     background-color: #99AACF;
     width: 55%;
@@ -148,7 +151,6 @@ svg {
 }
 
 #footerTable {
-    /*nice*/
     position: relative;
     top: -40%;
     width: 100%;

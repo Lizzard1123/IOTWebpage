@@ -1,1 +1,32 @@
-{"Public":{"name":"cayden","securityLevel":"admin"},"Private":{"password":"$2b$12$zoxgi2YPWdeUWPzmbvLSGOOxRVbO4MJwy8Q4aR0NUxSoqxQsNWX1W","lastLog":"10292020_20.51.9"},"timers":{}}
+{
+    "Public": {
+        "name": "cayden",
+        "securityLevel": "admin"
+    },
+    "Private": {
+        "password": "$2b$12$zoxgi2YPWdeUWPzmbvLSGOOxRVbO4MJwy8Q4aR0NUxSoqxQsNWX1W",
+        "lastLog": "11072020_16.35.10"
+    },
+    "timers": {
+        "task1": [
+            1604800028283,
+            "2020-11-09T05:59:00.000Z",
+            "AP1BW5"
+        ],
+        "task2": [
+            1604800028286,
+            "2020-11-09T05:59:00.000Z",
+            "Lab: Newton's Second Law"
+        ],
+        "task3": [
+            1604800028287,
+            "2020-11-09T05:59:00.000Z",
+            "Worksheet U2W2"
+        ],
+        "task4": [
+            1604800028288,
+            "2020-11-11T05:00:00.000Z",
+            "Speech Analysis Handout due today"
+        ]
+    }
+}
