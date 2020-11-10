@@ -85,6 +85,7 @@ function clonetask(reqid = avaliableid()) {
     const cln = task1.cloneNode(true);
     cln.getElementsByClassName('delete')[0].style.visibility = 'visible';
     cln.id = reqid;
+    cln.style.display = 'block';
     currenttasks.push(reqid);
     cln.getElementsByClassName('datething')[0].value = d.getFullYear() + '-' + monthActual + '-' + dayVal;
     taskcontent.appendChild(cln);
@@ -168,3 +169,17 @@ function getFile() {
 function uploadCalander() {
     document.getElementById('uploadFileForm').submit();
 }
+
+/* Sync Calaender
+<div id="sync" onclick="syncCalender()">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-refresh" width="32" height="32" viewBox="0 0 24 24" stroke-width="1.5" stroke="#000000" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+            <path d="M20 11a8.1 8.1 0 0 0 -15.5 -2m-.5 -4v4h4" />
+            <path d="M4 13a8.1 8.1 0 0 0 15.5 2m.5 4v-4h-4" />
+          </svg>
+    </div>
+function syncCalender() {
+    const userId = 89470314; // idInput.value;
+    window.open(`https://fcboe.schoology.com/calendar/feed/export/user/${userId}/download`);
+}
+*/

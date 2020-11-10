@@ -8,6 +8,7 @@
 
 <body style="width:397px; height:1000px" onbeforeunload="sendtobackend()" onload="recivefrombackend()">
     <h1 id="title">TODO LIST</h1>
+
     <div id="upload" onclick="getFile()">
         <form action="/ToDo/uploadCal" id="uploadFileForm" method="POST" onsubmit="return false" enctype="multipart/form-data">
             <input id="fileInput" type="file" onchange="uploadCalander()" accept=".ics" name="calender" />
@@ -22,7 +23,7 @@
     </div>
     <button type="button" id="create" onclick="clonetask()">Create New Task</button>
     <div id="taskcontent">
-        <div id="task0" class="tasks">
+        <div id="task0" class="tasks" style="display: none;">
             <div id="task1title" class="insidetitle">
                 <input type="text" class="task1titlename" autocomplete="off" placeholder="Something" disabled>
                 <input type="date" class="datething" autocomplete="off" disabled>

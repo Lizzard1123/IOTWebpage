@@ -47,7 +47,6 @@ app.use(express.urlencoded({ type: 'application/x-www-form-urlencoded', extended
 
 app.use('/publicstatic', express.static('public'));
 app.use('/privatestatic', (req, res, next) => {
-    console.log('podkjhas ');
     auth('stranger', req, res, next);
 });
 app.use('/privatestatic', express.static('Private'));
@@ -462,17 +461,13 @@ app.post('/ToDo/uploadCal', (req, res) => {
     // eslint-disable-next-line space-before-function-paren
     form.parse(req, (err, fields, files) => {
         if (err) {
-            console.log(err);
-            console.log('Submited error');
+            consoleLog('Submited error');
             return;
         }
-        console.log(files.calender.path);
         const newData = ical.sync.parseFile(files.calender.path.toString());
         const keys = Object.keys(newData);
         const finalNewData = {};
         for (let i = 0; i < keys.length; i++) {
-            console.log(i);
-            console.log(newData[keys[i]]);
             const now = Date.now();
             if (newData[keys[i]].end > now) {
                 finalNewData[keys[i]] = [

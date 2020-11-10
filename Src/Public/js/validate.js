@@ -115,5 +115,8 @@ function switchsubmit() {
     console.log('tried');
 }
 
-// Errors
-console.log(document.cookie);
+window.addEventListener('keyup', function(event) {
+    if (event.key == 'Enter') {
+        document.getElementById('submitbutton').click();
+    }
+});
