@@ -253,7 +253,7 @@ let Fadeinterval;
 const Fadetime = 1;
 let FadeTotalTime = 800;
 let bodyVisible = true;
-const dissapearingActs = ['header', 'scrollbar', 'body', 'footer', 'Weather', 'createBox'];
+const dissapearingActs = ['header', 'scrollbar', 'body', 'footer', 'Weather', 'createBox', 'bugBox'];
 let opacitysetting = 1;
 let inProgress = false;
 
