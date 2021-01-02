@@ -11,7 +11,7 @@ import request from 'request';
 import dotenv from 'dotenv';
 import ical from 'node-ical';
 import formidable from 'formidable';
-
+import cron from 'node-cron';
 
 const serverBusy = true;
 
@@ -481,6 +481,14 @@ app.post('/ToDo/uploadCal', (req, res) => {
         const userTimer = getUserInfo(req);
         updateTimers(userTimer, true, finalNewData);
         res.end();
+    });
+});
+
+
+cron.schedule('0 0 6 * * *', () => {
+    consoleLog('Turning on lamps SCHEDULE test');
+    sendMessageToESPLights('all', 'On', (err) => {
+        consoleLog('ESP post err', err);
     });
 });
 
