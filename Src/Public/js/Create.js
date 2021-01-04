@@ -86,7 +86,7 @@ function nextInput() {
         if (!checkWhitelist(submitInfo.name) && !checkWhitelist(submitInfo.password)) {
             console.log('pip');
             submitNewInfo();
-            createAccount();
+            switchInfoPage('Login');
             createBox.style.display = 'none';
         }
         return;

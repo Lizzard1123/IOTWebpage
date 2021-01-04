@@ -19,6 +19,7 @@ let logspath;
 function consoleLog(string, data = '') {
     console.log('\x1b[34m', string + ' ' + data);
 }
+
 async function updateCurrentDir() {
     consoleLog('Updating Directory for Logs');
     const dir = await fs.promises.opendir(logspath);
@@ -42,6 +43,8 @@ function createDay() {
         }
     });
 }
+
+/*
 export function record(qtype, string, level) {
     fs.readFile(`${logspath}\\${title}.json`, 'utf-8', (err, data) => {
         if (err) {
@@ -60,7 +63,8 @@ export function record(qtype, string, level) {
         return true;
     });
 }
-
+*/
+/*
 export async function checkDaily(paththing) {
     logspath = path.join(paththing, 'Private', 'Logs');
     consoleLog('Checking Daily function');
@@ -78,3 +82,4 @@ export async function checkDaily(paththing) {
         });
     }
 }
+*/

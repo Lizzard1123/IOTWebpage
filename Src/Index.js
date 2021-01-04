@@ -1,19 +1,15 @@
-import fs from 'fs';
 import express from 'express';
 import path from 'path';
 import validator from 'validator';
 import jwt from 'jsonwebtoken';
-import bcrypt from 'bcrypt';
 import cookieParser from 'cookie-parser';
-import { record } from './Private/js/logs.js';
-import { checkDaily } from './Private/js/logs.js';
+import { record } from './Private/js/database.js';
 import request from 'request';
 import dotenv from 'dotenv';
 import ical from 'node-ical';
 import formidable from 'formidable';
 import cron from 'node-cron';
-
-const serverBusy = true;
+import { dbexecute, error, handleLogin, createAccount, removeTimer, editTimer, getTimers } from './Private/js/database.js';
 
 const __dirname = path.resolve();
 const result = dotenv.config({ path: `${path.join(__dirname, 'secretCodes.env')}` });
@@ -27,19 +23,6 @@ if (result.error) {
 
 const port = 3000;
 const app = express();
-const date = new Date();
-const month = date.getMonth();
-let monthActual = month + 1;
-if (monthActual < 10) {
-    monthActual = '0' + monthActual;
-}
-let dayVal = date.getDate();
-if (dayVal < 10) {
-    dayVal = '0' + dayVal;
-}
-const title = `${monthActual}${dayVal}${date.getFullYear()}`;
-const time = `${date.getHours()}.${date.getMinutes()}.${date.getSeconds()}`;
-checkDaily(__dirname);
 
 app.use(cookieParser());
 app.use(express.json({ type: 'application/json' }));
@@ -52,11 +35,6 @@ app.use('/privatestatic', (req, res, next) => {
 app.use('/privatestatic', express.static('Private'));
 
 
-function error(res, errorthing = 'default') {
-    consoleLog('Error function:', errorthing);
-    record('Error', errorthing, 2);
-    return res.sendStatus(401).end();
-}
 // userinfo
 function getUserInfo(req) {
     const token = req.cookies.token;
@@ -126,26 +104,10 @@ app.post('/createAccount', (req, res, next) => {
         next();
     }
 }, (req, res) => {
-    const bcryptPassword = bcrypt.hashSync(req.body.password, 12);
     consoleLog('Creating user:', req.body.name);
-    fs.writeFile(`${__dirname}\\users\\${req.body.name}.json`, JSON.stringify({
-        'Public': {
-            'name': req.body.name,
-            'securityLevel': 'stranger',
-        },
-        'Private': {
-            'password': bcryptPassword,
-            'lastLog': '',
-        },
-        'timers': {},
-    }), (err) => {
-        if (err) {
-            consoleLog('Error writing user', err);
-            return;
-        }
-        consoleLog('Done writing user'); // Success
-    });
+    createAccount(req);
 });
+
 app.post('/login',
     (req, res, next) => {
         consoleLog('Authenticating with whitelist for user', req.body.Name);
@@ -161,79 +123,7 @@ app.post('/login',
     },
     // main check
     (req, res, next) => {
-        try {
-            consoleLog('Checking if Account is there');
-            // read from json file under username
-            fs.readFile(path.join(__dirname, `/users/${req.body.Name}.json`), 'utf-8', (err, data) => {
-                if (err) {
-                    // no file found/error reading json file
-                    consoleLog('No user found for', req.body.Name);
-                    error(res, err);
-                }
-                consoleLog('User found:', req.body.Name);
-                // there is a file for user parse it
-                const filedata = JSON.parse(data);
-                // engrypt and compare paswword and check with user file
-                bcrypt.compare(req.body.Password, filedata.Private.password, (err, result) => {
-                    if (err) {
-                        // general error with bcrpyt
-                        consoleLog('General bcrypt error');
-                        error(res, err);
-                    }
-                    // result is true if password is the same
-                    consoleLog('Password matches:', result);
-                    if (result) {
-                        // same password
-                        record('logging in', req.connection.remoteAddress, 3);
-                        consoleLog('Bcrtpy same password');
-                        // set LAst login
-                        filedata.Private.lastLog = `${title}_${time}`;
-                        fs.writeFile(path.join(__dirname, `/users/${req.body.Name}.json`), JSON.stringify(filedata), (err) => {
-                            if (err) {
-                                consoleLog('Error writing lastLog');
-                                return;
-                            }
-                        });
-                        // create jwt
-                        const token = jwt.sign(filedata.Public, process.env.secretkey, { expiresIn: '30min' });
-                        // set authorization cookie with jwt
-                        res.cookie('token', token, {
-                            // ms
-                            // 30 min
-                            maxAge: process.env.timeoutTime,
-                        });
-                        // ajax redirect
-                        consoleLog('Validated and redirected');
-                        // parsed on frontend and rediredted there with credintials
-                        if (serverBusy && filedata.Public.securityLevel != 'admin') {
-                            return res.json({
-                                message: 'busy',
-                            });
-                        } else {
-                            return res.json({
-                                message: 'redirect',
-                                newpage: '/home',
-                            });
-                        }
-                    } else {
-                        // incorrect password
-                        record('Failed login from', req.connection.remoteAddress, 3);
-                        // record('password attempt', req.body.Password, 3);
-                        consoleLog('Incorrect Password');
-                        return res.json({
-                            message: 'error',
-                        });
-                    }
-                });
-            });
-        } catch (errror) {
-            // error up above in some statement
-            consoleLog('Weird error in Login', errror);
-            error(res, err);
-        } finally {
-            // ends main segment
-            next();
-        }
+        handleLogin(req, res, next);
     },
     (req, res) => {
         consoleLog('logging in:', req.body.Name);
@@ -249,17 +139,15 @@ function checkForDup(original, lookFor) {
     }
     return true;
 }
+
 // keep timers
 function updateTimers(userTimer, addto, add = {}) {
-    const userPath = `/users/${userTimer.name}.json`;
-    const timerpath = path.join(__dirname, userPath);
-    let userJSON = fs.readFileSync(timerpath);
-    userJSON = JSON.parse(userJSON);
+    const user = dbexecute(true, `SELECT * from tasks WHERE id = ${userTimer.id}`);
     if (addto) {
-        const keys = Object.keys(userJSON.timers);
+        const keys = Object.keys(user);
         let count = keys.length;
         for (const property in add) {
-            if (checkForDup(userJSON.timers, add[property][2])) {
+            if (checkForDup(user, add[property][2])) {
                 console.log('hereQ');
                 count++;
                 userJSON.timers[`task${count}`] = add[property];
@@ -268,13 +156,6 @@ function updateTimers(userTimer, addto, add = {}) {
     } else {
         userJSON.timers = add;
     }
-    fs.writeFile(timerpath, JSON.stringify(userJSON), (err) => {
-        if (err) {
-            consoleLog('Timer set failed', err);
-            return;
-        }
-        consoleLog('Updated timer for', userTimer.name);
-    });
 }
 
 app.post('/timer', (req, res, next) => {
@@ -305,16 +186,9 @@ app.post('/timer', (req, res, next) => {
 app.get('/timer', (req, res, next) => {
     auth('stranger', req, res, next);
 }, (req, res) => {
-    const userTimer = getUserInfo(req);
-    const userPath = `/users/${userTimer.name}.json`;
-    const timerpath = path.join(__dirname, userPath);
-    fs.readFile(timerpath, (err, data) => {
-        if (err) {
-            consoleLog('Timer get failed', err);
-            return false;
-        }
-        return res.json(JSON.parse(data).timers);
-    });
+    const mess = getTimers(getUserInfo(req).id);
+    consoleLog(mess);
+    return res.json(mess);
 });
 
 
@@ -484,6 +358,19 @@ app.post('/ToDo/uploadCal', (req, res) => {
     });
 });
 
+// timerdel
+app.post('/timerdel', (req, res) => {
+    const userId = getUserInfo(req).id;
+    removeTimer(req.body.id, userId);
+    res.end();
+});
+
+// timeredit
+app.post('/timeredit', (req, res) => {
+    const userId = getUserInfo(req).id;
+    editTimer(req.body, userId);
+    res.end();
+});
 
 cron.schedule('0 0 6 * * *', () => {
     consoleLog('Turning on lamps SCHEDULE test');

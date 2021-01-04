@@ -1,1 +1,11 @@
-{"Public":{"name":"cayden","securityLevel":"admin"},"Private":{"password":"$2b$12$zoxgi2YPWdeUWPzmbvLSGOOxRVbO4MJwy8Q4aR0NUxSoqxQsNWX1W","lastLog":"11292020_20.50.8"},"timers":{}}
+{
+    "Public": {
+        "name": "cayden",
+        "securityLevel": "admin"
+    },
+    "Private": {
+        "password": "$2b$12$zoxgi2YPWdeUWPzmbvLSGOOxRVbO4MJwy8Q4aR0NUxSoqxQsNWX1W",
+        "lastLog": "11292020_20.50.8"
+    },
+    "timers": {}
+}

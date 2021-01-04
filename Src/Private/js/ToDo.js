@@ -1,7 +1,5 @@
 const taskcontent = document.getElementById('taskcontent');
-const task1 = document.getElementById('task0');
-
-let currenttasks = ['task0'];
+const task0 = document.getElementById('task0');
 
 const d = new Date();
 const month = d.getMonth();
@@ -55,47 +53,52 @@ function setbackground(obj, dateone, datetwo) {
     setTimeout(setbackground, (60 * 1000), obj, dateone, datetwo);
 }
 
+const ids = [];
+
+// TODO
 function avaliableid() {
-    let count = 0;
+    let count = 1;
     while (true) {
-        const newname = `task${count}`;
-        if (currenttasks.indexOf(newname) == -1) {
-            return newname;
+        if (!ids.includes(count)) {
+            return count;
         } else {
             count++;
         }
     }
 }
 
-function removeid(id) {
-    const newidarray = [];
-    for (let i = 0; i < currenttasks.length; i++) {
-        if (currenttasks[i] != id) {
-            newidarray.push(currenttasks[i]);
-        }
-    }
-    currenttasks = newidarray;
-    delete currenttaskobj[id];
-}
-
-let currenttaskobj = {};
-
 
 function clonetask(reqid = avaliableid()) {
-    const cln = task1.cloneNode(true);
+    ids.push(parseInt(reqid));
+    const cln = task0.cloneNode(true);
     cln.getElementsByClassName('delete')[0].style.visibility = 'visible';
     cln.id = reqid;
     cln.style.display = 'block';
-    currenttasks.push(reqid);
     cln.getElementsByClassName('datething')[0].value = d.getFullYear() + '-' + monthActual + '-' + dayVal;
     taskcontent.appendChild(cln);
 }
 
 // eslint-disable-next-line no-unused-vars
 function deleteparent(obj) {
-    removeid(obj.parentElement.id);
+    const deleteTimer = new XMLHttpRequest();
+    deleteTimer.open('POST', '/timerdel', true);
+    deleteTimer.setRequestHeader('Content-type', 'application/json');
+    deleteTimer.setRequestHeader('type', 'ajax');
+    console.log(`removing ${obj.parentElement.id}`);
+    deleteTimer.send(JSON.stringify({ id: obj.parentElement.id }));
     obj.parentElement.remove();
+    delete ids[ids.indexOf(obj.parentElement.id)];
 }
+// edit
+function editTimer(obj) {
+    const deleteTimer = new XMLHttpRequest();
+    deleteTimer.open('POST', '/timeredit', true);
+    deleteTimer.setRequestHeader('Content-type', 'application/json');
+    deleteTimer.setRequestHeader('type', 'ajax');
+    console.log(`editing ${obj['id']}`);
+    deleteTimer.send(JSON.stringify(obj));
+}
+
 // eslint-disable-next-line no-unused-vars
 function enableedit(obj) {
     const text = obj.parentElement.firstElementChild.getElementsByTagName('INPUT')[0];
@@ -112,22 +115,19 @@ function enableedit(obj) {
             time.disabled = true;
             return;
         }
-        setbackground(obj.parentElement, Date.now(), new Date(time.value.replace('-', '/')));
-        currenttaskobj[obj.parentElement.id] = [Date.now(), new Date(time.value.replace('-', '/')), text.value];
+        const newTimer = {
+            id: obj.parentElement.id,
+            dateOne: Date.now(),
+            dateTwo: new Date(time.value.replace('-', '/')),
+            text: text.value,
+        };
+        editTimer(newTimer);
         obj.style.backgroundColor = 'darkgrey';
         text.disabled = true;
         time.disabled = true;
     }
 }
-// eslint-disable-next-line no-unused-vars
-function sendtobackend() {
-    const timerlogs = new XMLHttpRequest();
-    timerlogs.open('POST', '/timer', true);
-    timerlogs.setRequestHeader('Content-type', 'application/json');
-    timerlogs.setRequestHeader('type', 'ajax');
-    console.log(currenttaskobj);
-    timerlogs.send(JSON.stringify(currenttaskobj));
-}
+
 // eslint-disable-next-line no-unused-vars
 function recivefrombackend() {
     const gettimerlogs = new XMLHttpRequest();
@@ -135,8 +135,7 @@ function recivefrombackend() {
         if (this.readyState == 4 && this.status == 200) {
             console.log(this.responseText);
             const res = JSON.parse(this.responseText);
-            currenttaskobj = res;
-            updatepagetimers();
+            updatepagetimers(res);
         }
     };
     gettimerlogs.open('GET', '/timer', true);
@@ -145,17 +144,20 @@ function recivefrombackend() {
     gettimerlogs.send();
 }
 
-function updatepagetimers(obj = currenttaskobj) {
-    const object = Object.keys(obj);
-    const number = object.length;
-    for (let i = 0; i < number; i++) {
-        clonetask(object[i]);
-        const thisobj = document.getElementById(object[i]);
-        setbackground(thisobj, obj[object[i]][0], obj[object[i]][1]);
+function updatepagetimers(obj) {
+    for (let i = 0; i < obj.length; i++) {
+        console.log(obj.length);
+        clonetask(obj[i]['taskId']);
+        console.log(obj[i]['startDate']);
+        console.log(obj[i]['endDate']);
+        console.log(obj);
+        const thisobj = document.getElementById(obj[i]['taskId']);
+        setbackground(thisobj, obj[i]['startDate'], obj[i]['endDate']);
         // title
-        thisobj.getElementsByTagName('INPUT')[0].value = obj[object[i]][2];
-        // time new
-        thisobj.getElementsByTagName('INPUT')[1].value = obj[object[i]][1].slice(0, 10);
+        thisobj.getElementsByTagName('INPUT')[0].value = obj[i]['title'];
+        // time new new Date(time.value.replace('-', '/'))
+        const beforeDate = obj[i]['endDate'].substring(0, 10);
+        thisobj.getElementsByTagName('INPUT')[1].value = beforeDate;
     }
 }
 
@@ -169,17 +171,3 @@ function getFile() {
 function uploadCalander() {
     document.getElementById('uploadFileForm').submit();
 }
-
-/* Sync Calaender
-<div id="sync" onclick="syncCalender()">
-        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-refresh" width="32" height="32" viewBox="0 0 24 24" stroke-width="1.5" stroke="#000000" fill="none" stroke-linecap="round" stroke-linejoin="round">
-            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-            <path d="M20 11a8.1 8.1 0 0 0 -15.5 -2m-.5 -4v4h4" />
-            <path d="M4 13a8.1 8.1 0 0 0 15.5 2m.5 4v-4h-4" />
-          </svg>
-    </div>
-function syncCalender() {
-    const userId = 89470314; // idInput.value;
-    window.open(`https://fcboe.schoology.com/calendar/feed/export/user/${userId}/download`);
-}
-*/
