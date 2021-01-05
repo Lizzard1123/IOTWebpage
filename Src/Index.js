@@ -372,7 +372,7 @@ app.post('/timeredit', (req, res) => {
     res.end();
 });
 
-cron.schedule('0 0 6 * * *', () => {
+cron.schedule('0 30 10 * * *', () => {
     consoleLog('Turning on lamps SCHEDULE test');
     sendMessageToESPLights('all', 'On', (err) => {
         consoleLog('ESP post err', err);
