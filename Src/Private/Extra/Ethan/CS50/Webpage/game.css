@@ -1,0 +1,50 @@
+.all{
+    position: absolute;
+    line-height: 40px;
+    color: black;
+}
+#Info{
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 40px;
+    align-content: center;
+    font-size: 1.5em;
+    background-color: #7eb2cc;
+}
+
+#color{
+    color: green;
+}
+
+#score{
+    left: 30%;
+    top: 40px;
+    width: 20%;
+    height: 40px;
+    background-color: #008a37;
+}
+
+#HS{
+    right: 30%;
+    top: 40px;
+    width: 20%;
+    height: 40px;
+    background-color: #005c8a;
+}
+
+#clickBox{
+    right: 10%;
+    top: 100px;
+    width: 80%;
+    height: 300px;
+    background-color: #ff1226;
+}
+
+#start{
+    right: 40%;
+    bottom: 40px;
+    width: 20%;
+    height: 40px;
+    background-color: #6c7f80;
+}

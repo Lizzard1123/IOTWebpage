@@ -9,7 +9,7 @@ export function error(res, errorthing = 'default') {
 }
 
 function consoleLog(string, data = '') {
-    console.log('\x1b[36m', string + ' ' + data);
+    console.log('\x1b[32m', string + ' ' + data);
 }
 
 const db = new Database('IOTWebpageDB.db', { verbose: consoleLog });

@@ -57,14 +57,13 @@ const ids = [];
 
 // TODO
 function avaliableid() {
-    let count = 1;
-    while (true) {
-        if (!ids.includes(count)) {
-            return count;
-        } else {
-            count++;
+    let max = 0;
+    for (let i = 0; i < ids.length; i++) {
+        if (ids[i] > max) {
+            max = ids[i];
         }
     }
+    return max + 1;
 }
 
 
