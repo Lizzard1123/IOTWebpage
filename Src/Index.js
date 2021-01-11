@@ -6,8 +6,8 @@ import dotenv from 'dotenv';
 import ical from 'node-ical';
 import formidable from 'formidable';
 import cron from 'node-cron';
-import { error, handleLogin, createAccount, removeTimer, editTimer, getTimers, record } from './appSrc/database.js';
-import { getUserInfo, auth, updateTimers, sendMessageToESPLights, eSPPostErr, getGithubCommits } from './appSrc/helpers.js';
+import { error, handleLogin, createAccount, removeTimer, editTimer, getTimers, record, createTaskFromICAL } from './appSrc/database.js';
+import { getUserInfo, auth, sendMessageToESPLights, eSPPostErr, getGithubCommits } from './appSrc/helpers.js';
 
 const __dirname = path.resolve();
 const result = dotenv.config({ path: `${path.join(__dirname, 'secretCodes.env')}` });

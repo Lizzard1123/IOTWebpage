@@ -174,7 +174,7 @@ export function editTimer(body, userId) {
 }
 
 /**
- * Recives tasks for user
+ * Makes tasks from ICAL
  * @param {number} userId - "User id"
  * @param {number} now - "Current time"
  * @param {string} end - "End time"
@@ -182,7 +182,11 @@ export function editTimer(body, userId) {
  */
 export function createTaskFromICAL(userId, now, end, summary) {
     const maxid = Number(dbexecute(true, `SELECT MAX(taskId) FROM tasks WHERE id = ${userId}`)[0]['MAX(taskId)']) + 1;
-    dbexecute(false, `INSERT INTO tasks VALUES(${userId}, '${summary}', ${now}, '${end}', ${maxid})`);
+    const oldDate = new Date(end);
+    const day = oldDate.getDate() < 10 ? '0' + oldDate.getDate() : oldDate.getDate();
+    const month = (oldDate.getMonth() + 1) < 10 ? '0' + (oldDate.getMonth() + 1) : (oldDate.getMonth() + 1);
+    const newDate = oldDate.getFullYear() + '-' + month + '-' + day;
+    dbexecute(false, `INSERT INTO tasks VALUES(${userId}, '${summary}', ${now}, '${newDate}', ${maxid})`);
 }
 
 /**
