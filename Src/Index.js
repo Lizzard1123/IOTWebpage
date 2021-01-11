@@ -6,6 +6,8 @@ import dotenv from 'dotenv';
 import ical from 'node-ical';
 import formidable from 'formidable';
 import cron from 'node-cron';
+import http from 'http';
+import { Server } from 'socket.io';
 import { error, handleLogin, createAccount, removeTimer, editTimer, getTimers, record, createTaskFromICAL } from './appSrc/database.js';
 import { getUserInfo, auth, sendMessageToESPLights, eSPPostErr, getGithubCommits } from './appSrc/helpers.js';
 
@@ -27,6 +29,8 @@ if (result.error) {
 
 const port = 3000;
 const app = express();
+const httpServer = http.createServer(app);
+const io = new Server(httpServer);
 
 app.use(cookieParser());
 app.use(express.json({ type: 'application/json' }));
@@ -212,4 +216,18 @@ cron.schedule('0 50 6 * * *', () => {
     });
 });
 
-app.listen(port, () => consoleLog(`IOTWebpage is listening on port ${port}!`));
+// SOCKET.IO
+
+io.on('connection', (socket) => {
+    consoleLog('id: ', socket.id);
+    socket.on('messages', (message) => {
+        // sending to the client
+        socket.emit('messages', `recived! ${message}`);
+
+        // sending to all clients except sender
+        socket.broadcast.emit('messages', `recived from ${message} friends!`);
+    });
+});
+
+
+httpServer.listen(port, () => consoleLog(`IOTWebpage is listening on port ${port}!`));
