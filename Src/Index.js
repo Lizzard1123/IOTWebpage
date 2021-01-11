@@ -167,10 +167,9 @@ app.post('/githubCommits', (req, res) => {
     });
 });
 
-// upload calender
-
 // TODO FIX
 app.post('/ToDo/uploadCal', (req, res) => {
+    const userId = getUserInfo(req).id;
     const form = new formidable.IncomingForm();
     // eslint-disable-next-line space-before-function-paren
     form.parse(req, (err, fields, files) => {
@@ -180,20 +179,12 @@ app.post('/ToDo/uploadCal', (req, res) => {
         }
         const newData = ical.sync.parseFile(files.calender.path.toString());
         const keys = Object.keys(newData);
-        const finalNewData = {};
         for (let i = 0; i < keys.length; i++) {
             const now = Date.now();
             if (newData[keys[i]].end > now) {
-                finalNewData[keys[i]] = [
-                    Date.now(),
-                    newData[keys[i]].end,
-                    newData[keys[i]].summary,
-                ];
+                createTaskFromICAL(userId, Date.now(), newData[keys[i]].end, newData[keys[i]].summary);
             }
         }
-        console.log(finalNewData);
-        const userTimer = getUserInfo(req);
-        updateTimers(userTimer, true, finalNewData);
         res.end();
     });
 });
