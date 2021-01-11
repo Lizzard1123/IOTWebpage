@@ -2,14 +2,25 @@ import Database from 'better-sqlite3';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
+/**
+ * Logs to the console
+ * @param {string} string - "String to be logged"
+ * @param {string} data - "Additional data"
+ */
+function consoleLog(string, data = '') {
+    console.log('\x1b[32m', string + ' ' + data);
+}
+
+/**
+ * Logs, records, and responds error
+ * @param {res} res - "String to be logged"
+ * @param {string} errorthing - "Error message"
+ * @return {status} "Error status"
+ */
 export function error(res, errorthing = 'default') {
     consoleLog('Error function:', errorthing);
     record('Error', errorthing, 2);
     return res.sendStatus(401).end();
-}
-
-function consoleLog(string, data = '') {
-    console.log('\x1b[32m', string + ' ' + data);
 }
 
 const db = new Database('IOTWebpageDB.db', { verbose: consoleLog });
@@ -29,7 +40,13 @@ if (dayVal < 10) {
 const time = `${date.getHours()}.${date.getMinutes()}.${date.getSeconds()}`;
 const serverBusy = true;
 
-export function dbexecute(returnVal, message) {
+/**
+ * Executes SQL
+ * @param {boolean} returnVal - "True if expected return val"
+ * @param {string} message - "SQL command"
+ * @return {object} "Returned values in dictionary array"
+ */
+function dbexecute(returnVal, message) {
     const stmt = db.prepare(message);
     if (returnVal) {
         return stmt.all();
@@ -37,21 +54,42 @@ export function dbexecute(returnVal, message) {
     stmt.run();
 }
 
+/**
+ * Records to DB
+ * @param {string} qtype - "Type of error"
+ * @param {string} string - "Message to record"
+ * @param {number} level - "Level of concern 4 being least"
+ * @param {number} id - "Id of user"
+ */
 export function record(qtype, string, level, id = null) {
     dbexecute(false, `INSERT INTO logs VALUES(${id}, '${qtype + string}', ${level}, '${time}');`);
 }
 
+/**
+ * Returns next ID available in DB
+ * @return {number} - "Next ID"
+ */
 function nextID() {
     consoleLog(JSON.stringify(dbexecute(true, 'SELECT MAX(id) FROM users')));
     return dbexecute(true, 'SELECT MAX(id) FROM users')[0]['MAX(id)'] + 1;
 }
 
+/**
+ * Creates account
+ * @param {req} req - "User request"
+ */
 export function createAccount(req) {
     const bcryptPassword = bcrypt.hashSync(req.body.password, 12);
     dbexecute(false, `INSERT INTO users VALUES(${nextID()}, '${req.body.name}', '${bcryptPassword}', '${time}', 'stranger');`);
     consoleLog('Done writing user');
 }
 
+/**
+ * Checks if login is valid and logs user in
+ * @param {req} req - "User request"
+ * @param {res} res - "User response"
+ * @param {next} next - "Next function"
+ */
 export function handleLogin(req, res, next) {
     // checks if user is found
     const user = dbexecute(true, `SELECT * FROM users WHERE name = '${req.body.Name}'`);
@@ -111,11 +149,20 @@ export function handleLogin(req, res, next) {
     next();
 }
 
-
+/**
+ * Removes selected timer
+ * @param {number} id - "Task id"
+ * @param {number} userId - "User id"
+ */
 export function removeTimer(id, userId) {
     dbexecute(false, `DELETE FROM tasks WHERE id = ${userId} AND taskId = ${id}`);
 }
 
+/**
+ * Edits or creates timer for user
+ * @param {body} body - "User request body"
+ * @param {number} userId - "User id"
+ */
 export function editTimer(body, userId) {
     const task = dbexecute(true, `SELECT * FROM tasks WHERE taskId = ${body.id} AND id = ${userId}`);
     const foundTask = task.length != 0;
@@ -126,6 +173,11 @@ export function editTimer(body, userId) {
     dbexecute(false, `INSERT INTO tasks VALUES(${userId}, '${body.text}', ${body.dateOne}, '${body.dateTwo}', ${maxid})`);
 }
 
+/**
+ * Recives tasks for user
+ * @param {number} id - "User id"
+ * @return {object} - "Tasks for the user"
+ */
 export function getTimers(id) {
     consoleLog(id);
     return dbexecute(true, `SELECT * FROM tasks WHERE id = ${id}`);

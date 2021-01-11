@@ -1,10 +1,20 @@
 import jwt from 'jsonwebtoken';
 import request from 'request';
 
+/**
+ * logs to the console
+ * @param {string} string - "String to be logged"
+ * @param {string} data - "Additional data"
+ */
 function consoleLog(string, data = '') {
     console.log('\x1b[35m', string + ' ' + data);
 }
 
+/**
+ * returns object of user request cookies
+ * @param {req} req - "User request"
+ * @return {object} - "User cookies or \'Invalid\' "
+ */
 export function getUserInfo(req) {
     const token = req.cookies.token;
     try {
@@ -16,7 +26,13 @@ export function getUserInfo(req) {
     }
 }
 
-// auth function
+/**
+ * Checks if user is authenticated, redirects if invalid
+ * @param {string} privlage - "Level of security needed to access"
+ * @param {req} req - "User request"
+ * @param {res} res - "User response"
+ * @param {next} next - "Next function"
+ */
 export function auth(privlage, req, res, next) {
     consoleLog('Authenticating user');
     try {
@@ -44,34 +60,14 @@ export function auth(privlage, req, res, next) {
     }
 }
 
-export function checkForDup(original, lookFor) {
-    for (const property in original) {
-        if (original[property][2] == lookFor) {
-            consoleLog('duplicate entry');
-            return false;
-        }
-    }
-    return true;
-}
 
-// keep timers
-export function updateTimers(userTimer, addto, add = {}) {
-    const user = dbexecute(true, `SELECT * from tasks WHERE id = ${userTimer.id}`);
-    if (addto) {
-        const keys = Object.keys(user);
-        let count = keys.length;
-        for (const property in add) {
-            if (checkForDup(user, add[property][2])) {
-                count++;
-                userJSON.timers[`task${count}`] = add[property];
-            }
-        }
-    } else {
-        userJSON.timers = add;
-    }
-}
-
-
+/**
+ * Sends message to ESP Lamps
+ * @param {string} name - "Name of lamp"
+ * @param {string} mes - "Message to ESP"
+ * @param {function} callback - "Callback"
+ * @return {string} - "Respnse from ESP"
+ */
 export function sendMessageToESPLights(name, mes, callback) {
     const propperMes = {};
     propperMes[name] = mes;
@@ -96,8 +92,14 @@ export function sendMessageToESPLights(name, mes, callback) {
             return response.body;
         },
     );
+    return 'EOF';
 }
 
+/**
+ * Responds 'noComs' if error
+ * @param {string} err - "Name of lamp"
+ * @param {res} res - "User response"
+ */
 export function eSPPostErr(err, res) {
     if (err) {
         consoleLog('ESP post err', err);
@@ -107,6 +109,11 @@ export function eSPPostErr(err, res) {
     }
 }
 
+/**
+ * Gets Github Commits for IOTWebpage
+ * @param {number} pagenum - "Github commit page"
+ * @param {function} callback - "Callback function"
+ */
 export function getGithubCommits(pagenum, callback) {
     request.get(
 

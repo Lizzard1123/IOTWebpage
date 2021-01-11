@@ -12,6 +12,11 @@ import { getUserInfo, auth, updateTimers, sendMessageToESPLights, eSPPostErr, ge
 const __dirname = path.resolve();
 const result = dotenv.config({ path: `${path.join(__dirname, 'secretCodes.env')}` });
 
+/**
+ * logs to the console
+ * @param {string} string - "String to be logged"
+ * @param {string} data - "Additional data"
+ */
 function consoleLog(string, data = '') {
     console.log('\x1b[36m', string + ' ' + data);
 }
@@ -87,31 +92,6 @@ app.post('/login',
         // logging pourposes
     });
 
-app.post('/timer', (req, res, next) => {
-    auth('stranger', req, res, next);
-}, (req, res) => {
-    const keysarray = Object.keys(req.body);
-    let lastkeyarrayval;
-    try {
-        for (let i = 0; i < keysarray.length; i++) {
-            lastkeyarrayval = req.body[keysarray[(keysarray.length - (i + 1))]][2];
-            console.log(lastkeyarrayval);
-            if (!validator.isWhitelisted(lastkeyarrayval, process.env.whitelist)) {
-                // record('Invalid Characters on backend from', req.connection.remoteAddress, 5);
-                consoleLog('Invalid character in timer post');
-                error(res, 'validator for timer post');
-                return;
-            }
-        }
-    } catch {
-        lastkeyarrayval = {};
-    } finally {
-        const userTimer = getUserInfo(req);
-        console.log(req.body);
-        updateTimers(userTimer, false, req.body);
-        return;
-    }
-});
 app.get('/timer', (req, res, next) => {
     auth('stranger', req, res, next);
 }, (req, res) => {
@@ -189,7 +169,7 @@ app.post('/githubCommits', (req, res) => {
 
 // upload calender
 
-
+// TODO FIX
 app.post('/ToDo/uploadCal', (req, res) => {
     const form = new formidable.IncomingForm();
     // eslint-disable-next-line space-before-function-paren
