@@ -110,14 +110,7 @@ export function handleLogin(req, res, next) {
     });
     next();
 }
-/*
-const newTimer = {
-            id: obj.parentElement.id,
-            dateOne: Date.now(),
-            dateTwo: new Date(time.value.replace('-', '/')),
-            text: text.value,
-        };
-*/
+
 
 export function removeTimer(id, userId) {
     dbexecute(false, `DELETE FROM tasks WHERE id = ${userId} AND taskId = ${id}`);

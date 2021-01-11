@@ -1,15 +1,13 @@
 import express from 'express';
 import path from 'path';
 import validator from 'validator';
-import jwt from 'jsonwebtoken';
 import cookieParser from 'cookie-parser';
-import { record } from './Private/js/database.js';
-import request from 'request';
 import dotenv from 'dotenv';
 import ical from 'node-ical';
 import formidable from 'formidable';
 import cron from 'node-cron';
-import { dbexecute, error, handleLogin, createAccount, removeTimer, editTimer, getTimers } from './Private/js/database.js';
+import { error, handleLogin, createAccount, removeTimer, editTimer, getTimers, record } from './appSrc/database.js';
+import { getUserInfo, auth, updateTimers, sendMessageToESPLights, eSPPostErr, getGithubCommits } from './appSrc/helpers.js';
 
 const __dirname = path.resolve();
 const result = dotenv.config({ path: `${path.join(__dirname, 'secretCodes.env')}` });
@@ -17,6 +15,7 @@ const result = dotenv.config({ path: `${path.join(__dirname, 'secretCodes.env')}
 function consoleLog(string, data = '') {
     console.log('\x1b[36m', string + ' ' + data);
 }
+
 if (result.error) {
     consoleLog('Dotnev Error Loading env', result.error);
 }
@@ -33,48 +32,6 @@ app.use('/privatestatic', (req, res, next) => {
     auth('stranger', req, res, next);
 });
 app.use('/privatestatic', express.static('Private'));
-
-
-// userinfo
-function getUserInfo(req) {
-    const token = req.cookies.token;
-    try {
-        const data = jwt.verify(token, process.env.secretkey);
-        return data;
-    } catch (err) {
-        consoleLog('Invalid JWT', err);
-        return 'Invalid';
-    }
-}
-
-// auth function
-function auth(privlage, req, res, next) {
-    consoleLog('Authenticating user');
-    try {
-        const decoded = jwt.verify(req.cookies.token, process.env.secretkey);
-        if (decoded.securityLevel == privlage || decoded.securityLevel == 'admin') {
-            next();
-        } else {
-            res.send('Forbidden');
-        }
-    } catch (err) {
-        // record('Failed Auth ip', (req.connection.remoteAddress).toString(), 3);
-        const isAjaxRequest = req.header.type == 'ajax';
-        consoleLog('Is it an AJAX request:', isAjaxRequest);
-        if (isAjaxRequest) {
-            consoleLog('It is');
-            res.sendStatus(401).end();
-        } else {
-            consoleLog('Redirecting expired Token');
-            if (req.path == '/home') {
-                res.redirect(302, '/login');
-            } else {
-                res.sendStatus(401).end();
-            }
-        }
-    }
-}
-// static file check
 
 // get login page
 app.get('/login', (req, res) => {
@@ -130,34 +87,6 @@ app.post('/login',
         // logging pourposes
     });
 
-function checkForDup(original, lookFor) {
-    for (const property in original) {
-        if (original[property][2] == lookFor) {
-            consoleLog('duplicate entry');
-            return false;
-        }
-    }
-    return true;
-}
-
-// keep timers
-function updateTimers(userTimer, addto, add = {}) {
-    const user = dbexecute(true, `SELECT * from tasks WHERE id = ${userTimer.id}`);
-    if (addto) {
-        const keys = Object.keys(user);
-        let count = keys.length;
-        for (const property in add) {
-            if (checkForDup(user, add[property][2])) {
-                console.log('hereQ');
-                count++;
-                userJSON.timers[`task${count}`] = add[property];
-            }
-        }
-    } else {
-        userJSON.timers = add;
-    }
-}
-
 app.post('/timer', (req, res, next) => {
     auth('stranger', req, res, next);
 }, (req, res) => {
@@ -190,45 +119,6 @@ app.get('/timer', (req, res, next) => {
     consoleLog(mess);
     return res.json(mess);
 });
-
-
-// esp local ip
-const espLightsIP = 'http://192.168.1.110:80/ESPLights';
-
-function sendMessageToESPLights(name, mes, callback) {
-    const propperMes = {};
-    propperMes[name] = mes;
-    request.post(
-        espLightsIP, {
-            headers: {
-                'content-type': 'text/plain',
-            },
-            // message it sends
-            body: JSON.stringify(propperMes),
-        },
-        (error, response) => {
-            if (error || (response.statusCode == 500)) {
-                consoleLog('Req error to ESP', error);
-                callback(error);
-                return;
-            }
-            if (response.statusCode != 200) {
-                consoleLog('Not ok Status code ESP');
-            }
-            callback(error, response.body);
-            return response.body;
-        },
-    );
-}
-
-function eSPPostErr(err, res) {
-    if (err) {
-        consoleLog('ESP post err', err);
-        res.json({ status: 'noComs' });
-    } else {
-        res.json({ status: 'Got it' });
-    }
-}
 
 app.post('/espLights_Update', (req, res, next) => {
     auth('admin', req, res, next);
@@ -265,36 +155,6 @@ app.get('/espLights_Status', (req, res) => {
     });
 });
 
-
-function getGithubCommits(pagenum, callback) {
-    request.get(
-
-        {
-            url: process.env.githubLink,
-            qs: {
-                per_page: 25,
-                page: pagenum,
-            },
-            headers: {
-                'User-Agent': 'EthanIOTBACKEND',
-                'Accept': 'application/vnd.github.v3+json',
-                'Authorization': `${process.env.GithubAcsess}`,
-            },
-        },
-        (error, response) => {
-            if (error || (response.statusCode == 500)) {
-                consoleLog('Github request error', error);
-                callback(error);
-                return;
-            }
-            if (response.statusCode != 200) {
-                consoleLog('Github not ok StatusCode');
-            }
-            callback(error, response.body);
-            return response;
-        },
-    );
-}
 
 app.post('/githubCommits', (req, res) => {
     const sendMess = [];
