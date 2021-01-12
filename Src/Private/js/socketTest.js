@@ -4,8 +4,14 @@ socket.on('connect', () => {
     console.log('connected');
 });
 document.getElementById('button').onclick = () => {
-    socket.emit('messages', 'Hello World!');
+    socket.emit('status', 'get');
 };
-socket.on('messages', (data) => {
+document.getElementById('button1').onclick = () => {
+    socket.emit('update', '{"bed":"Off","desk":"On"}');
+};
+document.getElementById('button2').onclick = () => {
+    socket.emit('update', '{"bed":"Off","desk":"Off"}');
+};
+socket.on('status', (data) => {
     console.log(data);
 });

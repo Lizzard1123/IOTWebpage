@@ -6,8 +6,9 @@ import dotenv from 'dotenv';
 import ical from 'node-ical';
 import formidable from 'formidable';
 import cron from 'node-cron';
-import http from 'http';
+import http, { createServer } from 'http';
 import WebSocket from 'ws';
+import { Server } from 'socket.io';
 import { error, handleLogin, createAccount, removeTimer, editTimer, getTimers, record, createTaskFromICAL } from './appSrc/database.js';
 import { getUserInfo, auth, sendMessageToESPLights, eSPPostErr, getGithubCommits } from './appSrc/helpers.js';
 
@@ -28,9 +29,12 @@ if (result.error) {
 }
 
 const port = 3000;
+const wsServerPort = 3001;
 const app = express();
-const server = http.createServer(app);
+const IOTServer = http.createServer(app);
+const server = createServer();
 const wss = new WebSocket.Server({ server });
+const io = new Server(IOTServer);
 
 app.use(cookieParser());
 app.use(express.json({ type: 'application/json' }));
@@ -125,52 +129,6 @@ app.post('/espLights_Update', (req, res, next) => {
     return;
 });
 
-// get lights status
-app.get('/espLights_Status', (req, res) => {
-    sendMessageToESPLights('status', 'question', (err, mes) => {
-        if (err) {
-            if (err.errno == 'ETIMEDOUT') {
-                consoleLog('No response from ESP');
-                res.json({ status: 'noComs' });
-            }
-        } else {
-            res.json(JSON.parse(mes));
-        }
-    });
-});
-
-
-app.post('/githubCommits', (req, res) => {
-    const sendMess = [];
-    consoleLog('Github Page sent:', req.body.page);
-    getGithubCommits(req.body.page, (err, responsething) => {
-        if (err) {
-            consoleLog('GithubCommits Error', err);
-            return res.send('[]');
-        } else {
-            if (responsething == undefined) {
-                consoleLog('Github undefined');
-                return res.send('[]');
-            }
-            const github = JSON.parse(responsething);
-            if (github.message == 'Not Found') {
-                consoleLog('No Github Acsess');
-                res.send('[]');
-            } else {
-                for (let i = 0; i < github.length; i++) {
-                    const currentmes = {
-                        'name': github[i].commit.committer.name,
-                        'date': github[i].commit.committer.date,
-                        'message': github[i].commit.message,
-                    };
-                    sendMess.push(currentmes);
-                }
-                res.send(sendMess);
-            }
-        }
-    });
-});
-
 // TODO FIX
 app.post('/ToDo/uploadCal', (req, res) => {
     const userId = getUserInfo(req).id;
@@ -216,18 +174,116 @@ cron.schedule('0 50 6 * * *', () => {
     });
 });
 
-// SOCKET.IO
 
-wss.on('connection', (socket) => {
-    consoleLog('id: ', socket.id);
-    socket.on('messages', (message) => {
-        // sending to the client
-        socket.emit('messages', `recived! ${message}`);
-        consoleLog(message);
-        // sending to all clients except sender
-        socket.broadcast.emit('messages', `recived from ${message} friends!`);
+// get lights status
+app.get('/espLights_Status', (req, res) => {
+    sendMessageToESPLights('status', 'question', (err, mes) => {
+        if (err) {
+            if (err.errno == 'ETIMEDOUT') {
+                consoleLog('No response from ESP');
+                res.json({ status: 'noComs' });
+            }
+        } else {
+            res.json(JSON.parse(mes));
+        }
     });
 });
 
 
-server.listen(port, () => consoleLog(`IOTWebpage is listening on port ${port}!`));
+app.post('/githubCommits', (req, res) => {
+    const sendMess = [];
+    consoleLog('Github Page sent:', req.body.page);
+    getGithubCommits(req.body.page, (err, responsething) => {
+        if (err) {
+            consoleLog('GithubCommits Error', err);
+            return res.send('[]');
+        } else {
+            if (responsething == undefined) {
+                consoleLog('Github undefined');
+                return res.send('[]');
+            }
+            const github = JSON.parse(responsething);
+            if (github.message == 'Not Found') {
+                consoleLog('No Github Acsess');
+                res.send('[]');
+            } else {
+                for (let i = 0; i < github.length; i++) {
+                    const currentmes = {
+                        'name': github[i].commit.committer.name,
+                        'date': github[i].commit.committer.date,
+                        'message': github[i].commit.message,
+                    };
+                    sendMess.push(currentmes);
+                }
+                res.send(sendMess);
+            }
+        }
+    });
+});
+// sending to all clients except sender
+// socket.broadcast.emit('messages', `recived from ${message} friends!`);
+
+// SOCKET.IO
+let bedStatus = false;
+let deskStatus = false;
+let noComs = true;
+let globalWS = null;
+io.on('connection', (socket) => {
+    consoleLog('New client id: ', socket.id);
+    socket.on('status', (message) => {
+        // sending to the client
+        if (noComs) {
+            socket.emit('status', `${JSON.stringify({ status: 'noComs' })}`);
+        } else {
+            socket.emit('status', `${JSON.stringify({ bed: bedStatus?'On':'Off', desk: deskStatus?'On':'Off' })}`);
+        }
+    });
+    socket.on('update', (message) => {
+        // sending to the client
+        if (noComs || globalWS == null) {
+            socket.emit('status', `${JSON.stringify({ status: 'noComs' })}`);
+        } else {
+            globalWS.send(message);
+            socket.emit('status', `${JSON.stringify({ bed: bedStatus?'On':'Off', desk: deskStatus?'On':'Off' })}`);
+        }
+    });
+});
+
+// ws
+function heartbeat() {
+    // eslint-disable-next-line no-invalid-this
+    this.isAlive = true;
+}
+
+wss.on('connection', function(ws) {
+    console.log('ESP connected');
+    noComs = false;
+    globalWS = ws;
+    ws.isAlive = true;
+    ws.on('pong', heartbeat);
+    ws.on('message', (data) => {
+        consoleLog('recived: ', data);
+        // const updateVar = JSON.parse(data);
+        // bedStatus = updateVar['bed'];
+        // deskStatus = updateVar['desk'];
+    });
+    ws.on('close', function() {
+        noComs = true;
+        console.log('ESP disconnected');
+    });
+});
+
+const interval = setInterval(function ping() {
+    wss.clients.forEach(function each(ws) {
+        if (ws.isAlive === false) return ws.terminate();
+        ws.isAlive = false;
+        ws.ping();
+    });
+}, 5000);
+
+wss.on('close', function close() {
+    clearInterval(interval);
+});
+
+IOTServer.listen(port, () => consoleLog(`IOTWebpage is listening on port ${port}!`));
+server.listen(wsServerPort, () => consoleLog(`wsServer is listening on port ${wsServerPort}!`));
