@@ -11,6 +11,7 @@ import WebSocket from 'ws';
 import { Server } from 'socket.io';
 import { error, handleLogin, createAccount, removeTimer, editTimer, getTimers, record, createTaskFromICAL } from './appSrc/database.js';
 import { getUserInfo, auth, sendMessageToESPLights, eSPPostErr, getGithubCommits } from './appSrc/helpers.js';
+import { sizeUpPhoto } from './appSrc/imgCreate.js';
 
 const __dirname = path.resolve();
 const result = dotenv.config({ path: `${path.join(__dirname, 'secretCodes.env')}` });
@@ -220,6 +221,32 @@ app.post('/githubCommits', (req, res) => {
         }
     });
 });
+/*
+const form = new formidable.IncomingForm();
+    // eslint-disable-next-line space-before-function-paren
+    form.parse(req, (err, fields, files) => {
+        if (err) {
+            consoleLog('Submited error');
+            return;
+        }
+        const newData = ical.sync.parseFile(files.calender.path.toString());
+        const keys = Object.keys(newData);
+*/
+
+app.post('/createImg', (req, res, next) => {
+    auth('admin', req, res, next);
+}, (req, res) => {
+    const form = new formidable.IncomingForm();
+    form.parse(req, (err, fields, files) => {
+        if (err) {
+            consoleLog('Submited error');
+            return;
+        }
+        sizeUpPhoto(files.file.path.toString(), fields.width, fields.height, feilds.id);
+    });
+    res.sendStatus(200);
+});
+
 // sending to all clients except sender
 // socket.broadcast.emit('messages', `recived from ${message} friends!`);
 

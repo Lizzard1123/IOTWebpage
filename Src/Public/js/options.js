@@ -21,10 +21,11 @@ let custom;
 const normal = ['true', 'true', 'true', 'true', 'true', 'true', 'false', 'true', 'true'];
 const slider = document.getElementById('switcherselector');
 const switches = document.getElementsByClassName('switchpages');
-const titles = ['Extra', 'Remote', 'Home', 'Lamps', 'To-Do'];
-const pagelink = ['Extra', 'Remote', 'Home', 'Lamps', 'To-Do'];
+const titles = ['Extra', 'Remote', 'Home', 'Lamps', 'To-Do', 'Image', 'Game'];
+const pagelink = ['Extra', 'Remote', 'Home', 'Lamps', 'To-Do', 'image', 'Game'];
 const numberofpages = titles.length;
 const maxdivbox = 100 / numberofpages;
+const offset = 2.5;
 
 function givetitles() {
     for (let i = 0; i < numberofpages; i++) {
@@ -35,7 +36,7 @@ function givetitles() {
 function setintoplace() {
     const middle = numberofpages / 2 - .5;
     for (let i = 0; i < numberofpages; i++) {
-        switches[i].style.left = `${maxdivbox * i}%`;
+        switches[i].style.left = `${maxdivbox * i - offset}%`;
         if (i != middle) {
             switches[i].style.zIndex = 5;
             switches[i].style.cursor = 'pointer';
