@@ -11,7 +11,7 @@ import WebSocket from 'ws';
 import { Server } from 'socket.io';
 import { error, handleLogin, createAccount, removeTimer, editTimer, getTimers, record, createTaskFromICAL } from './appSrc/database.js';
 import { getUserInfo, auth, sendMessageToESPLights, eSPPostErr, getGithubCommits } from './appSrc/helpers.js';
-import { sizeUpPhoto } from './appSrc/imgCreate.js';
+//import { sizeUpPhoto } from './appSrc/imgCreate.js';
 
 const __dirname = path.resolve();
 const result = dotenv.config({ path: `${path.join(__dirname, 'secretCodes.env')}` });
@@ -242,7 +242,7 @@ app.post('/createImg', (req, res, next) => {
             consoleLog('Submited error');
             return;
         }
-        sizeUpPhoto(files.file.path.toString(), fields.width, fields.height, feilds.id);
+        //sizeUpPhoto(files.file.path.toString(), fields.width, fields.height, feilds.id);
     });
     res.sendStatus(200);
 });
