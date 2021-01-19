@@ -10,8 +10,8 @@ import http, { createServer } from 'http';
 import WebSocket from 'ws';
 import { Server } from 'socket.io';
 import { error, handleLogin, createAccount, removeTimer, editTimer, getTimers, record, createTaskFromICAL } from './appSrc/database.js';
-import { getUserInfo, auth, sendMessageToESPLights, eSPPostErr, getGithubCommits } from './appSrc/helpers.js';
-//import { sizeUpPhoto } from './appSrc/imgCreate.js';
+import { getUserInfo, getUserInfoCookie, auth, sendMessageToESPLights, eSPPostErr, getGithubCommits } from './appSrc/helpers.js';
+import { sizeUpPhoto } from './appSrc/imgCreate.js';
 
 const __dirname = path.resolve();
 const result = dotenv.config({ path: `${path.join(__dirname, 'secretCodes.env')}` });
@@ -36,6 +36,11 @@ const IOTServer = http.createServer(app);
 const server = createServer();
 const wss = new WebSocket.Server({ server });
 const io = new Server(IOTServer);
+const connected = {};
+let bedStatus = false;
+let deskStatus = false;
+let noComs = true;
+let globalWS = null;
 
 app.use(cookieParser());
 app.use(express.json({ type: 'application/json' }));
@@ -236,27 +241,32 @@ const form = new formidable.IncomingForm();
 app.post('/createImg', (req, res, next) => {
     auth('admin', req, res, next);
 }, (req, res) => {
-    const form = new formidable.IncomingForm();
+    consoleLog('um');
+    const form = new formidable.IncomingForm({ keepExtensions: true, uploadDir: `${__dirname}/Private/js/ICstore` });
     form.parse(req, (err, fields, files) => {
         if (err) {
             consoleLog('Submited error');
             return;
         }
-        //sizeUpPhoto(files.file.path.toString(), fields.width, fields.height, feilds.id);
+        consoleLog('hereee');
+        consoleLog(JSON.stringify(fields));
+        consoleLog(files.file.path.toString());
+        consoleLog(files.file.name);
+        sizeUpPhoto(files.file.path.toString(), __dirname, files.file.name, fields.screenwidth,
+            fields.screenheight, getUserInfo(req).id, (id, url) => io.to(id).emit(url), connected[(getUserInfo(req).id).toString()]);
     });
-    res.sendStatus(200);
+    res.sendFile(path.join(__dirname, '/Private/html/reciveImg.html'));
 });
 
 // sending to all clients except sender
 // socket.broadcast.emit('messages', `recived from ${message} friends!`);
 
 // SOCKET.IO
-let bedStatus = false;
-let deskStatus = false;
-let noComs = true;
-let globalWS = null;
+
 io.on('connection', (socket) => {
-    consoleLog('New client id: ', socket.id);
+    consoleLog('New client id: ', socket.client.id);
+    connected[getUserInfoCookie(socket.handshake.headers.cookie).id] = socket.client.id;
+    consoleLog(JSON.stringify(connected));
     socket.on('status', (message) => {
         // sending to the client
         if (noComs) {

@@ -23,6 +23,8 @@
     "dependencies": {
         "bcrypt": "^5.0.0",
         "better-sqlite3": "^7.1.2",
+        "canvas": "^2.6.1",
+        "cookie": "^0.4.1",
         "cookie-parser": "^1.4.5",
         "dotenv": "^8.2.0",
         "express": "^4.17.1",

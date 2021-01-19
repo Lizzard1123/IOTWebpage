@@ -1,6 +1,7 @@
+import cookieParser from 'cookie-parser';
 import jwt from 'jsonwebtoken';
 import request from 'request';
-
+import cookie from 'cookie';
 /**
  * logs to the console
  * @param {string} string - "String to be logged"
@@ -17,6 +18,22 @@ function consoleLog(string, data = '') {
  */
 export function getUserInfo(req) {
     const token = req.cookies.token;
+    try {
+        const data = jwt.verify(token, process.env.secretkey);
+        return data;
+    } catch (err) {
+        consoleLog('Invalid JWT', err);
+        return 'Invalid';
+    }
+}
+
+/**
+ * returns object of user request cookies
+ * @param {req} str - "User cookie"
+ * @return {object} - "User cookies or \'Invalid\' "
+ */
+export function getUserInfoCookie(str) {
+    const token = cookie.parse(str).token;
     try {
         const data = jwt.verify(token, process.env.secretkey);
         return data;
