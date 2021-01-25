@@ -128,9 +128,7 @@ export function handleLogin(req, res, next) {
             consoleLog('Validated and redirected');
             // parsed on frontend and rediredted there with credintials
             if (serverBusy && user[0]['securityLevel'] != 'admin') {
-                return res.json({
-                    message: 'busy',
-                });
+                res.redirect('/busy');
             } else {
                 return res.json({
                     message: 'redirect',

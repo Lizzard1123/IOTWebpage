@@ -1,8 +1,6 @@
 const formTitle = document.getElementById('title');
 const basicForm = document.getElementById('form');
 const bugTable = document.getElementById('bugTable');
-const bugButton = document.getElementById('bugBox');
-const busyPic = document.getElementById('busyPic');
 let currentPage = 'Login';
 
 // eslint-disable-next-line no-unused-vars
@@ -17,14 +15,6 @@ function switchInfoPage(page) {
         basicForm.style.display = 'none';
         bugTable.style.display = 'block';
         currentPage = 'Bugs';
-    } else if (page == 'busy') {
-        formTitle.innerHTML = 'Site is currently unavailible';
-        basicForm.style.display = 'none';
-        bugTable.style.display = 'none';
-        busyPic.style.display = 'flex';
-        bugButton.style.visibility = 'hidden';
-        createButton.style.visibility = 'hidden';
-        currentPage = 'busy';
     }
 }
 

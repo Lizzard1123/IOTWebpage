@@ -1,49 +1,32 @@
-<!DOCTYPE html>
-<html>
+<%- include('views/plainHeader')  %>
 
-<head>
-    <script type="text/javascript" src="publicstatic/js/errorHandler.js"></script>
-    <script>
-        clearcookies('sessionErrors, seed');
-    </script>
-    <link href='https://fonts.googleapis.com/css?family=Archivo Black' rel='stylesheet' onerror="failedToLoad(this, false)">
-    <link rel="stylesheet" type="text/css" href="publicstatic/css/Auth.css" onerror="failedToLoad(this, true)">
-    <link rel="stylesheet" type="text/css" href="publicstatic/css/options.css" onerror="failedToLoad(this, true)">
-    <link rel="shortcut icon" href="publicstatic/img/favicon.png" onerror="failedToLoad(this, true)">
-</head>
-
-<body onload="loadsettings(false)" id="pagebody">
-    <div id="contentbody">
-        <div id="message" style="visibility: visible; color: green;"></div>
-        <div id="body">
-            <div id="title">Login</div>
-            <form id="form" name="login" action="/login" method="POST" enctype="application/x-www-form-urlencoded">
-                <label for="Name" id="namelabel">Name</label><br>
-                <input type="text" name="Name" id="Name" min="4" maxlength="25" required><br>
-                <label for="Password" id="passwordlabel">Password</label><br>
-                <input type="password" name="Password" id="Password" min="10" maxlength="35" required><br>
-                <h3 id="enablejs">Please Enable Javascript</h3>
-            </form>
-            <div id="bugTable" style="display: none;">
-                <div id="nameTable">
-                    <div class="namecell" id="nameCell1">
-                        No Bugs!
-                    </div>
-                </div>
-            </div>
-            <div id="busyPic" style="display: none;">
-                <img src='https://media3.giphy.com/media/kG1FSrXBMfxg2N20pT/giphy.gif' id="stallimg" onerror="failedToLoad(this, false)">
+    <div id="title">
+        Login
+    </div>
+    <form id="form" name="login" action="/login" method="POST" enctype="application/x-www-form-urlencoded">
+        <label for="Name" id="namelabel">Name</label><br>
+        <input type="text" name="Name" id="Name" min="4" maxlength="25" required><br>
+        <label for="Password" id="passwordlabel">Password</label><br>
+        <input type="password" name="Password" id="Password" min="10" maxlength="35" required><br>
+        <h3 id="enablejs">Please Enable Javascript</h3>
+    </form>
+    <div id="bugTable" style="display: none;">
+        <div id="nameTable">
+            <div class="namecell" id="nameCell1">
+                No Bugs!
             </div>
         </div>
-        <div id="createBox" class="not" onclick="switchInfoPage('createAccount')">
-            <svg id="create" xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-settings" width="32px" height="32px" viewBox="0 0 24 24" stroke-width="2.5" stroke="#000000" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    </div>
+    </div>
+    <div id="createBox" class="not" onclick="switchInfoPage('createAccount')">
+        <svg id="create" xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-settings" width="32px" height="32px" viewBox="0 0 24 24" stroke-width="2.5" stroke="#000000" fill="none" stroke-linecap="round" stroke-linejoin="round">
                 <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
                 <path d="M10.325 4.317c.426 -1.756 2.924 -1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543 -.94 3.31 .826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756 .426 1.756 2.924 0 3.35a1.724 1.724 0 0 0 -1.066 2.573c.94 1.543 -.826 3.31 -2.37 2.37a1.724 1.724 0 0 0 -2.572 1.065c-.426 1.756 -2.924 1.756 -3.35 0a1.724 1.724 0 0 0 -2.573 -1.066c-1.543 .94 -3.31 -.826 -2.37 -2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756 -.426 -1.756 -2.924 0 -3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94 -1.543 .826 -3.31 2.37 -2.37c1 .608 2.296 .07 2.572 -1.065z" />
                 <circle cx="12" cy="12" r="3" />
               </svg>
-        </div>
-        <div id="bugBox" class="not" onclick="switchInfoPage('Bugs')">
-            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-bug" width="32" height="32" viewBox="0 0 24 24" stroke-width="2" stroke="#000000" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    </div>
+    <div id="bugBox" class="not" onclick="switchInfoPage('Bugs')">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-bug" width="32" height="32" viewBox="0 0 24 24" stroke-width="2" stroke="#000000" fill="none" stroke-linecap="round" stroke-linejoin="round">
                 <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
                 <path d="M9 9v-1a3 3 0 0 1 6 0v1" />
                 <path d="M8 9h8a6 6 0 0 1 1 3v3a5 5 0 0 1 -10 0v-3a6 6 0 0 1 1 -3" />
@@ -55,131 +38,10 @@
                 <line x1="4" y1="7" x2="7.75" y2="9.4" />
                 <line x1="20" y1="7" x2="16.25" y2="9.4" />
               </svg>
-        </div>
-        <div id="scrollbar">
-            <div id="cover" style="z-index: 1;">
-                <div class="scrollbarcontent" id="rightscrollbarcontent" style="bottom: 48.5vh;">
-                    <div class="contentcollum" style="left:0%">
-                        <div>
-                            <div class="button b2 button-13" id="buttonOne">
-                                <input type="checkbox" class="checkbox" name="buttonOne">
-                                <div class="knobs">
-                                    <span></span>
-                                </div>
-                                <div class="layer"></div>
-                            </div>
-                            <label for="buttonOne"><b>Timeout Screen</b></label>
-                        </div>
-                        <div>
-                            <div class="button b2 button-13" id="buttonTwo">
-                                <input type="checkbox" class="checkbox" name="buttonTwo">
-                                <div class="knobs">
-                                    <span></span>
-                                </div>
-                                <div class="layer"></div>
-
-                            </div>
-                            <label for="buttonTwo"><b>Auto Randomize</b></label>
-                        </div>
-                        <div style="visibility:hidden">
-                            <div class="button b2 button-13" id="buttonThree">
-                                <input type="checkbox" class="checkbox" name="buttonThree">
-                                <div class="knobs">
-                                    <span></span>
-                                </div>
-                                <div class="layer"></div>
-                            </div>
-                            <label for="buttonThree"><b>Hello</b></label>
-                        </div>
-                    </div>
-                    <div class="contentcollum" style="left:33.333%">
-                        <div>
-                            <div class="button b2 button-13" id="buttonFour">
-                                <input type="checkbox" class="checkbox" name="buttonFour">
-                                <div class="knobs">
-                                    <span></span>
-                                </div>
-                                <div class="layer"></div>
-                            </div>
-                            <label for="buttonFour"><b>Click Fade</b></label>
-                        </div>
-                        <div style="visibility:hidden">
-                            <div class="button b2 button-13" id="buttonFive">
-                                <input type="checkbox" class="checkbox" name="buttonFive">
-                                <div class="knobs">
-                                    <span></span>
-                                </div>
-                                <div class="layer"></div>
-                            </div>
-                            <label for="buttonFive"><b>Hello</b></label>
-                        </div>
-                        <div style="visibility:hidden">
-                            <div class="button b2 button-13" id="buttonSix">
-                                <input type="checkbox" class="checkbox" name="buttonSix">
-                                <div class="knobs">
-                                    <span></span>
-                                </div>
-                                <div class="layer"></div>
-                            </div>
-                            <label for="buttonSix"><b>Hello</b></label>
-                        </div>
-                    </div>
-                    <div class="contentcollum" style="left:66.666%">
-                        <div>
-                            <div class="button b2 button-13" id="buttonSeven">
-                                <input type="checkbox" class="checkbox" name="buttonSeven">
-                                <div class="knobs">
-                                    <span></span>
-                                </div>
-                                <div class="layer"></div>
-                            </div>
-                            <label for="buttonSeven"><b>Triangle Change</b></label>
-                        </div>
-                        <div style="visibility:hidden">
-                            <div class="button b2 button-13" id="buttonEight">
-                                <input type="checkbox" class="checkbox" name="buttonEight">
-                                <div class="knobs">
-                                    <span></span>
-                                </div>
-                                <div class="layer"></div>
-                            </div>
-                            <label for="buttonEight"><b>Hello</b></label>
-                        </div>
-                        <div style="visibility:hidden">
-                            <div class="button b2 button-13" id="buttonNine">
-                                <input type="checkbox" class="checkbox" name="buttonNine">
-                                <div class="knobs">
-                                    <span></span>
-                                </div>
-                                <div class="layer"></div>
-                            </div>
-                            <label for="buttonNine"><b>Hello</b></label>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="scrollbar" id="scrollbar_right" onclick="moveBottom('right')" style="bottom: 74%;">
-            </div>
-        </div>
-
     </div>
-    <div id="backsplash">
-        <svg id="parent"></svg>
-    </div>
-    <script type="text/javascript" src="publicstatic/js/Global.js" onerror="failedToLoad(this, true)"></script>
-    <script type="text/javascript" src="publicstatic/js/backSource.js" onerror="failedToLoad(this, true)"></script>
-    <script type="text/javascript" src="publicstatic/js/validate.js" onerror="failedToLoad(this, true)"></script>
-    <script type="text/javascript" src="publicstatic/js/Create.js" onerror="failedToLoad(this, true)"></script>
-    <script>
-        // multiple of 3
-        var numberoftrianlgleshigh = 24;
-        //makes background
-        var randomizedList = randomizecoords(backpoints(width, height, numberoftrianlgleshigh));
-        //abstracted make all triangles
-        makeTriangleRows(randomizedList, numberoftrianlgleshigh);
-    </script>
-    <script type="text/javascript" src="publicstatic/js/options.js" onerror="failedToLoad(this, true)"></script>
-
-</body>
-
-</html>
+    <%- include('views/plainFooter', {includes: [
+        "publicstatic/js/Global.js",
+        "publicstatic/js/backSource.js",
+        "publicstatic/js/validate.js",
+        "publicstatic/js/Create.js"
+    ]})  %>

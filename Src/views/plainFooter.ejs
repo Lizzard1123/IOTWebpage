@@ -1,0 +1,22 @@
+<%- include('optionBars'); %>
+
+    </div>
+    <div id="backsplash">
+        <svg id="parent"></svg>
+    </div>
+    <% for( let index = 0; index < includes.length; index++ ) { %>
+        <script type="text/javascript" src="<%= includes[index]%> " onerror="failedToLoad(this, true)"></script>
+        <% } %>
+            <script>
+                // multiple of 3
+                var numberoftrianlgleshigh = 24;
+                //makes background
+                var randomizedList = randomizecoords(backpoints(width, height, numberoftrianlgleshigh));
+                //abstracted make all triangles
+                makeTriangleRows(randomizedList, numberoftrianlgleshigh);
+            </script>
+            <script type="text/javascript" src="publicstatic/js/options.js" onerror="failedToLoad(this, true)"></script>
+
+            </body>
+
+            </html>

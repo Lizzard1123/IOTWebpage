@@ -12,6 +12,7 @@ import { Server } from 'socket.io';
 import { error, handleLogin, createAccount, removeTimer, editTimer, getTimers, record, createTaskFromICAL } from './appSrc/database.js';
 import { getUserInfo, getUserInfoCookie, auth, sendMessageToESPLights, eSPPostErr, getGithubCommits } from './appSrc/helpers.js';
 import { Worker } from 'worker_threads';
+import ejs from 'ejs';
 
 const __dirname = path.resolve();
 const result = dotenv.config({ path: `${path.join(__dirname, 'secretCodes.env')}` });
@@ -32,6 +33,9 @@ if (result.error) {
 const port = 3000;
 const wsServerPort = 3001;
 const app = express();
+app.engine('html', ejs.renderFile);
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
 const IOTServer = http.createServer(app);
 const server = createServer();
 const wss = new WebSocket.Server({ server });
@@ -52,17 +56,49 @@ app.use('/privatestatic', (req, res, next) => {
 });
 app.use('/privatestatic', express.static('Private'));
 
+app.get('/error', (req, res) => {
+    res.render(path.join(__dirname, 'Error.html'), {}, (err, str) => {
+        if (err) {
+            consoleLog('Error Rendering Error ah', err);
+            res.sendStatus(500);
+        }
+        res.send(str);
+    });
+});
+
+app.get('/busy', (req, res) => {
+    res.render(path.join(__dirname, 'Busy.html'), {}, (err, str) => {
+        if (err) {
+            consoleLog('Error Rendering Error ah', err);
+            res.sendStatus(500);
+        }
+        res.send(str);
+    });
+});
+
 // get login page
 app.get('/login', (req, res) => {
     consoleLog('Served Login Page');
     record('Gave login page to', req.connection.remoteAddress, 3);
-    res.sendFile(path.join(__dirname, 'Auth.html'));
+    res.render(path.join(__dirname, 'Auth.html'), {}, (err, str) => {
+        if (err) {
+            consoleLog('Error Rendering', err);
+            res.redirect('/error');
+        }
+        res.send(str);
+    });
 });
 
 app.get('/register', (req, res) => {
     consoleLog('Served register Page');
     record('Gave register page to', req.connection.remoteAddress, 3);
-    res.sendFile(path.join(__dirname, 'Register.html'));
+    res.render(path.join(__dirname, 'Register.html'), {}, (err, str) => {
+        if (err) {
+            consoleLog('Error Rendering', err);
+            res.redirect('/error');
+        }
+        res.send(str);
+    });
 });
 
 app.get('/home', (req, res, next) => {

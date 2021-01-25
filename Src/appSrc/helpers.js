@@ -1,4 +1,3 @@
-import cookieParser from 'cookie-parser';
 import jwt from 'jsonwebtoken';
 import request from 'request';
 import cookie from 'cookie';
