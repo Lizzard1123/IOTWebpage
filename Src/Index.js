@@ -59,6 +59,12 @@ app.get('/login', (req, res) => {
     res.sendFile(path.join(__dirname, 'Auth.html'));
 });
 
+app.get('/register', (req, res) => {
+    consoleLog('Served register Page');
+    record('Gave register page to', req.connection.remoteAddress, 3);
+    res.sendFile(path.join(__dirname, 'Register.html'));
+});
+
 app.get('/home', (req, res, next) => {
     auth('stranger', req, res, next);
 }, (req, res) => {
@@ -72,6 +78,10 @@ app.post('/createAccount', (req, res, next) => {
     consoleLog('Creating and checking Account:', JSON.stringify(req.body));
     // request to login
     // check validity again through whitelist
+    if (req.body.password == undefined) {
+        res.sendStatus(403);
+        return;
+    }
     if (!validator.isWhitelisted(req.body.password, process.env.whitelist)) {
         record('Invalid Characters on backend from account', req.connection.remoteAddress, 5);
         consoleLog('Invalid characters on createaccount');
@@ -82,6 +92,7 @@ app.post('/createAccount', (req, res, next) => {
 }, (req, res) => {
     consoleLog('Creating user:', req.body.name);
     createAccount(req);
+    res.sendStatus(200);
 });
 
 app.post('/login',
@@ -245,8 +256,8 @@ app.post('/createImg', (req, res, next) => {
             pathName: files.file.path.toString(),
             path: __dirname,
             fileName: files.file.name,
-            width: fields.screenwidth,
-            height: fields.screenheight,
+            width: parseInt(fields.screenwidth),
+            height: parseInt(fields.screenheight),
             id: getUserInfo(req).id,
         };
         const worker = new Worker('./appSrc/imgCreate.js', { workerData: data });
@@ -258,7 +269,7 @@ app.post('/createImg', (req, res, next) => {
         });
         worker.on('message', (msg) => {
             if (msg.done) {
-                consoleLog('Done?: ', msg);
+                consoleLog('Done?: ', JSON.parse(msg));
                 consoleLog('sending to:', connected[(getUserInfo(req).id).toString()]);
                 io.to(connected[(getUserInfo(req).id).toString()]).emit('done', msg.data);
             } else {

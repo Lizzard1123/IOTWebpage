@@ -2,10 +2,14 @@ import canvas from 'canvas';
 import fs from 'fs';
 import { parentPort, workerData } from 'worker_threads';
 
-// const screenheight = 768;
-// const screenwidth = 1366;
 const resizewidth = 600;
 const resizeheight = 600;
+const path = workerData.pathName;
+const __dirname = workerData.path;
+const name = workerData.fileName;
+const Twidth = workerData.width;
+const Theight = workerData.height;
+const id = workerData.id;
 /**
  * logs to the console
  * @param {string} string - "String to be logged"
@@ -26,28 +30,28 @@ function getcommoncolor(imgData, filename) {
     for (let i = 0; i < imglength; i += 4) {
         switch (i) {
             case intervalone:
-                console.log(`${filename}: [██......]`);
+                consoleLog(`${name}: [██......]`);
                 parentPort.postMessage({
                     done: false,
                     data: 1,
                 });
                 break;
             case intervaltwo:
-                console.log(`${filename}: [████....]`);
+                consoleLog(`${name}: [████....]`);
                 parentPort.postMessage({
                     done: false,
                     data: 2,
                 });
                 break;
             case intervalthree:
-                console.log(`${filename}: [██████..]`);
+                consoleLog(`${name}: [██████..]`);
                 parentPort.postMessage({
                     done: false,
                     data: 3,
                 });
                 break;
             case intervalfour:
-                console.log(`${filename}: [████████]`);
+                consoleLog(`${name}: [████████]`);
                 parentPort.postMessage({
                     done: false,
                     data: 4,
@@ -88,8 +92,7 @@ function getcommoncolor(imgData, filename) {
 const offset = 40;
 const funcTotal = 1;
 
-function finishImg(cvs, context, imgwidth, imgheight, Twidth, Theight, colorstochoose, name, id, image, __dirname, func, path) {
-    consoleLog('Done!');
+function finishImg(cvs, context, imgwidth, imgheight, colorstochoose, image, func) {
     context.fillStyle = `rgb(${colorstochoose[0]},${colorstochoose[1]},${colorstochoose[2]})`;
     context.fillRect(0, 0, Twidth, Theight);
     const chamger = (Theight - offset) / imgheight;
@@ -115,9 +118,9 @@ function finishImg(cvs, context, imgwidth, imgheight, Twidth, Theight, colorstoc
     });
 }
 
-export function sizeUpPhoto(path, __dirname, name, Twidth, Theight, id) {
+export function sizeUpPhoto() {
     for (let func = 0; func < funcTotal; func++) {
-        const cvs = canvas.createCanvas(parseInt(Twidth), parseInt(Theight), 'png');
+        const cvs = canvas.createCanvas(Twidth, Theight, 'png');
         const context = cvs.getContext('2d');
         canvas.loadImage(path).then((image) => {
             const imgwidth = image.width;
@@ -127,13 +130,11 @@ export function sizeUpPhoto(path, __dirname, name, Twidth, Theight, id) {
             switch (func) {
                 case 0:
                     colorstochoose = getcommoncolor(context.getImageData(0, 0, resizewidth, resizeheight), path);
-                    finishImg(cvs, context, imgwidth, imgheight, Twidth, Theight, colorstochoose, name, id, image, __dirname, func, path);
-                    console.log('dpne');
+                    finishImg(cvs, context, imgwidth, imgheight, colorstochoose, image, func);
                     break;
             }
         });
     }
 }
 
-sizeUpPhoto(workerData.pathName, workerData.path, workerData.fileName, workerData.width, workerData.height,
-    workerData.id);
+sizeUpPhoto();

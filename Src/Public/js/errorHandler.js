@@ -7,9 +7,11 @@ function clearcookies(exeption = 'none') {
         const cookie = cookies[i];
         const eqPos = cookie.indexOf('=');
         const name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+        console.log(name);
+        console.log(exeption);
         if (exeption == 'none') {
             document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:00 GMT';
-        } else if (name != exeption && name != ' ' + exeption) {
+        } else if (!exeption.includes(name)) {
             document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:00 GMT';
         }
     }

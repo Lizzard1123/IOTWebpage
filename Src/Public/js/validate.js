@@ -100,23 +100,3 @@ function checkvalid() {
     defaultcheckvalid(nameinput, namelabel);
     setTimeout(chnagebacktext, 5000);
 }
-
-// eslint-disable-next-line no-unused-vars
-function switchsubmit() {
-    document.getElementById('enablejs').remove();
-    const newbutton = document.createElement('button');
-    newbutton.id = 'submitbutton';
-    newbutton.setAttribute('type', 'button');
-    newbutton.setAttribute('name', 'Submit');
-    newbutton.setAttribute('onclick', 'checkvalid()');
-    newbutton.innerHTML = 'Submit';
-    form.appendChild(newbutton);
-    console.log(newbutton);
-    console.log('tried');
-}
-
-window.addEventListener('keyup', function(event) {
-    if (event.key == 'Enter') {
-        document.getElementById('submitbutton').click();
-    }
-});

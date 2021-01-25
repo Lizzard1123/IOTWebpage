@@ -47,6 +47,40 @@ const colors = [
     '#1051b3',
     '#267ea3',
 ];
+
+// thx to w3 schools for this oen
+function getCookie(cname) {
+    const name = cname + '=';
+    const decodedCookie = decodeURIComponent(document.cookie);
+    const ca = decodedCookie.split(';');
+    for (let i = 0; i < ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+        }
+    }
+    return 'none';
+}
+
+function setSeed() {
+    console.log('new seed');
+    const newSeed = Math.floor(Math.random() * 100);
+    document.cookie = `seed=${newSeed}`;
+    return newSeed;
+}
+const seedCookie = getCookie('seed');
+const seed = seedCookie == 'none' || window.location.href.includes('login') ? setSeed() : parseInt(seedCookie);
+
+function mulberry32(a) {
+    let t = a += 0x6D2B79F5;
+    t = Math.imul(t ^ t >>> 15, t | 1);
+    t ^= t + Math.imul(t ^ t >>> 7, t | 61);
+    return ((t ^ t >>> 14) >>> 0) / 4294967296;
+}
+
 // var colors = [];
 /*
 const coloroffset = 50;
@@ -101,7 +135,7 @@ function createTriangle(name, stringOfPoints) {
     svg.appendChild(mypolygon);
     mypolygon.id = name;
     mypolygon.setAttribute('points', stringOfPoints);
-    mypolygon.setAttribute('fill', colors[Math.floor(Math.random() * colors.length)]);
+    mypolygon.setAttribute('fill', colors[Math.floor(mulberry32(seed + totalTriangles) * colors.length)]);
     mypolygon.setAttribute('onmouseover', 'hoverchange(this)');
     mypolygon.setAttribute('onclick', 'clickFadeBody()');
     mypolygon.setAttribute('class', 'back-triangles');
@@ -153,17 +187,19 @@ function makeTriangleRows(list, actualhigh) {
     }
 }
 // changes the coordinates in a random direction in a random number with these variables max
-const randomxchangelimit = 25;
-const randomychangelimit = 20;
+const randomxchangelimit = 30;
+const randomychangelimit = 25;
 // eslint-disable-next-line no-unused-vars
 function randomizecoords(list) {
     const newlist = [];
+    let count = 0;
     for (let i = 0; i < list.length; i++) {
         const newrow = [];
         for (let t = 0; t < list[i].length; t++) {
-            const changex = Math.floor(Math.random() * randomxchangelimit);
-            const changey = Math.floor(Math.random() * randomychangelimit);
-            const Add = Math.random() >= 0.5;
+            count++;
+            const changex = Math.floor(mulberry32(seed + count) * randomxchangelimit);
+            const changey = Math.floor(mulberry32(seed + count + 1) * randomychangelimit);
+            const Add = mulberry32(seed + count) >= 0.5;
             let newx;
             let newy;
             if (Add) {

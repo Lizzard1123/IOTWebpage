@@ -21,8 +21,8 @@ let custom;
 const normal = ['true', 'true', 'true', 'true', 'true', 'true', 'false', 'true', 'true'];
 const slider = document.getElementById('switcherselector');
 const switches = document.getElementsByClassName('switchpages');
-const titles = ['Extra', 'Remote', 'Home', 'Lamps', 'To-Do', 'Image', 'Game'];
-const pagelink = ['Extra', 'Remote', 'Home', 'Lamps', 'To-Do', 'image', 'Game'];
+const titles = ['Extra', 'Remote', 'Lamps', 'Home', 'To-Do', 'Image', 'Game'];
+const pagelink = ['Extra', 'Remote', 'Lamps', 'Home', 'To-Do', 'image', 'Game'];
 const numberofpages = titles.length;
 const maxdivbox = 100 / numberofpages;
 const offset = 2.5;
@@ -187,8 +187,9 @@ function loadsettings(titleset) {
             setintoplace();
         } else {
             // auth
-
-            switchsubmit();
+            if (window.location.href.includes('/login')) {
+                switchsubmit();
+            }
         }
         try {
             checkErrors();

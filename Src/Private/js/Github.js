@@ -53,7 +53,7 @@ function cloneRow(obj, example, parent, id) {
         min = '0' + min;
     }
     const timeShort = hour + ':' + min + timeOfDay;
-    const content = obj.name + ' made a commit at ' + dateShort + ' at ' + timeShort + '<br />' + obj.message;
+    const content = obj.name + ' made a commit on ' + dateShort + ' at ' + timeShort + '<br />' + obj.message;
     cln.innerHTML = content;
     parent.appendChild(cln);
 }
