@@ -96,7 +96,7 @@ export function handleLogin(req, res, next) {
     const foundUser = user.length != 0;
     if (!foundUser) {
         consoleLog('No user found for', req.body.Name);
-        error(res, err);
+        error(res, 'no user found');
         next();
     } else {
         consoleLog('User found:', user[0]['name']);

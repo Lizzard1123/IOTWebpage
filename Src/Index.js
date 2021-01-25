@@ -11,7 +11,7 @@ import WebSocket from 'ws';
 import { Server } from 'socket.io';
 import { error, handleLogin, createAccount, removeTimer, editTimer, getTimers, record, createTaskFromICAL } from './appSrc/database.js';
 import { getUserInfo, getUserInfoCookie, auth, sendMessageToESPLights, eSPPostErr, getGithubCommits } from './appSrc/helpers.js';
-import { sizeUpPhoto } from './appSrc/imgCreate.js';
+import { Worker } from 'worker_threads';
 
 const __dirname = path.resolve();
 const result = dotenv.config({ path: `${path.join(__dirname, 'secretCodes.env')}` });
@@ -226,17 +226,6 @@ app.post('/githubCommits', (req, res) => {
         }
     });
 });
-/*
-const form = new formidable.IncomingForm();
-    // eslint-disable-next-line space-before-function-paren
-    form.parse(req, (err, fields, files) => {
-        if (err) {
-            consoleLog('Submited error');
-            return;
-        }
-        const newData = ical.sync.parseFile(files.calender.path.toString());
-        const keys = Object.keys(newData);
-*/
 
 app.post('/createImg', (req, res, next) => {
     auth('admin', req, res, next);
@@ -252,10 +241,40 @@ app.post('/createImg', (req, res, next) => {
         consoleLog(JSON.stringify(fields));
         consoleLog(files.file.path.toString());
         consoleLog(files.file.name);
-        sizeUpPhoto(files.file.path.toString(), __dirname, files.file.name, fields.screenwidth,
-            fields.screenheight, getUserInfo(req).id, (id, url) => io.to(id).emit(url), connected[(getUserInfo(req).id).toString()]);
+        const data = {
+            pathName: files.file.path.toString(),
+            path: __dirname,
+            fileName: files.file.name,
+            width: fields.screenwidth,
+            height: fields.screenheight,
+            id: getUserInfo(req).id,
+        };
+        const worker = new Worker('./appSrc/imgCreate.js', { workerData: data });
+        worker.on('error', (err) => {
+            throw err;
+        });
+        worker.on('exit', () => {
+            consoleLog('Worker Done');
+        });
+        worker.on('message', (msg) => {
+            if (msg.done) {
+                consoleLog('Done?: ', msg);
+                consoleLog('sending to:', connected[(getUserInfo(req).id).toString()]);
+                io.to(connected[(getUserInfo(req).id).toString()]).emit('done', msg.data);
+            } else {
+                io.to(connected[(getUserInfo(req).id).toString()]).emit('updates', msg.data);
+            }
+        });
     });
     res.sendFile(path.join(__dirname, '/Private/html/reciveImg.html'));
+});
+
+
+app.get('/getImg/:url', (req, res, next) => {
+    auth('admin', req, res, next);
+}, (req, res) => {
+    res.type('png');
+    res.sendFile(path.join(__dirname, '/Private/js/ICstore/', req.params.url));
 });
 
 // sending to all clients except sender
@@ -265,7 +284,7 @@ app.post('/createImg', (req, res, next) => {
 
 io.on('connection', (socket) => {
     consoleLog('New client id: ', socket.client.id);
-    connected[getUserInfoCookie(socket.handshake.headers.cookie).id] = socket.client.id;
+    connected[getUserInfoCookie(socket.handshake.headers.cookie).id] = socket.id;
     consoleLog(JSON.stringify(connected));
     socket.on('status', (message) => {
         // sending to the client
