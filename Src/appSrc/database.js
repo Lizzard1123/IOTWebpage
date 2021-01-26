@@ -100,51 +100,48 @@ export function handleLogin(req, res, next) {
         next();
     } else {
         consoleLog('User found:', user[0]['name']);
-    }
-    const id = user[0]['id'];
-    // compare passwords
-    bcrypt.compare(req.body.Password, user[0]['password'], (err, result) => {
-        if (err) {
-            // general error with bcrpyt
-            consoleLog('General bcrypt error');
-            error(res, err);
-        }
-        // passwords match
-        if (result) {
-            record('logging in', req.connection.remoteAddress, 3);
-            consoleLog('Bcrtpy same password');
-            // set last login
-            dbexecute(false, `UPDATE users SET lastLog = '${time}' WHERE id = ${id}`);
-            // public data to send
-            const publicData = dbexecute(true, `SELECT id, name, securityLevel FROM users WHERE id = ${id}`);
-            // jwt
-            const token = jwt.sign(publicData[0], process.env.secretkey, { expiresIn: '720min' });
-            // set authorization cookie with jwt
-            res.cookie('token', token, {
-                // 30 min
-                maxAge: process.env.timeoutTime,
-            });
-            // ajax redirect
-            consoleLog('Validated and redirected');
-            // parsed on frontend and rediredted there with credintials
-            if (serverBusy && user[0]['securityLevel'] != 'admin') {
-                res.redirect('/busy');
-            } else {
-                return res.json({
-                    message: 'redirect',
-                    newpage: '/home',
+        const id = user[0]['id'];
+        // compare passwords
+        bcrypt.compare(req.body.Password, user[0]['password'], (err, result) => {
+            if (err) {
+                // general error with bcrpyt
+                consoleLog('General bcrypt error');
+                error(res, err);
+            }
+            // passwords match
+            if (result) {
+                record('logging in', req.connection.remoteAddress, 3);
+                consoleLog('Bcrtpy same password');
+                // set last login
+                dbexecute(false, `UPDATE users SET lastLog = '${time}' WHERE id = ${id}`);
+                // public data to send
+                const publicData = dbexecute(true, `SELECT id, name, securityLevel FROM users WHERE id = ${id}`);
+                // jwt
+                const token = jwt.sign(publicData[0], process.env.secretkey, { expiresIn: '720min' });
+                // set authorization cookie with jwt
+                res.cookie('token', token, {
+                    // 30 min
+                    maxAge: process.env.timeoutTime,
+                });
+                // ajax redirect
+                consoleLog('Validated and redirected');
+                // parsed on frontend and rediredted there with credintials
+                if (serverBusy && user[0]['securityLevel'] != 'admin') {
+                    res.redirect('/busy');
+                } else {
+                    res.redirect('/home');
+                }
+            } else { // incorrect password
+                record('Failed login from', req.connection.remoteAddress, 3);
+                // record('password attempt', req.body.Password, 3);
+                consoleLog('Incorrect Password');
+                return res.status(401).json({
+                    message: 'error',
                 });
             }
-        } else { // incorrect password
-            record('Failed login from', req.connection.remoteAddress, 3);
-            // record('password attempt', req.body.Password, 3);
-            consoleLog('Incorrect Password');
-            return res.json({
-                message: 'error',
-            });
-        }
-    });
-    next();
+        });
+        next();
+    }
 }
 
 /**

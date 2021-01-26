@@ -159,3 +159,17 @@ export function getGithubCommits(pagenum, callback) {
         },
     );
 }
+
+/**
+ * checks for XML request
+ * @param {res} req - "User request"
+ * @param {res} res - "User response"
+ * @param {function} next - "next"
+ */
+export function checkXLM(req, res, next) {
+    if (req.headers.type == 'ajax') {
+        res.status(200).send('redirect');
+    } else {
+        next();
+    }
+}

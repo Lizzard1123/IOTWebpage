@@ -10,7 +10,7 @@ import http, { createServer } from 'http';
 import WebSocket from 'ws';
 import { Server } from 'socket.io';
 import { error, handleLogin, createAccount, removeTimer, editTimer, getTimers, record, createTaskFromICAL } from './appSrc/database.js';
-import { getUserInfo, getUserInfoCookie, auth, sendMessageToESPLights, eSPPostErr, getGithubCommits } from './appSrc/helpers.js';
+import { getUserInfo, getUserInfoCookie, auth, sendMessageToESPLights, eSPPostErr, getGithubCommits, checkXLM } from './appSrc/helpers.js';
 import { Worker } from 'worker_threads';
 import ejs from 'ejs';
 
@@ -102,6 +102,8 @@ app.get('/register', (req, res) => {
 });
 
 app.get('/home', (req, res, next) => {
+    checkXLM(req, res, next);
+}, (req, res, next) => {
     auth('stranger', req, res, next);
 }, (req, res) => {
     const userDat = getUserInfo(req);

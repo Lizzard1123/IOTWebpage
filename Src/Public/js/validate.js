@@ -50,30 +50,24 @@ function defaultcheckvalid(obj, textobj) {
 function ajaxSend() {
     const logincheck = new XMLHttpRequest();
     logincheck.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-            console.log('doneeeee');
-            const obj = JSON.parse(this.responseText);
-            if (obj.message == 'busy') {
-                window.switchInfoPage('busy');
-                return;
-            }
-            message.style.visibility = 'visible';
-            form.style.visibility = 'hidden';
-            title.style.visibility = 'hidden';
-            if (obj.message == 'redirect') {
-                message.innerHTML = 'Authorized';
-                setTimeout(() => {
-                    window.location.href = obj.newpage;
-                }, 500);
-            } else if (obj.message == 'error') {
-                message.style.color = 'red';
-                message.innerHTML = 'Error';
-                setTimeout(() => {
-                    message.style.visibility = 'hidden';
-                    message.style.color = 'green';
-                    title.style.visibility = 'visible';
-                    form.style.visibility = 'visible';
-                }, 500);
+        if (this.readyState == 4) {
+            if (this.status == 200) {
+                window.location = this.responseURL;
+            } else {
+                const obj = JSON.parse(this.responseText);
+                message.style.visibility = 'visible';
+                form.style.visibility = 'hidden';
+                title.style.visibility = 'hidden';
+                if (obj.message == 'error') {
+                    message.style.color = 'red';
+                    message.innerHTML = 'Error';
+                    setTimeout(() => {
+                        message.style.visibility = 'hidden';
+                        message.style.color = 'green';
+                        title.style.visibility = 'visible';
+                        form.style.visibility = 'visible';
+                    }, 500);
+                }
             }
         }
     };
