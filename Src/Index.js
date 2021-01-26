@@ -30,7 +30,7 @@ if (result.error) {
     consoleLog('Dotnev Error Loading env', result.error);
 }
 
-const port = 3000;
+const port = 80;
 const wsServerPort = 3001;
 const app = express();
 app.engine('html', ejs.renderFile);
