@@ -109,7 +109,13 @@ app.get('/home', (req, res, next) => {
     const userDat = getUserInfo(req);
     record('Gave login page to', `${req.connection.remoteAddress} as ${userDat.name}`, 4);
     consoleLog('Served Home Path');
-    res.sendFile(path.join(__dirname, 'Main.html'));
+    res.render(path.join(__dirname, 'Main.html'), {}, (err, str) => {
+        if (err) {
+            consoleLog('Error Rendering Main', err);
+            res.redirect('/error');
+        }
+        res.send(str);
+    });
 });
 
 app.post('/createAccount', (req, res, next) => {
