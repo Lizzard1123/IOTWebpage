@@ -102,7 +102,6 @@ const loader = document.getElementById('loadingg');
 
 function sendInfo(deskVal, bedVal) {
     socket.emit('update', `{"bed":${bedVal? '\"On\"' : '\"Off\"'},"desk":${deskVal? '\"On\"' : '\"Off\"'}}`);
-    console.log('Sent ' + `{"bed":${bedVal? '\"On\"' : '\"Off\"'},"desk":${deskVal? '\"On\"' : '\"Off\"'}}`);
 }
 
 // eslint-disable-next-line no-unused-vars
@@ -121,7 +120,6 @@ function buttonChange(element) {
 
 function sendInfoAll(Val) {
     socket.emit('update', `{"all":${Val? '\"On\"' : '\"Off\"'}}`);
-    console.log('Sent ' + `{"all":${Val? '\"On\"' : '\"Off\"'}}`);
 }
 
 // eslint-disable-next-line no-unused-vars
@@ -136,7 +134,6 @@ function buttonAllChange(element) {
 }
 
 socket.on('status', (data) => {
-    console.log(data);
     const values = JSON.parse(data);
     if (values['status'] == 'noComs') {
         bedLamp.noComsSpecific();
@@ -159,22 +156,4 @@ all.allOffButton.setAttribute('onClick', 'buttonAllChange(this)');
 all.allOnButton.setAttribute('onClick', 'buttonAllChange(this)');
 setInterval(() => {
     socket.emit('status', 'hey');
-}, 1000);
-/*
-socket.on('connect', () => {
-    console.log('connected');
-});
-document.getElementById('button').onclick = () => {
-    socket.emit('status', 'get');
-};
-document.getElementById('button1').onclick = () => {
-    socket.emit('update', '{"bed":"On","desk":"Off"}');
-};
-document.getElementById('button2').onclick = () => {
-    socket.emit('update', '{"bed":"Off","desk":"Off"}');
-};
-socket.on('status', (data) => {
-    console.log(data);
-});
-
-*/
+}, 2000);

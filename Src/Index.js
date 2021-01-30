@@ -9,7 +9,7 @@ import cron from 'node-cron';
 import http, { createServer } from 'http';
 import WebSocket from 'ws';
 import { Server } from 'socket.io';
-import { error, handleLogin, createAccount, removeTimer, editTimer, getTimers, record, createTaskFromICAL } from './appSrc/database.js';
+import { error, handleLogin, createAccount, removeTimer, editTimer, getTimers, record, createTaskFromICAL, logLampChange } from './appSrc/database.js';
 import { getUserInfo, getUserInfoCookie, auth, sendMessageToESPLights, eSPPostErr, getGithubCommits, checkXLM } from './appSrc/helpers.js';
 import { Worker } from 'worker_threads';
 import ejs from 'ejs';
@@ -30,7 +30,7 @@ if (result.error) {
     consoleLog('Dotnev Error Loading env', result.error);
 }
 
-const port = 80;
+const port = 3000;
 const wsServerPort = 3001;
 const app = express();
 app.engine('html', ejs.renderFile);
@@ -340,7 +340,6 @@ app.get('/getImg/:url', (req, res, next) => {
 io.on('connection', (socket) => {
     consoleLog('New client id: ', socket.client.id);
     connected[getUserInfoCookie(socket.handshake.headers.cookie).id] = socket.id;
-    consoleLog(JSON.stringify(connected));
     socket.on('status', (message) => {
         // sending to the client
         if (noComs) {
@@ -350,17 +349,15 @@ io.on('connection', (socket) => {
         }
     });
     socket.on('update', (message) => {
-        consoleLog('updating USer');
         // sending to the client
         if (noComs || globalWS == null) {
             socket.emit('status', `${JSON.stringify({ status: 'noComs' })}`);
         } else {
-            consoleLog('sending; ', message);
+            logLampChange(getUserInfoCookie(socket.handshake.headers.cookie).id);
             globalWS.send(message);
             const response = JSON.parse(message);
             response['status'] = 'online';
-            // change to io for all clinets
-            socket.emit('status', JSON.stringify(response));
+            io.emit('status', JSON.stringify(response));
         }
     });
 });
@@ -378,14 +375,10 @@ wss.on('connection', function(ws) {
     ws.isAlive = true;
     ws.on('pong', heartbeat);
     ws.on('message', (data) => {
-        consoleLog('recived: ', data);
         if (data != 'Connected') {
             const updateVar = JSON.parse(data);
-            consoleLog('data: ', JSON.stringify(updateVar));
             bedStatus = updateVar['bed'] == 'On' ? true : false;
             deskStatus = updateVar['desk'] == 'On' ? true : false;
-            consoleLog('bed now: ', bedStatus);
-            consoleLog('desk now: ', deskStatus);
         }
     });
     ws.on('close', function() {

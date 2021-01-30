@@ -179,8 +179,8 @@ export function createTaskFromICAL(userId, now, end, summary) {
     const maxid = Number(dbexecute(true, `SELECT MAX(taskId) FROM tasks WHERE id = ${userId}`)[0]['MAX(taskId)']) + 1;
     const oldDate = new Date(end);
     const day = oldDate.getDate() < 10 ? '0' + oldDate.getDate() : oldDate.getDate();
-    const month = (oldDate.getMonth() + 1) < 10 ? '0' + (oldDate.getMonth() + 1) : (oldDate.getMonth() + 1);
-    const newDate = oldDate.getFullYear() + '-' + month + '-' + day;
+    const newmonth = (oldDate.getMonth() + 1) < 10 ? '0' + (oldDate.getMonth() + 1) : (oldDate.getMonth() + 1);
+    const newDate = oldDate.getFullYear() + '-' + newmonth + '-' + day;
     dbexecute(false, `INSERT INTO tasks VALUES(${userId}, '${summary}', ${now}, '${newDate}', ${maxid})`);
 }
 
@@ -192,4 +192,13 @@ export function createTaskFromICAL(userId, now, end, summary) {
 export function getTimers(id) {
     consoleLog(id);
     return dbexecute(true, `SELECT * FROM tasks WHERE id = ${id}`);
+}
+
+
+/**
+ * Logs that a user (id) has changed a lamp status, Does not contain which lamp
+ * @param {number} id - "User id"
+ */
+export function logLampChange(id) {
+    record('lamp change', '', 4, id);
 }
