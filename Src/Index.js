@@ -305,8 +305,8 @@ app.post('/createImg', (req, res, next) => {
             id: getUserInfo(req).id,
         };
         const worker = new Worker('./appSrc/imgCreate.js', { workerData: data });
-        worker.on('error', (err) => {
-            throw err;
+        worker.on('error', (connecterr) => {
+            throw connecterr;
         });
         worker.on('exit', () => {
             consoleLog('Worker Done');

@@ -18,7 +18,7 @@ const deskLamp = {
     lampTitle: document.getElementById('deskLabelTitle'),
     noComsPic: document.getElementById('deskNoComsPic'),
     buttonBox: document.getElementById('deskLampButton'),
-    buttonState: false,
+    buttonState: true,
     changeState: function(state) {
         this.buttonState = state;
     },
@@ -60,7 +60,7 @@ const bedLamp = {
     lampTitle: document.getElementById('bedLabelTitle'),
     noComsPic: document.getElementById('bedNoComsPic'),
     buttonBox: document.getElementById('bedLampButton'),
-    buttonState: false,
+    buttonState: true,
     changeState: function(state) {
         this.buttonState = state;
     },
@@ -146,10 +146,8 @@ socket.on('status', (data) => {
 
 socket.emit('status', 'hey');
 deskLamp.setUp();
-deskLamp.HTMLnode.click();
 deskLamp.HTMLnode.setAttribute('onchange', 'buttonChange(this)');
 bedLamp.setUp();
-bedLamp.HTMLnode.click();
 bedLamp.HTMLnode.setAttribute('onchange', 'buttonChange(this)');
 
 all.allOffButton.setAttribute('onClick', 'buttonAllChange(this)');

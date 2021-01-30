@@ -48,7 +48,7 @@ function setbackground(obj, dateone, datetwo) {
         return;
     }
     const progress = currenttime / totaltime;
-    colorarray = getbgcolor(greencolor, redcolor, progress);
+    const colorarray = getbgcolor(greencolor, redcolor, progress);
     obj.style.backgroundColor = `rgb(${colorarray[0]}, ${colorarray[1]}, ${colorarray[2]})`;
     setTimeout(setbackground, (60 * 1000), obj, dateone, datetwo);
 }

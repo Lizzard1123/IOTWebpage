@@ -19,7 +19,7 @@ function consoleLog(string, data = '') {
     console.log('\x1b[33m', string + ' ' + data);
 }
 
-function getcommoncolor(imgData, filename) {
+function getcommoncolor(imgData) {
     const colors = [];
     const numberofcolors = [];
     const imglength = imgData.data.length;
@@ -129,7 +129,7 @@ export function sizeUpPhoto() {
             let colorstochoose;
             switch (func) {
                 case 0:
-                    colorstochoose = getcommoncolor(context.getImageData(0, 0, resizewidth, resizeheight), path);
+                    colorstochoose = getcommoncolor(context.getImageData(0, 0, resizewidth, resizeheight));
                     finishImg(cvs, context, imgwidth, imgheight, colorstochoose, image, func);
                     break;
             }

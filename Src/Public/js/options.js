@@ -114,7 +114,7 @@ function checkAuth() {
 function getinfo(number) {
     let thisValue;
     if (typeof number == 'string') {
-        numbertoreturn = numbers.indexOf(number);
+        const numbertoreturn = numbers.indexOf(number);
         thisValue = custom[numbertoreturn];
     } else {
         thisValue = custom[number - 1];
