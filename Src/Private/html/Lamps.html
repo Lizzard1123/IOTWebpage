@@ -7,12 +7,12 @@
     <link rel="stylesheet" type="text/css" href="/privatestatic/css/Lamps.css">
 </head>
 
-<body style="width:397px; height:1000px" onload="startupLamps()">
+<body style="width:397px; height:1000px">
     <!--Title-->
     <div id="titleBox">
         <h1>Lamps!</h1>
-        <button type="button" id="allOff" onclick="allOff()">Off</button>
-        <button type="button" id="allOn" onclick="allOn()">On</button>
+        <button type="button" id="allOff">Off</button>
+        <button type="button" id="allOn">On</button>
     </div>
 
 
@@ -27,9 +27,9 @@
                 <div class="layer"></div>
 
             </div>
-            <div class="labelForButton"><b id="deskLabelTitle">Connecting...</b></div>
+            <div class="labelForButton"><strong id="deskLabelTitle">Connecting...</strong></div>
         </div>
-        <div class="noComsPic" id="deskNoComsPic" style="visibility: hidden;" onclick="updateFromGlobal()">
+        <div class="noComsPic" id="deskNoComsPic" style="visibility: hidden;">
             <svg id="deskNoComsSvg" xmlns="http://www.w3.org/2000/svg" class="noComsSvg icon icon-tabler icon-tabler-access-point-off" width="56" height="56" viewBox="0 0 24 24" stroke-width="1.5" stroke="#000000" fill="none" stroke-linecap="round" stroke-linejoin="round">
             <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
             <line x1="3" y1="3" x2="21" y2="21" />
@@ -51,9 +51,9 @@
                 <div class="layer"></div>
 
             </div>
-            <div class="labelForButton"><b id="bedLabelTitle">Connecting...</b></div>
+            <div class="labelForButton"><strong id="bedLabelTitle">Connecting...</strong></div>
         </div>
-        <div class="noComsPic" id="bedNoComsPic" style="visibility: hidden;" onclick="updateFromGlobal()">
+        <div class="noComsPic" id="bedNoComsPic" style="visibility: hidden;">
             <svg id="bedNoComsSvg" xmlns="http://www.w3.org/2000/svg" class="noComsSvg icon icon-tabler icon-tabler-access-point-off" width="56" height="56" viewBox="0 0 24 24" stroke-width="1.5" stroke="#000000" fill="none" stroke-linecap="round" stroke-linejoin="round">
             <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
             <line x1="3" y1="3" x2="21" y2="21" />
@@ -68,6 +68,7 @@
     <div class="collum" id="collumFour"></div>
     <div id="loadingg"><span class="loader"></span></div>
 </body>
+<script src='/socket.io/socket.io.js'></script>
 <script src="/privatestatic/js/Lamps.js"></script>
 
 </html>

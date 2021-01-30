@@ -346,16 +346,21 @@ io.on('connection', (socket) => {
         if (noComs) {
             socket.emit('status', `${JSON.stringify({ status: 'noComs' })}`);
         } else {
-            socket.emit('status', `${JSON.stringify({ bed: bedStatus?'On':'Off', desk: deskStatus?'On':'Off' })}`);
+            socket.emit('status', `${JSON.stringify({ status: 'online', bed: bedStatus?'On':'Off', desk: deskStatus?'On':'Off' })}`);
         }
     });
     socket.on('update', (message) => {
+        consoleLog('updating USer');
         // sending to the client
         if (noComs || globalWS == null) {
             socket.emit('status', `${JSON.stringify({ status: 'noComs' })}`);
         } else {
+            consoleLog('sending; ', message);
             globalWS.send(message);
-            socket.emit('status', message);
+            const response = JSON.parse(message);
+            response['status'] = 'online';
+            // change to io for all clinets
+            socket.emit('status', JSON.stringify(response));
         }
     });
 });
