@@ -7,7 +7,7 @@ document.getElementById('button').onclick = () => {
     socket.emit('status', 'get');
 };
 document.getElementById('button1').onclick = () => {
-    socket.emit('update', '{"bed":"Off","desk":"On"}');
+    socket.emit('update', '{"bed":"On","desk":"Off"}');
 };
 document.getElementById('button2').onclick = () => {
     socket.emit('update', '{"bed":"Off","desk":"Off"}');

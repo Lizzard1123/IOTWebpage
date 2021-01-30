@@ -355,7 +355,7 @@ io.on('connection', (socket) => {
             socket.emit('status', `${JSON.stringify({ status: 'noComs' })}`);
         } else {
             globalWS.send(message);
-            socket.emit('status', `${JSON.stringify({ bed: bedStatus?'On':'Off', desk: deskStatus?'On':'Off' })}`);
+            socket.emit('status', message);
         }
     });
 });
@@ -374,9 +374,14 @@ wss.on('connection', function(ws) {
     ws.on('pong', heartbeat);
     ws.on('message', (data) => {
         consoleLog('recived: ', data);
-        // const updateVar = JSON.parse(data);
-        // bedStatus = updateVar['bed'];
-        // deskStatus = updateVar['desk'];
+        if (data != 'Connected') {
+            const updateVar = JSON.parse(data);
+            consoleLog('data: ', JSON.stringify(updateVar));
+            bedStatus = updateVar['bed'] == 'On' ? true : false;
+            deskStatus = updateVar['desk'] == 'On' ? true : false;
+            consoleLog('bed now: ', bedStatus);
+            consoleLog('desk now: ', deskStatus);
+        }
     });
     ws.on('close', function() {
         noComs = true;
