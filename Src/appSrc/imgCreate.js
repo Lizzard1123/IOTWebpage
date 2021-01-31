@@ -198,7 +198,7 @@ function getclosecolor(imgData) {
 const offset = 40;
 const funcTotal = 4;
 
-function beginImg(cvs, context, imgwidth, imgheight, colorstochoose, image, func) {
+function beginImg(context, imgwidth, imgheight, colorstochoose, image) {
     context.fillStyle = `rgb(${colorstochoose[0]},${colorstochoose[1]},${colorstochoose[2]})`;
     context.fillRect(0, 0, Twidth, Theight);
     const chamger = (Theight - offset) / imgheight;
@@ -207,7 +207,7 @@ function beginImg(cvs, context, imgwidth, imgheight, colorstochoose, image, func
     context.drawImage(image, (Twidth - newwidth) / 2, 0, newwidth, newheight);
 }
 
-function beginImgGrey(cvs, context, imgwidth, imgheight, colorstochoose, image, func) {
+function beginImgGrey(context, imgwidth, imgheight, colorstochoose, image) {
     const average = Math.floor((colorstochoose[0] + colorstochoose[1] + colorstochoose[2]) / 3);
     context.fillStyle = `rgb(${average},${average},${average})`;
     context.fillRect(0, 0, Twidth, Theight);
@@ -226,7 +226,7 @@ function beginImgGrey(cvs, context, imgwidth, imgheight, colorstochoose, image, 
 }
 
 
-function beginImgExtend(cvs, context, imgwidth, imgheight, colorstochoose, image, func) {
+function beginImgExtend(context, imgwidth, imgheight, image) {
     context.fillStyle = `rgb(${255},${255},${255})`;
     context.fillRect(0, 0, Twidth, Theight);
     const chamger = (Theight - offset) / imgheight;
@@ -255,18 +255,18 @@ export function sizeUpPhoto() {
             switch (func) {
                 case 0: // brute force
                     colorstochoose = getcommoncolor(context.getImageData(0, 0, resizewidth, resizeheight));
-                    beginImg(cvs, context, imgwidth, imgheight, colorstochoose, image, func);
+                    beginImg(context, imgwidth, imgheight, colorstochoose, image);
                     break;
                 case 1: // close
                     colorstochoose = getclosecolor(context.getImageData(0, 0, resizewidth, resizeheight));
-                    beginImg(cvs, context, imgwidth, imgheight, colorstochoose, image, func);
+                    beginImg(context, imgwidth, imgheight, colorstochoose, image);
                     break;
                 case 2: // greyscale
                     colorstochoose = getclosecolor(context.getImageData(0, 0, resizewidth, resizeheight));
-                    beginImgGrey(cvs, context, imgwidth, imgheight, colorstochoose, image, func);
+                    beginImgGrey(context, imgwidth, imgheight, colorstochoose, image);
                     break;
                 case 3: // line extenion
-                    beginImgExtend(cvs, context, imgwidth, imgheight, colorstochoose, image, func);
+                    beginImgExtend(context, imgwidth, imgheight, image);
                     break;
             }
         });
@@ -284,24 +284,33 @@ function selectPhoto() {
     canvas.loadImage(path).then((image) => {
         const imgwidth = image.width;
         const imgheight = image.height;
+        context.drawImage(image, 0, 0, resizewidth, resizeheight);
         let colorstochoose;
         // background + image stage
         if (fields.looseColor == 'on') { // common color
+            consoleLog('LooseColor');
             colorstochoose = getclosecolor(context.getImageData(0, 0, resizewidth, resizeheight));
-            beginImg(cvs, context, imgwidth, imgheight, colorstochoose, image, 9);
+            consoleLog(colorstochoose[0]);
+            consoleLog(colorstochoose[1]);
+            consoleLog(colorstochoose[2]);
+            beginImg(context, imgwidth, imgheight, colorstochoose, image);
         } else if (fields.stretch == 'on') { // stretch
-            beginImgExtend(cvs, context, imgwidth, imgheight, colorstochoose, image, 9);
+            consoleLog('stretch');
+            beginImgExtend(context, imgwidth, imgheight, image);
         } else if (fields.random == 'on') { // leave it up to the cvs library
+            consoleLog('cvs');
             context.drawImage(image, 0, 0, 1, 1);
-            colorstochoose = getcommoncolor(context.getImageData(0, 0, resizewidth, resizeheight));
-            beginImg(cvs, context, imgwidth, imgheight, colorstochoose, image, 9);
+            colorstochoose = getcommoncolor(context.getImageData(0, 0, 1, 1));
+            beginImg(context, imgwidth, imgheight, colorstochoose, image);
         } else { // brute force
+            consoleLog('brute');
             colorstochoose = getcommoncolor(context.getImageData(0, 0, resizewidth, resizeheight));
-            beginImg(cvs, context, imgwidth, imgheight, colorstochoose, image, 9);
+            beginImg(context, imgwidth, imgheight, colorstochoose, image);
         }
         // effects
         // black and white
         if (fields.BW == 'on') {
+            consoleLog('black');
             const data = context.getImageData(0, 0, Twidth, Theight);
             for (let i = 0; i < data.data.length; i += 4) {
                 const avg = Math.floor((data.data[i] + data.data[i + 1] + data.data[i + 2]) / 3);
@@ -313,12 +322,15 @@ function selectPhoto() {
         }
         // reverse horizontally
         if (fields.reverse == 'on') {
+            consoleLog('horizontally');
             const data = context.getImageData(0, 0, Twidth, Theight);
             const copy = data.data;
-            for (let i = 0; i < data.data.length; i += 4) {
-                data.data[i] = copy[copy.length - i - 1];
-                data.data[i + 1] = copy[copy.length - 2];
-                data.data[i + 2] = copy[copy.length - 3];
+            for (let i = 0; i < Theight; i++) {
+                for (let j = 0; j < Twidth; j += 4) {
+                    data.data[i * Twidth + j] = copy[(i + 1) * Twidth - j - 4];
+                    data.data[i * Twidth + j + 1] = copy[(i + 1) * Twidth - j - 3];
+                    data.data[i * Twidth + j + 2] = copy[(i + 1) * Twidth - j - 2];
+                }
             }
             context.putImageData(data, 0, 0);
         }
@@ -326,25 +338,32 @@ function selectPhoto() {
         // if (fields.edge) {
         //
         // }
-    });
-    const buffer = cvs.toBuffer('image/png');
-    fs.writeFile(`${__dirname}/Private/js/ICstore/new${name.substring(0, (name.length - 4))}v${9}_${id}.png`, buffer, (err) => {
-        if (err) {
-            consoleLog('error writing img file');
-        }
-    });
-    // /privatestatic/js
-    const url = `/privatestatic/js/ICstore/new${name.substring(0, (name.length - 4))}v${9}_${id}.png`;
-    parentPort.postMessage({
-        done: true,
-        data: url,
-    });
-    fs.unlink(path, (err) => {
-        if (err) {
-            consoleLog('error unlinking img file', err);
-        }
+        const buffer = cvs.toBuffer('image/png');
+        fs.writeFile(`${__dirname}/Private/js/ICstore/new${name.substring(0, (name.length - 4))}v${9}_${id}.png`, buffer, (err) => {
+            if (err) {
+                consoleLog('error writing img file');
+            }
+        });
+        // /privatestatic/js
+        const url = `/privatestatic/js/ICstore/new${name.substring(0, (name.length - 4))}v${9}_${id}.png`;
+        parentPort.postMessage({
+            done: true,
+            data: url,
+        });
+        fs.unlink(path, (err) => {
+            if (err) {
+                consoleLog('error unlinking img file', err);
+            }
+        });
     });
 }
 
 selectPhoto();
 // sizeUpPhoto();
+/*
+            for (let i = 0; i < data.data.length; i += 4) {
+                data.data[i] = copy[copy.length - i - 2];
+                data.data[i + 1] = copy[copy.length - i - 3];
+                data.data[i + 2] = copy[copy.length - i - 4];
+            }
+*/
