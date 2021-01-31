@@ -169,27 +169,6 @@ app.get('/timer', (req, res, next) => {
     return res.json(mess);
 });
 
-app.post('/espLights_Update', (req, res, next) => {
-    auth('admin', req, res, next);
-}, (req, res) => {
-    const reqMessage = req.body;
-    const firstObj = Object.keys(reqMessage)[0];
-    if (reqMessage[firstObj] == 'On') {
-        consoleLog('Turning Light On:', firstObj);
-        sendMessageToESPLights(firstObj, 'On', (err) => {
-            eSPPostErr(err, res);
-        });
-    } else if (reqMessage[firstObj] == 'Off') {
-        consoleLog('Turning Light Off:', firstObj);
-        sendMessageToESPLights(firstObj, 'Off', (err) => {
-            eSPPostErr(err, res);
-        });
-    } else {
-        consoleLog('Unknown body', req.body);
-    }
-    return;
-});
-
 // TODO FIX
 app.post('/ToDo/uploadCal', (req, res) => {
     const userId = getUserInfo(req).id;
@@ -224,30 +203,6 @@ app.post('/timeredit', (req, res) => {
     const userId = getUserInfo(req).id;
     editTimer(req.body, userId);
     res.end();
-});
-
-cron.schedule('0 50 6 * * *', () => {
-    consoleLog('Turning on lamps SCHEDULE test');
-    sendMessageToESPLights('all', 'On', (err) => {
-        if (err) {
-            consoleLog('ESP post err', err);
-        }
-    });
-});
-
-
-// get lights status
-app.get('/espLights_Status', (req, res) => {
-    sendMessageToESPLights('status', 'question', (err, mes) => {
-        if (err) {
-            if (err.errno == 'ETIMEDOUT') {
-                consoleLog('No response from ESP');
-                res.json({ status: 'noComs' });
-            }
-        } else {
-            res.json(JSON.parse(mes));
-        }
-    });
 });
 
 
@@ -292,10 +247,7 @@ app.post('/createImg', (req, res, next) => {
             consoleLog('Submited error');
             return;
         }
-        consoleLog('hereee');
         consoleLog(JSON.stringify(fields));
-        consoleLog(files.file.path.toString());
-        consoleLog(files.file.name);
         const data = {
             pathName: files.file.path.toString(),
             path: __dirname,
@@ -303,6 +255,7 @@ app.post('/createImg', (req, res, next) => {
             width: parseInt(fields.screenwidth),
             height: parseInt(fields.screenheight),
             id: getUserInfo(req).id,
+            fields: fields,
         };
         const worker = new Worker('./appSrc/imgCreate.js', { workerData: data });
         worker.on('error', (connecterr) => {
@@ -313,7 +266,7 @@ app.post('/createImg', (req, res, next) => {
         });
         worker.on('message', (msg) => {
             if (msg.done) {
-                consoleLog('Done?: ', JSON.parse(msg));
+                consoleLog('Done?: ', JSON.stringify(msg));
                 consoleLog('sending to:', connected[(getUserInfo(req).id).toString()]);
                 io.to(connected[(getUserInfo(req).id).toString()]).emit('done', msg.data);
             } else {
@@ -332,8 +285,10 @@ app.get('/getImg/:url', (req, res, next) => {
     res.sendFile(path.join(__dirname, '/Private/js/ICstore/', req.params.url));
 });
 
-// sending to all clients except sender
-// socket.broadcast.emit('messages', `recived from ${message} friends!`);
+cron.schedule('0 50 6 * * *', () => {
+    consoleLog('Turning on lamps SCHEDULE test');
+    globalWS.send(`${JSON.stringify({ bed: 'On', desk: 'On' })}`);
+});
 
 // SOCKET.IO
 

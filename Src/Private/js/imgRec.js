@@ -10,7 +10,11 @@ socketIO.on('connect', () => {
 
 socketIO.on('done', (data) => { // url
     console.log(data);
-    document.getElementById('loading').remove();
+    try {
+        document.getElementById('loading').remove();
+    } catch {
+        console.log('wow thats fast');
+    }
     const img = document.createElement('IMG');
     img.src = data;
     document.getElementById('imgContainer').appendChild(img);
