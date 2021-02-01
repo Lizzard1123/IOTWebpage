@@ -112,7 +112,7 @@ function getcommoncolor(imgData) {
  */
 function within(limit, num, target) {
     return (num > target - limit) && (num < target + limit);
-};
+}
 
 
 /**

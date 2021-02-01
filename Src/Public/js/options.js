@@ -24,6 +24,7 @@ const switches = document.getElementsByClassName('switchpages');
 const titles = ['Extra', 'Remote', 'Lamps', 'Home', 'To-Do', 'Image', 'Game'];
 const pagelink = ['Extra', 'Remote', 'Lamps', 'Home', 'To-Do', 'image', 'Game'];
 const numberofpages = titles.length;
+const middle = numberofpages / 2 - .5;
 const maxdivbox = 100 / numberofpages;
 const offset = 2.5;
 
@@ -34,7 +35,6 @@ function givetitles() {
 }
 
 function setintoplace() {
-    const middle = numberofpages / 2 - .5;
     for (let i = 0; i < numberofpages; i++) {
         switches[i].style.left = `${maxdivbox * i - offset}%`;
         if (i != middle) {
@@ -90,13 +90,13 @@ function updatesliderbar(name) {
     } else {
         targetmiddle = titles[numbers.indexOf(name)];
     }
-    while (titles[2] != targetmiddle) {
+    while (titles[middle] != targetmiddle) {
         titles.unshift(titles.pop());
         pagelink.unshift(pagelink.pop());
     }
     setintoplace();
-    iframe.src = `privatestatic/html/${pagelink[2]}.html`;
-    document.getElementById('Title').innerHTML = titles[2];
+    iframe.src = `privatestatic/html/${pagelink[middle]}.html`;
+    document.getElementById('Title').innerHTML = titles[middle];
 }
 
 // eslint-disable-next-line no-unused-vars
@@ -121,9 +121,8 @@ function getinfo(number) {
     }
     if (thisValue == 'false') {
         return false;
-    } else {
-        return true;
     }
+    return true;
 }
 
 function addtoall() {

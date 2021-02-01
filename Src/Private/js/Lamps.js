@@ -33,10 +33,13 @@ const deskLamp = {
         this.HTMLnode.disabled = false;
         this.buttonBox.style.visibility = 'visible';
         all.enable();
+        console.log('setup');
     },
     clickWithoutChange: function(newState) {
+        console.log('clc');
         this.setUp();
         if (this.buttonState != newState) {
+            console.log('change');
             this.HTMLnode.removeAttribute('onchange');
             this.HTMLnode.click();
             this.changeState(newState);
@@ -44,6 +47,7 @@ const deskLamp = {
         }
     },
     noComsSpecific: function() {
+        console.log('no coms');
         this.lampTitle.innerHTML = 'No Connection';
         this.noComsPic.style.visibility = 'visible';
         this.buttonBox.style.visibility = 'hidden';
@@ -51,6 +55,7 @@ const deskLamp = {
         all.noComsSpecific();
     },
     click: function() {
+        console.log('click');
         this.HTMLnode.click();
     },
 };
@@ -99,9 +104,11 @@ const bedLamp = {
 
 const socket = io();
 const loader = document.getElementById('loadingg');
+let awaitingRes = false;
 
 function sendInfo(deskVal, bedVal) {
     socket.emit('update', `{"bed":${bedVal? '\"On\"' : '\"Off\"'},"desk":${deskVal? '\"On\"' : '\"Off\"'}}`);
+    awaitingRes = true;
 }
 
 // eslint-disable-next-line no-unused-vars
@@ -135,6 +142,7 @@ function buttonAllChange(element) {
 
 socket.on('status', (data) => {
     const values = JSON.parse(data);
+    awaitingRes = false;
     if (values['status'] == 'noComs') {
         bedLamp.noComsSpecific();
         deskLamp.noComsSpecific();
@@ -153,5 +161,7 @@ bedLamp.HTMLnode.setAttribute('onchange', 'buttonChange(this)');
 all.allOffButton.setAttribute('onClick', 'buttonAllChange(this)');
 all.allOnButton.setAttribute('onClick', 'buttonAllChange(this)');
 setInterval(() => {
-    socket.emit('status', 'hey');
+    if (!awaitingRes) {
+        socket.emit('status', 'hey');
+    }
 }, 2000);

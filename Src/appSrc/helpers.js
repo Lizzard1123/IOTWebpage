@@ -50,7 +50,7 @@ export function getUserInfoCookie(str) {
  * @param {next} next - "Next function"
  */
 export function auth(privlage, req, res, next) {
-    consoleLog('Authenticating user');
+    // consoleLog('Authenticating user');
     try {
         const decoded = jwt.verify(req.cookies.token, process.env.secretkey);
         if (decoded.securityLevel == privlage || decoded.securityLevel == 'admin') {
