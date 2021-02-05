@@ -292,6 +292,11 @@ cron.schedule('0 50 6 * * *', () => {
 
 // SOCKET.IO
 
+// game vars
+let usersGame = [];
+let gameUserData = [];
+const gameDat = {};
+
 io.on('connection', (socket) => {
     consoleLog('New client id: ', socket.client.id);
     connected[getUserInfoCookie(socket.handshake.headers.cookie).id] = socket.id;
@@ -314,6 +319,82 @@ io.on('connection', (socket) => {
             response['status'] = 'online';
             io.emit('status', JSON.stringify(response));
         }
+    });
+
+    // game
+
+    socket.on('join', (data) => {
+        usersGame.push((data));
+        consoleLog(JSON.stringify(usersGame[0]));
+        io.emit('updateUsers', (data));
+    });
+
+    socket.on('startGame', (data) => {
+        gameDat['start'] = data.start;
+        gameDat['end'] = data.end;
+        io.emit('start');
+    });
+
+    socket.on('getUsers', () => {
+        consoleLog('updating');
+        consoleLog(usersGame[0]);
+        for (let i = 0; i < usersGame.length; i++) {
+            consoleLog(JSON.stringify(usersGame[i]));
+            socket.emit('updateUsers', usersGame[i]);
+        }
+    });
+
+    socket.on('removeUser', (data) => {
+        consoleLog('removing');
+        const newUserGame = [];
+        for (let i = 0; i < usersGame.length; i++) {
+            if (usersGame[i].name != data.name) {
+                newUserGame.push(data.name);
+            } else {
+                data.remove = true;
+                io.emit('updateUsers', (data));
+            }
+        }
+        gameUserData = newUserGame;
+    });
+
+    // gmae game
+
+    socket.on('joinGame', (data) => {
+        gameUserData.push(data);
+        socket.emit('settings', gameDat);
+    });
+
+    socket.on('leaveGame', (data) => {
+        consoleLog('removing game user');
+        const newUserGameList = [];
+        for (let i = 0; i < newUserGameList.length; i++) {
+            if (newUserGameList[i].name != data.name) {
+                newUserGameList.push(data.name);
+            }
+        }
+        usersGame = newUserGameList;
+    });
+
+    socket.on('quitGame', (data) => {
+        let giveup = true;
+        for (let i = 0; i < gameUserData.length; i++) {
+            if (data.name == gameUserData[i].name) {
+                gameUserData[i].playing = false;
+                for (let j = 0; j < gameUserData.length; j++) {
+                    if (gameUserData[j].playing) {
+                        giveup = false;
+                    }
+                }
+            }
+        }
+        if (giveup) {
+            io.emit('quit');
+        }
+    });
+
+    socket.on('end', (data) => {
+        io.emit('endScreen', (data));
     });
 });
 
