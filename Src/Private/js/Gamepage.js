@@ -17,6 +17,7 @@ function getCookie(cname) {
 
 const socket = io();
 const userName = getCookie('gameName');
+const iframe = document.getElementById('game');
 
 function joinGame(ame) {
     socket.emit('joinGame', ({
@@ -25,9 +26,15 @@ function joinGame(ame) {
     }));
 }
 
+function changeIframe(title) {
+    const form = title.replace(' ', '_');
+    iframe.src = `https://en.wikipedia.org/wiki/${form}`;
+}
+
 function loadSettings(data) {
     document.getElementById('start').innerHTML = data.start;
     document.getElementById('end').innerHTML = data.end;
+    changeIframe(data.start);
 }
 
 socket.on('settings', (data) => {

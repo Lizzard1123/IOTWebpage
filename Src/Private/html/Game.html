@@ -21,13 +21,20 @@
     <div id="Users"></div>
     <div id="counter"></div>
     <div id="startBox">
-        <form><input type="text" id="start" placeholder="start">
-            <input type="text" id="end" placeholder="end"></form>
-
+        <form>
+            <input type="text" id="start" placeholder="start">
+            <div id="startDesc"></div>
+            <input type="text" id="end" placeholder="end">
+            <div id="endDesc"></div>
+        </form>
+        <button id="randomStart">randomStart</button>
+        <button id="randomEnd">randomEnd</button>
         <button id="startBtn" style="visibility:hidden">Start!</button>
     </div>
 </body>
 <script src='/socket.io/socket.io.js'></script>
 <script src="/privatestatic/js/Game.js"></script>
+
+</html>
 
 </html>

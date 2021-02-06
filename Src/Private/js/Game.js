@@ -75,6 +75,50 @@ document.getElementById('joinBtn').onclick = () => {
     }
 };
 
+// https://en.wikipedia.org/w/api.php?action=query&prop=description&titles=London&format=json
+function getDescription(title, start, id) {
+    const wikiRandom = new XMLHttpRequest();
+    wikiRandom.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            if (start) { // query.pages[14492927].description
+                document.getElementById('startDesc').innerHTML = JSON.parse(this.responseText).query.pages[id].description;
+            } else {
+                document.getElementById('endDesc').innerHTML = JSON.parse(this.responseText).query.pages[id].description;
+            }
+        }
+    };
+    wikiRandom.open('GET', `https://en.wikipedia.org/w/api.php?origin=*&action=query&prop=description&titles=${title}&format=json`, true);
+    wikiRandom.send();
+}
+
+function getRandomUrlName(start) {
+    const wikiRandom = new XMLHttpRequest();
+    wikiRandom.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            const res = JSON.parse(this.responseText);
+            const title = res.query.random[0].title;
+            const id = res.query.random[0].id;
+            if (start) {
+                document.getElementById('start').value = title;
+                getDescription(title, true, id.toString());
+            } else {
+                document.getElementById('end').value = title;
+                getDescription(title, false, id.toString());
+            }
+        }
+    };
+    wikiRandom.open('GET', 'https://en.wikipedia.org/w/api.php?origin=*&rnnamespace=0&action=query&format=json&list=random&rnlimit=1', true);
+    wikiRandom.send();
+}
+
+document.getElementById('randomStart').onclick = () => {
+    getRandomUrlName(true);
+};
+
+document.getElementById('randomEnd').onclick = () => {
+    getRandomUrlName(false);
+};
+
 document.getElementById('startBtn').onclick = () => {
     if (document.getElementById('start').value.length != 0 || document.getElementById('end').value.length != 0) {
         socket.emit('startGame', ({
