@@ -7,6 +7,7 @@ let userSet = false;
 let userDataSet = {};
 
 function updateTimer() {
+    document.getElementById('startBtn').style.visibility = 'hidden';
     if (count < 5) {
         count++;
         counter.innerHTML = count;
@@ -70,8 +71,9 @@ document.getElementById('joinBtn').onclick = () => {
         document.getElementById('joinBtn').disabled = true;
         userSet = true;
         userDataSet = userData;
+        console.log(userDataSet);
         document.getElementById('startBtn').style.visibility = 'visible';
-        document.cookie = `gameName=${userDataSet.name}`;
+        localStorage.setItem('gameName', userDataSet.name);
     }
 };
 
@@ -80,10 +82,20 @@ function getDescription(title, start, id) {
     const wikiRandom = new XMLHttpRequest();
     wikiRandom.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
+            const desc = JSON.parse(this.responseText).query.pages[id].description;
             if (start) { // query.pages[14492927].description
-                document.getElementById('startDesc').innerHTML = JSON.parse(this.responseText).query.pages[id].description;
+                document.getElementById('startDesc').innerHTML = desc;
             } else {
-                document.getElementById('endDesc').innerHTML = JSON.parse(this.responseText).query.pages[id].description;
+                document.getElementById('endDesc').innerHTML = desc;
+            }
+            const data = {
+                title: title,
+                desc: desc,
+            };
+            if (start) {
+                socket.emit('updateStart', (data));
+            } else {
+                socket.emit('updateEnd', (data));
             }
         }
     };
@@ -118,6 +130,16 @@ document.getElementById('randomStart').onclick = () => {
 document.getElementById('randomEnd').onclick = () => {
     getRandomUrlName(false);
 };
+
+socket.on('updateStartPos', (data) => {
+    document.getElementById('start').value = data.title;
+    document.getElementById('startDesc').innerHTML = data.desc;
+});
+
+socket.on('updateEndPos', (data) => {
+    document.getElementById('end').value = data.title;
+    document.getElementById('endDesc').innerHTML = data.desc;
+});
 
 document.getElementById('startBtn').onclick = () => {
     if (document.getElementById('start').value.length != 0 || document.getElementById('end').value.length != 0) {

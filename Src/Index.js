@@ -335,6 +335,16 @@ io.on('connection', (socket) => {
         io.emit('start');
     });
 
+    socket.on('updateStart', (data) => {
+        consoleLog('sending', JSON.stringify(data));
+        io.emit('updateStartPos', (data));
+    });
+
+    socket.on('updateEnd', (data) => {
+        consoleLog('sending', JSON.stringify(data));
+        io.emit('updateEndPos', (data));
+    });
+
     socket.on('getUsers', () => {
         consoleLog('updating');
         consoleLog(usersGame[0]);
@@ -348,14 +358,19 @@ io.on('connection', (socket) => {
         consoleLog('removing');
         const newUserGame = [];
         for (let i = 0; i < usersGame.length; i++) {
+            consoleLog('array', usersGame[i].name);
+            consoleLog('rem', data.name);
             if (usersGame[i].name != data.name) {
-                newUserGame.push(data.name);
+                consoleLog('add');
+                newUserGame.push(data);
             } else {
+                consoleLog('sent');
                 data.remove = true;
                 io.emit('updateUsers', (data));
             }
         }
-        gameUserData = newUserGame;
+        consoleLog('new', JSON.stringify(newUserGame[0]));
+        usersGame = newUserGame;
     });
 
     // gmae game
@@ -377,9 +392,11 @@ io.on('connection', (socket) => {
     });
 
     socket.on('quitGame', (data) => {
+        consoleLog('wuitting');
         let giveup = true;
         for (let i = 0; i < gameUserData.length; i++) {
             if (data.name == gameUserData[i].name) {
+                consoleLog('wuitting', gameUserData[i].name);
                 gameUserData[i].playing = false;
                 for (let j = 0; j < gameUserData.length; j++) {
                     if (gameUserData[j].playing) {
@@ -388,9 +405,13 @@ io.on('connection', (socket) => {
                 }
             }
         }
+
         if (giveup) {
+            gameUserData = [];
+            consoleLog('donezo');
             io.emit('quit');
         }
+        socket.emit('quit');
     });
 
     socket.on('end', (data) => {

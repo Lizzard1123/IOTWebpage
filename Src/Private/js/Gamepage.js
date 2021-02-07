@@ -1,23 +1,12 @@
-// thx w3 schools again
-function getCookie(cname) {
-    const tname = cname + '=';
-    const decodedCookie = decodeURIComponent(document.cookie);
-    const ca = decodedCookie.split(';');
-    for (let i = 0; i < ca.length; i++) {
-        let c = ca[i];
-        while (c.charAt(0) == ' ') {
-            c = c.substring(1);
-        }
-        if (c.indexOf(tname) == 0) {
-            return c.substring(tname.length, c.length);
-        }
-    }
-    return '';
-}
-
 const socket = io();
-const userName = getCookie('gameName');
+const userName = localStorage.getItem('gameName');
 const iframe = document.getElementById('game');
+let time = 0;
+let firstTime = true;
+const userData = {
+    quit: false,
+    name: userName,
+};
 
 function joinGame(ame) {
     socket.emit('joinGame', ({
@@ -37,20 +26,56 @@ function loadSettings(data) {
     changeIframe(data.start);
 }
 
+function updateTimer() {
+    time = Math.floor(time + .1 * 10) / 10;
+    document.getElementById('timer').innerHTML = time;
+}
+
 socket.on('settings', (data) => {
     loadSettings(data);
 });
 
-socket.on('endScreen', (data) => {
+const timer = setInterval(updateTimer, 100);
+
+function endGame() {
+    firstTime = false;
+    clearInterval(timer);
+    iframe.remove();
+    userData['time'] = time;
+    socket.emit('end', userData);
+}
+
+socket.on('quit', () => {
+    if (firstTime) {
+        userData['quit'] = true;
+        endGame();
+    }
     const ending = document.createElement('div');
-    ending.id = data.settingName;
-    ending.innerHTML = data.description;
+    ending.innerHTML = 'quit';
+    iframe.remove();
+    document.getElementById('endingBox').appendChild(ending);
+});
+
+socket.on('endScreen', (data) => {
+    if (firstTime && !data.quit) {
+        endGame();
+    }
+    const ending = document.createElement('div');
+    let endmessage = '';
+    console.log(data);
+    for (const title in data) {
+        if (true) { // got it to shutup kinda typeof data[title] == 'string' || typeof data[title] == 'number'
+            endmessage += title + ': ' + data[title] + '\n';
+        }
+    }
+    ending.innerHTML = endmessage;
     document.getElementById('endingBox').appendChild(ending);
 });
 
 joinGame(userName);
 document.getElementById('quit').onclick = () => {
     socket.emit('quitGame', ({ name: userName }));
+    document.getElementById('quit').style.visibility = 'hidden';
 };
 document.getElementById('body').onbeforeunload = () => {
     socket.emit('leaveGame', ({ name: userName }));
