@@ -15,7 +15,7 @@
     const ctx = canvas.getContext('2d');
     ctx.fillStyle = '#e240ff';
     ctx.fillRect(0, height - 10, width, 10);
-    const numOfPoints = 4;
+    const numOfPoints = 8;
     const points = [];
     class point {
         pointOneX;
@@ -109,6 +109,24 @@
             return [this.pointOneX, this.pointOneY, this.pointTwoX, this.pointTwoY];
         }
     }
+
+    function drawEye(x, y) {
+        // console.log('u');
+        const radius = 20;
+        ctx.beginPath();
+        ctx.strokeStyle = "#FF0000";
+        ctx.fillStyle = 'white';
+        ctx.lineWidth = 5;
+        ctx.arc(x, y, radius, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.beginPath();
+        ctx.fillStyle = 'black';
+        ctx.strokeStyle = "#FF0000";
+        ctx.lineWidth = 5;
+        ctx.arc(x, y, radius / 2, 0, Math.PI * 2);
+        ctx.fill();
+    }
+
     for (let i = 0; i < numOfPoints; i++) {
         const heightConst = height - 10;
         const offset = width / numOfPoints / 8;
@@ -122,6 +140,8 @@
         ctx.strokeStyle = 'black';
         for (let i = 0; i < points.length; i++) {
             ctx.beginPath();
+            ctx.strokeStyle = 'black';
+            ctx.lineWidth = 5;
             const heightConst = height - 10;
             ctx.moveTo(width / numOfPoints * i, heightConst);
             points[i].updatePos();
@@ -131,6 +151,8 @@
                 newPoints[2], newPoints[3], width / numOfPoints * (i + 1), heightConst);
             ctx.fillStyle = '#e240ff';
             ctx.fill();
+            drawEye(points[0], points[1]);
+            drawEye(points[2], points[3]);
         }
     }
     setInterval(updateAll, 10);
