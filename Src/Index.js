@@ -56,14 +56,18 @@ app.use('/privatestatic', (req, res, next) => {
 });
 app.use('/privatestatic', express.static('Private'));
 
-app.get('/error', (req, res) => {
-    res.render(path.join(__dirname, 'Error.html'), {}, (err, str) => {
+function renderError(res, data) {
+    res.render(path.join(__dirname, 'Error.ejs'), { reason: data }, (err, str) => {
         if (err) {
             consoleLog('Error Rendering Error ah', err);
             res.sendStatus(500);
         }
         res.send(str);
     });
+}
+
+app.get('/error', (req, res) => {
+    renderError(res, 'uh Oh');
 });
 
 app.get('/busy', (req, res) => {
@@ -89,6 +93,11 @@ app.get('/login', (req, res) => {
     });
 });
 
+
+app.get('/', (req, res) => {
+    res.redirect('/login');
+});
+
 app.get('/register', (req, res) => {
     consoleLog('Served register Page');
     record('Gave register page to', req.connection.remoteAddress, 3);
@@ -101,6 +110,7 @@ app.get('/register', (req, res) => {
     });
 });
 
+
 app.get('/home', (req, res, next) => {
     checkXLM(req, res, next);
 }, (req, res, next) => {
@@ -109,10 +119,16 @@ app.get('/home', (req, res, next) => {
     const userDat = getUserInfo(req);
     record('Gave login page to', `${req.connection.remoteAddress} as ${userDat.name}`, 4);
     consoleLog('Served Home Path');
-    res.render(path.join(__dirname, 'Main.html'), {}, (err, str) => {
+    const userInfo = getUserInfo(req);
+    const permmitedSites = userInfo.securityLevel == 'admin' ? process.env.adminSites : process.env.strangerSites;
+    consoleLog(permmitedSites.split(',')[0]);
+    res.render(path.join(__dirname, 'Main.html'), {
+        sites: permmitedSites.split(','),
+        userName: userInfo.name,
+    }, (err, str) => {
         if (err) {
             consoleLog('Error Rendering Main', err);
-            res.redirect('/error');
+            renderError(res, err);
         }
         res.send(str);
     });

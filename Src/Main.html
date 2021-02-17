@@ -1,15 +1,14 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
+    <title>Home</title>
     <script src="publicstatic/js/errorHandler.js" onerror="failedToLoad()"></script>
     <link href='https://fonts.googleapis.com/css?family=Archivo Black' rel='stylesheet' onerror="failedToLoad(this, false)">
     <link rel="stylesheet" type="text/css" href="publicstatic/css/GlobalCSS.css" onerror="failedToLoad(this, true)">
     <link rel="stylesheet" type="text/css" href="publicstatic/css/options.css" onerror="failedToLoad(this, true)">
     <link rel="shortcut icon" href="publicstatic/img/favicon.png" onerror="failedToLoad(this, true)">
 </head>
-<!--onbeforeunload="pageClose()"-->
-<!--Hwllo-->
 
 <body onload="loadsettings(true)" id="pagebody">
     <div id="backsplash">
@@ -31,13 +30,11 @@
         </div>
         <div class="scrollbar" id="scrollbar_middle">
             <input type="range" min="1" max="100" value="50" class="slider" id="switcherselector" oninput="updateslider()" onchange="updatesliderbar()" onmousedown="grab(this, true)" onmouseup="unGrab(this, 'grab')" style="cursor: grab;">
-            <div class="switchpages" id="switchone" onclick="updatesliderbar('One')"></div>
-            <div class="switchpages" id="switchtwo" onclick="updatesliderbar('Two')"></div>
-            <div class="switchpages" id="switchthree" onclick="updatesliderbar('Three')"></div>
-            <div class="switchpages" id="switchfour" onclick="updatesliderbar('Four')"></div>
-            <div class="switchpages" id="switchfive" onclick="updatesliderbar('Five')"></div>
-            <div class="switchpages" id="switchsix" onclick="updatesliderbar('Six')"></div>
-            <div class="switchpages" id="switchseven" onclick="updatesliderbar('Seven')"></div>
+            <% for( let index = 0; index < sites.length; index++ ) { %>
+                <div class="switchpages" onclick='updatesliderbar(<%-index + 1 %>)'>
+                    <%=sites[index]%>
+                </div>
+                <% } %>
         </div>
         <div class="scrollbarcontent" id="rightscrollbarcontent" style="bottom: 86%;">
             <%- include('views/optionBars')  %>
@@ -47,20 +44,22 @@
     </div>
 
     <div id="body">
-        <iframe src="privatestatic/html/Home.html" scrolling="no" id="embeded" onload="checkAuth()">
+        <iframe src="privatestatic/html/Home.html" scrolling="no" id="embeded" onload="checkAuth()" title="embeded">
         </iframe>
     </div>
-    <div id="footer" style="bottom:0%;" onclick=" moveBottom('bottom') ">
-        <table id="footerTable">
+    <div id=" footer " style="bottom:0%; " onclick=" moveBottom( 'bottom') ">
+        <table id="footerTable ">
             <tr>
-                <th id="profile">
-                    <h3 id="profilename"></h3>
+                <th id="profile ">
+                    <h3>
+                        <%= userName %>
+                    </h3>
                 </th>
             </tr>
         </table>
     </div>
-    <div id='Weather' style="bottom:-40%;">
-        <div id="openweathermap-widget-21"></div>
+    <div id='Weather' style="bottom:-40%; ">
+        <div id="openweathermap-widget-21 "></div>
         <script src='//openweathermap.org/themes/openweathermap/assets/vendor/owm/js/d3.min.js'></script>
         <script>
             window.myWidgetParam ? window.myWidgetParam : window.myWidgetParam = [];
@@ -74,16 +73,16 @@
             (function() {
                 var script = document.createElement('script');
                 script.async = true;
-                script.charset = "utf-8";
-                script.src = "//openweathermap.org/themes/openweathermap/assets/vendor/owm/js/weather-widget-generator.js";
+                script.charset = "utf-8 ";
+                script.src = "//openweathermap.org/themes/openweathermap/assets/vendor/owm/js/weather-widget-generator.js ";
                 var s = document.getElementsByTagName('script')[0];
                 s.parentNode.insertBefore(script, s);
             })();
         </script>
     </div>
-    <script src="privatestatic/js/PageInfo.js" onerror="failedToLoad(this, true)"></script>
-    <script src="publicstatic/js/Global.js" onerror="failedToLoad(this, true)"></script>
-    <script src="publicstatic/js/backSource.js" onerror="failedToLoad(this, true)"></script>
+    <script src="privatestatic/js/PageInfo.js " onerror="failedToLoad(this, true) "></script>
+    <script src="publicstatic/js/Global.js " onerror="failedToLoad(this, true) "></script>
+    <script src="publicstatic/js/backSource.js " onerror="failedToLoad(this, true) "></script>
     <script>
         //multiple of 3
         var numberoftrianlgleshigh = 42;
@@ -92,7 +91,7 @@
         //abstracted make all triangles
         makeTriangleRows(randomizedList, numberoftrianlgleshigh);
     </script>
-    <script src="publicstatic/js/options.js" onerror="failedToLoad()"></script>
+    <script src="publicstatic/js/options.js " onerror="failedToLoad() "></script>
 </body>
 
 </html>

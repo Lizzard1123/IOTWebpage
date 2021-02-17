@@ -21,12 +21,22 @@ let custom;
 const normal = ['true', 'true', 'true', 'true', 'true', 'true', 'false', 'true', 'true'];
 const slider = document.getElementById('switcherselector');
 const switches = document.getElementsByClassName('switchpages');
-const titles = ['Extra', 'Remote', 'Lamps', 'Home', 'To-Do', 'Image', 'Game'];
-const pagelink = ['Extra', 'Remote', 'Lamps', 'Home', 'To-Do', 'image', 'Game'];
-const numberofpages = titles.length;
-const middle = numberofpages / 2 - .5;
-const maxdivbox = 100 / numberofpages;
-const offset = 2.5;
+// ['Extra', 'Remote', 'Lamps', 'Home', 'To-Do', 'Image', 'Game'];
+const titles = [];
+let numberofpages;
+let middle;
+let maxdivbox;
+let offset;
+
+function setUp(collection) {
+    for (let i = 0; i < collection.length; i++) {
+        titles.push(collection[i].innerHTML.replace(/\s/g, ''));
+    }
+    numberofpages = titles.length;
+    middle = numberofpages / 2 - .5;
+    maxdivbox = 100 / numberofpages;
+    offset = 2.5;
+}
 
 function givetitles() {
     for (let i = 0; i < numberofpages; i++) {
@@ -82,20 +92,19 @@ function updateslider() {
 }
 
 // eslint-disable-next-line no-unused-vars
-function updatesliderbar(name) {
+function updatesliderbar(num) {
     slider.value = 50;
     let targetmiddle;
-    if (name == undefined) {
+    if (num == undefined) {
         targetmiddle = titles[closesttomiddle()];
     } else {
-        targetmiddle = titles[numbers.indexOf(name)];
+        targetmiddle = titles[num - 1];
     }
     while (titles[middle] != targetmiddle) {
         titles.unshift(titles.pop());
-        pagelink.unshift(pagelink.pop());
     }
     setintoplace();
-    iframe.src = `privatestatic/html/${pagelink[middle]}.html`;
+    iframe.src = `privatestatic/html/${titles[middle]}.html`;
     document.getElementById('Title').innerHTML = titles[middle];
 }
 
@@ -181,8 +190,7 @@ function loadsettings(titleset) {
         resetPage();
         if (titleset) {
             // home
-            // set bottom bar to name
-            document.getElementById('profilename').innerHTML = `Signed in as: ${globalUserData().name}`;
+            setUp(document.getElementsByClassName('switchpages'));
             setintoplace();
         } else {
             // auth
