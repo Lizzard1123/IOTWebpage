@@ -9,7 +9,21 @@ import cron from 'node-cron';
 import http, { createServer } from 'http';
 import WebSocket from 'ws';
 import { Server } from 'socket.io';
-import { error, handleLogin, createAccount, removeTimer, editTimer, getTimers, record, createTaskFromICAL, logLampChange } from './appSrc/database.js';
+import {
+    error,
+    handleLogin,
+    createAccount,
+    removeTimer,
+    editTimer,
+    getTimers,
+    record,
+    createTaskFromICAL,
+    logLampChange,
+    createCatan,
+    updateCatanGame,
+    getRolls,
+    getCatanId,
+} from './appSrc/database.js';
 import { getUserInfo, getUserInfoCookie, auth, getGithubCommits, checkXLM } from './appSrc/helpers.js';
 import { Worker } from 'worker_threads';
 import ejs from 'ejs';
@@ -306,6 +320,22 @@ cron.schedule('0 50 6 * * *', () => {
     globalWS.send(`${JSON.stringify({ bed: 'On', desk: 'On' })}`);
 });
 
+// catan game viewer
+app.post('/createCatanGame', (req, res) => {
+    createCatan(req.body.name, req.body.info);
+    res.sendStatus(200);
+});
+app.post('/updateDice', (req, res) => {
+    consoleLog(getCatanId(req.body.name)[0].id);
+    updateCatanGame(getCatanId(req.body.name)[0].id, req.body.roll);
+    res.sendStatus(200);
+});
+app.post('/getCatanGame', (req, res) => {
+    res.send(getRolls(getCatanId(req.body.name)[0].id));
+});
+app.post('/findCatanGame', (req, res) => {
+    res.send(getCatanId(req.body.name));
+});
 // SOCKET.IO
 
 // game vars

@@ -202,3 +202,46 @@ export function getTimers(id) {
 export function logLampChange(id) {
     record('lamp change', '', 4, id);
 }
+
+// catan handlers
+
+const catan_db = new Database('Private/Extra/Ethan/catan/catanGames.db', { verbose: consoleLog });
+
+/**
+ * Executes SQL
+ * @param {boolean} returnVal - "True if expected return val"
+ * @param {string} message - "SQL command"
+ * @return {object} "Returned values in dictionary array"
+ */
+function catan_dbexecute(returnVal, message) {
+    const stmt = catan_db.prepare(message);
+    if (returnVal) {
+        return stmt.all();
+    }
+    stmt.run();
+}
+
+export function createCatan(name, info) {
+    consoleLog('creating catan game');
+    const maxId = Number(catan_dbexecute(true, `SELECT MAX(id) FROM games`)[0]['MAX(id)']) + 1;
+    // id int, name string, info string
+    consoleLog('trying: ', `Insert into games values(${maxId}, '${name}', '${info}');`);
+    catan_dbexecute(false, `Insert into games values(${maxId}, '${name}', '${info}');`);
+}
+
+export function updateCatanGame(id, rollNum) {
+    consoleLog('adding roll');
+    // (id int, roll int)
+    catan_dbexecute(false, `Insert into rolls values(${id}, ${rollNum});`);
+}
+
+export function getRolls(id) {
+    consoleLog('returning roll');
+    // (id int, roll int)
+    return catan_dbexecute(true, `select roll from rolls where id=${id};`);
+}
+
+export function getCatanId(name) {
+    consoleLog('returning id');
+    return catan_dbexecute(true, `select id from games where name='${name}';`);
+}

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Catan Tracker</title>
+    <link rel="stylesheet" type="text/css" href="catan.css">
+</head>
+
+<body>
+    <h1 id="currentGame">Create Game</h1>
+    <form id="createGame">
+        <label for="name">Game Name</label>
+        <br>
+        <input type="text" name="name" id="createGameName">
+        <br>
+        <label for="info">Game Info</label>
+        <br>
+        <input type="text" name="info" id="createGameInfo">
+        <br>
+        <input type="button" onclick="createGame()">
+    </form>
+    <h1 id="currentGame">Or load</h1>
+    <form id="findGame" action="/findCatanGame">
+        <label for="name">Game name</label>
+        <br>
+        <input type="text" name="name" id="findGameName">
+        <br>
+        <input type="button" onclick="findGame()">
+    </form>
+    <h1 id="currentGame"></h1>
+    <br>
+    <h3 id="Info"></h3>
+    <br>
+    <h2>Current Game Stats</h2>
+    <canvas id="graph" width="480" height="200"></canvas>
+    <h3>Add roll</h3>
+    <form id="addRoll" action="/updateDice">
+        <label for="Roll">Roll Num</label>
+        <br>
+        <input type="number" name="Roll" id="rollNumInput">
+        <br>
+        <input type="button" onclick="updateDice()">
+    </form>
+    <script src="catanHandler.js"></script>
+    <div id="rolls">
+
+    </div>
+</body>
+
+</html>
