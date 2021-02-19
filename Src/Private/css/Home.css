@@ -12,6 +12,17 @@ body {
     font-family: 'Archivo Black';
 }
 
+#DevLog {
+    position: absolute;
+    bottom: 440px;
+    width: 100%;
+    vertical-align: middle;
+    text-align: center;
+    font-size: 1.5em;
+    font-weight: bold;
+    font-family: 'Archivo Black';
+}
+
 .githubTable {
     position: absolute;
     bottom: 3.5%;

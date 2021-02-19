@@ -3,11 +3,11 @@
 
 <head>
     <title>Home</title>
-    <script src="publicstatic/js/errorHandler.js" onerror="failedToLoad()"></script>
+    <script src="/publicstatic/js/errorHandler.js" onerror="failedToLoad()"></script>
     <link href='https://fonts.googleapis.com/css?family=Archivo Black' rel='stylesheet' onerror="failedToLoad(this, false)">
-    <link rel="stylesheet" type="text/css" href="publicstatic/css/GlobalCSS.css" onerror="failedToLoad(this, true)">
-    <link rel="stylesheet" type="text/css" href="publicstatic/css/options.css" onerror="failedToLoad(this, true)">
-    <link rel="shortcut icon" href="publicstatic/img/favicon.png" onerror="failedToLoad(this, true)">
+    <link rel="stylesheet" type="text/css" href="/publicstatic/css/GlobalCSS.css" onerror="failedToLoad(this, true)">
+    <link rel="stylesheet" type="text/css" href="/publicstatic/css/options.css" onerror="failedToLoad(this, true)">
+    <link rel="shortcut icon" href="/publicstatic/img/favicon.png" onerror="failedToLoad(this, true)">
 </head>
 
 <body onload="loadsettings(true)" id="pagebody">
@@ -44,7 +44,7 @@
     </div>
 
     <div id="body">
-        <iframe src="privatestatic/html/Home.html" scrolling="no" id="embeded" onload="checkAuth()" title="embeded">
+        <iframe src='/privatestatic/html/<%=path%>.html' scrolling="no" id="embeded" onload="checkAuth()" title="embeded">
         </iframe>
     </div>
     <div id="footer" style="bottom:0%;" onclick="moveBottom( 'bottom')">
@@ -81,9 +81,9 @@
             })();
         </script>
     </div>
-    <script src="privatestatic/js/PageInfo.js" onerror="failedToLoad(this, true)"></script>
-    <script src="publicstatic/js/Global.js" onerror="failedToLoad(this, true)"></script>
-    <script src="publicstatic/js/backSource.js" onerror="failedToLoad(this, true)"></script>
+    <script src="/privatestatic/js/PageInfo.js" onerror="failedToLoad(this, true)"></script>
+    <script src="/publicstatic/js/Global.js" onerror="failedToLoad(this, true)"></script>
+    <script src="/publicstatic/js/backSource.js" onerror="failedToLoad(this, true)"></script>
     <script>
         //multiple of 3
         var numberoftrianlgleshigh = 42;
@@ -92,7 +92,7 @@
         //abstracted make all triangles
         makeTriangleRows(randomizedList, numberoftrianlgleshigh);
     </script>
-    <script src="publicstatic/js/options.js" onerror="failedToLoad()"></script>
+    <script src="/publicstatic/js/options.js" onerror="failedToLoad()"></script>
 </body>
 
 </html>

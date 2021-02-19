@@ -127,6 +127,30 @@ app.get('/register', (req, res) => {
 });
 
 
+app.get('/home/:page', (req, res, next) => {
+    checkXLM(req, res, next);
+}, (req, res, next) => {
+    auth('stranger', req, res, next);
+}, (req, res) => {
+    const userDat = getUserInfo(req);
+    record('Gave login page to', `${req.connection.remoteAddress} as ${userDat.name}`, 4);
+    consoleLog('Served Home Path');
+    const userInfo = getUserInfo(req);
+    const permmitedSites = userInfo.securityLevel == 'admin' ? process.env.adminSites : process.env.strangerSites;
+    consoleLog(permmitedSites.split(',')[0]);
+    res.render(path.join(__dirname, 'Main.html'), {
+        sites: permmitedSites.split(','),
+        userName: userInfo.name,
+        path: req.params.page,
+    }, (err, str) => {
+        if (err) {
+            consoleLog('Error Rendering Main with req', err);
+            renderError(res, err);
+        }
+        res.send(str);
+    });
+});
+
 app.get('/home', (req, res, next) => {
     checkXLM(req, res, next);
 }, (req, res, next) => {
@@ -141,6 +165,7 @@ app.get('/home', (req, res, next) => {
     res.render(path.join(__dirname, 'Main.html'), {
         sites: permmitedSites.split(','),
         userName: userInfo.name,
+        path: 'Home',
     }, (err, str) => {
         if (err) {
             consoleLog('Error Rendering Main', err);
@@ -201,7 +226,7 @@ app.get('/timer', (req, res, next) => {
     return res.json(mess);
 });
 
-// TODO FIX
+// TODO FIX it works? oh wait i dont think i use this actual method below a couple
 app.post('/ToDo/uploadCal', (req, res) => {
     const userId = getUserInfo(req).id;
     const form = new formidable.IncomingForm();

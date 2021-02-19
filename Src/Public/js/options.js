@@ -35,7 +35,7 @@ function setUp(collection) {
     numberofpages = titles.length;
     middle = numberofpages / 2 - .5;
     maxdivbox = 100 / numberofpages;
-    offset = 2.5;
+    offset = 0;
 }
 
 function givetitles() {
@@ -47,6 +47,7 @@ function givetitles() {
 function setintoplace() {
     for (let i = 0; i < numberofpages; i++) {
         switches[i].style.left = `${maxdivbox * i - offset}%`;
+        switches[i].style.width = `${maxdivbox}%`;
         if (i != middle) {
             switches[i].style.zIndex = 5;
             switches[i].style.cursor = 'pointer';
@@ -104,7 +105,7 @@ function updatesliderbar(num) {
         titles.unshift(titles.pop());
     }
     setintoplace();
-    iframe.src = `privatestatic/html/${titles[middle]}.html`;
+    iframe.src = `/privatestatic/html/${titles[middle]}.html`;
     document.getElementById('Title').innerHTML = titles[middle];
 }
 

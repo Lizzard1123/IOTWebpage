@@ -111,20 +111,36 @@
     }
 
     function drawEye(x, y) {
-        // console.log('u');
-        const radius = 20;
+        const radius = 10;
         ctx.beginPath();
         ctx.strokeStyle = "#FF0000";
         ctx.fillStyle = 'white';
         ctx.lineWidth = 5;
         ctx.arc(x, y, radius, 0, Math.PI * 2);
+        ctx.stroke();
         ctx.fill();
         ctx.beginPath();
         ctx.fillStyle = 'black';
         ctx.strokeStyle = "#FF0000";
         ctx.lineWidth = 5;
         ctx.arc(x, y, radius / 2, 0, Math.PI * 2);
+        ctx.stroke();
         ctx.fill();
+    }
+
+    function drawStem(x1, y1, x2, y2) {
+        ctx.strokeStyle = '#e240ff';
+        ctx.lineWidth = 5;
+
+        ctx.beginPath();
+        ctx.moveTo(x1, y1);
+        ctx.lineTo((x1 + x2) / 2, height);
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.moveTo(x2, y2);
+        ctx.lineTo((x1 + x2) / 2, height);
+        ctx.stroke();
     }
 
     for (let i = 0; i < numOfPoints; i++) {
@@ -135,10 +151,14 @@
     }
 
     function updateAll() {
+
+        ctx.fillStyle = '#e240ff';
+        ctx.fillRect(0, height - 10, width, 10);
         ctx.fillStyle = 'white';
         ctx.fillRect(0, 0, width, height - 10);
         ctx.strokeStyle = 'black';
         for (let i = 0; i < points.length; i++) {
+            drawStem(points[i].pointOneX, points[i].pointOneY, points[i].pointTwoX, points[i].pointTwoY);
             ctx.beginPath();
             ctx.strokeStyle = 'black';
             ctx.lineWidth = 5;
@@ -151,8 +171,8 @@
                 newPoints[2], newPoints[3], width / numOfPoints * (i + 1), heightConst);
             ctx.fillStyle = '#e240ff';
             ctx.fill();
-            drawEye(points[0], points[1]);
-            drawEye(points[2], points[3]);
+            drawEye(points[i].pointOneX, points[i].pointOneY);
+            drawEye(points[i].pointTwoX, points[i].pointTwoY);
         }
     }
     setInterval(updateAll, 10);
