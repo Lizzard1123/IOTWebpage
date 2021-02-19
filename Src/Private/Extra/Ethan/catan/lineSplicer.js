@@ -1,3 +1,12 @@
+/*
+
+NOT MY CODE
+SOURCE : https://github.com/gdenisov/cardinal-spline-js
+CREDIT : Gleb Denisov
+
+*/
+
+// eslint-disable-next-line no-unused-vars
 function drawCurve(ctx, ptsa, tension, isClosed, numOfSegments, showPoints) {
     showPoints = showPoints ? showPoints : false;
 

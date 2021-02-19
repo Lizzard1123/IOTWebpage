@@ -192,6 +192,7 @@ function loadsettings(titleset) {
             // home
             setUp(document.getElementsByClassName('switchpages'));
             setintoplace();
+            document.getElementById('scrollbar_middle').style.visibility = 'visible';
         } else {
             // auth
             if (window.location.href.includes('/login')) {

@@ -23,6 +23,8 @@ import {
     updateCatanGame,
     getRolls,
     getCatanId,
+    getCatanInfo,
+    getCatanGames,
 } from './appSrc/database.js';
 import { getUserInfo, getUserInfoCookie, auth, getGithubCommits, checkXLM } from './appSrc/helpers.js';
 import { Worker } from 'worker_threads';
@@ -321,6 +323,18 @@ cron.schedule('0 50 6 * * *', () => {
 });
 
 // catan game viewer
+app.get('/catanViewer', (req, res) => {
+    const catanGames = getCatanGames();
+    res.render(path.join(__dirname, 'Private/Extra/Ethan/catan/Catan.html'), {
+        games: catanGames,
+    }, (err, str) => {
+        if (err) {
+            consoleLog('Error Rendering Error ah', err);
+            res.sendStatus(500);
+        }
+        res.send(str);
+    });
+});
 app.post('/createCatanGame', (req, res) => {
     createCatan(req.body.name, req.body.info);
     res.sendStatus(200);
@@ -335,6 +349,9 @@ app.post('/getCatanGame', (req, res) => {
 });
 app.post('/findCatanGame', (req, res) => {
     res.send(getCatanId(req.body.name));
+});
+app.post('/getCatanGameInfo', (req, res) => {
+    res.send(getCatanInfo(req.body.name));
 });
 // SOCKET.IO
 

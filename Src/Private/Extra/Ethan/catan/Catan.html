@@ -3,48 +3,62 @@
 
 <head>
     <title>Catan Tracker</title>
-    <link rel="stylesheet" type="text/css" href="catan.css">
+    <link href='https://fonts.googleapis.com/css?family=Archivo Black' rel='stylesheet'>
+    <link rel="stylesheet" type="text/css" href="privateStatic\Extra\Ethan\catan\catan.css">
 </head>
 
-<body>
-    <h1 id="currentGame">Create Game</h1>
-    <form id="createGame">
-        <label for="name">Game Name</label>
-        <br>
-        <input type="text" name="name" id="createGameName">
-        <br>
-        <label for="info">Game Info</label>
-        <br>
-        <input type="text" name="info" id="createGameInfo">
-        <br>
-        <input type="button" onclick="createGame()">
-    </form>
-    <h1 id="currentGame">Or load</h1>
-    <form id="findGame" action="/findCatanGame">
-        <label for="name">Game name</label>
-        <br>
-        <input type="text" name="name" id="findGameName">
-        <br>
-        <input type="button" onclick="findGame()">
-    </form>
-    <h1 id="currentGame"></h1>
-    <br>
-    <h3 id="Info"></h3>
-    <br>
-    <h2>Current Game Stats</h2>
-    <canvas id="graph" width="480" height="200"></canvas>
-    <h3>Add roll</h3>
-    <form id="addRoll" action="/updateDice">
-        <label for="Roll">Roll Num</label>
-        <br>
-        <input type="number" name="Roll" id="rollNumInput">
-        <br>
-        <input type="button" onclick="updateDice()">
-    </form>
-    <script src="catanHandler.js"></script>
-    <div id="rolls">
-
+<body style="width:397px; height:1000px">
+    <div id="introBox" class="pages">
+        <h1 id="create">Create Game</h1>
+        <form id="createGame">
+            <label for="name">Game Name</label>
+            <br>
+            <input type="text" name="name" id="createGameName" required>
+            <br>
+            <label for="info">Game Info</label>
+            <br>
+            <input type="text" name="info" id="createGameInfo" required>
+            <br>
+            <button type="button" onclick="createGame()">Create!</button>
+        </form>
+        <h1 id="load">Or load</h1>
+        <form id="findGame">
+            <label for="name">Game name</label>
+            <br>
+            <select id="findGameName" required>
+                <% for( let index = 0; index < games.length; index++ ) { %>
+                    <option value='<%- games[index].name %>'><%- games[index].name %> </option>
+                <% } %>
+            </select>
+            <br>
+            <button type="button" onclick="findGame()">Load</button>
+        </form>
     </div>
+    <div id="gamePage" style="display: none;" class="pages">
+        <h1 id="currentGame"></h1>
+        <h3 id="Info"></h3>
+        <h2>Current Game Stats</h2>
+        <div id="graphHolder">
+            <canvas id="graph" width="360" height="200"></canvas>
+            <form>
+                <label for="perfect">Show Perfect</label>
+                <input type="checkbox" name="perfect" id="perfectCheck" onchange="loadGameStats()">
+            </form>
+        </div>
+        <h3>Add roll</h3>
+        <form id="addRoll">
+            <label for="Roll">Roll Num</label>
+            <br>
+            <input type="number" name="Roll" id="rollNumInput" required>
+            <br>
+            <button type="button" onclick="updateDice()">Add</button>
+        </form>
+        <script src="privateStatic\Extra\Ethan\catan\lineSplicer.js"></script>
+        <script src="privateStatic\Extra\Ethan\catan\catanHandler.js"></script>
+        <div id="rolls">
+        </div>
+    </div>
+
 </body>
 
 </html>

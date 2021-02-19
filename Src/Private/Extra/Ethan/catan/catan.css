@@ -1,7 +1,45 @@
 body {
     background-color: #b0e7ff;
+    font-family: 'Archivo Black';
+}
+
+#graphHolder {
+    width: 100%;
+    align-items: center;
 }
 
 #graph {
     border: 1px solid black;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.pages {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+}
+
+#introBox {
+    background-color: #4dc9ff;
+}
+
+#gamePage {
+    background-color: #0894cf;
+}
+
+h1,
+h2,
+h3,
+form {
+    text-align: center;
+}
+
+#rolls {
+    width: 100%;
+    height: 100px;
+    overflow-y: auto
 }

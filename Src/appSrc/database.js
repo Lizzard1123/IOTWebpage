@@ -245,3 +245,13 @@ export function getCatanId(name) {
     consoleLog('returning id');
     return catan_dbexecute(true, `select id from games where name='${name}';`);
 }
+
+export function getCatanInfo(name) {
+    consoleLog('returning info');
+    return catan_dbexecute(true, `select name, info from games where name='${name}';`);
+}
+
+export function getCatanGames() {
+    consoleLog('returning games');
+    return catan_dbexecute(true, `select name from games;`);
+}
