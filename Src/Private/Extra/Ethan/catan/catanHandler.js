@@ -116,6 +116,15 @@ function updatePage() {
     xhttp.send(`name=${gameName}`);
 }
 
+document.getElementById('back').onclick = () => {
+    gameFinderPage.style.display = '';
+    gamePage.style.display = 'none';
+    document.getElementById('rolls').remove();
+    const elm = document.createElement('div');
+    elm.id = 'rolls';
+    document.getElementById('gamePage').appendChild(elm);
+};
+
 // canvases Handlers
 const graph = document.getElementById('graph');
 const width = 360;
@@ -131,33 +140,34 @@ function drawBottom() {
     // numbers
     const bottomOffset = 5;
     for (let i = 0; i < 11; i++) {
-        ctx.strokeText(i + 2, width / 12 * i + width / 24, height - bottomOffset, width / 12);
+        ctx.strokeText(i + 2, width / 12 * i + width / 12, height - bottomOffset, width / 12);
     }
     // bottom line
     ctx.fillStyle = '#000000';
-    ctx.fillRect(0, height - 20, width, 5);
+    ctx.fillRect(15, height - 20, width, 5);
 }
 
 function getScale(obj) {
     const offset = .5;
-    let highest = obj[`num2`] / rolls.length;
+    let highest = 0;
+    console.log(highest);
     for (let i = 0; i < 11; i++) {
-        if (highest < obj[`num${i + 2}`] / rolls.length) {
-            highest = obj[`num${i + 2}`] / rolls.length;
+        if (obj[`num${i + 2}`] > highest) {
+            highest = obj[`num${i + 2}`];
         }
     }
-    return 1 / highest - offset;
+    return 1 / (highest / rolls.length) - offset;
 }
 
 function updateGraph() {
     const points = [];
+    const scale = getScale(game);
     for (let i = 0; i < 11; i++) {
-        // x isnt mathmatically inline but it lines up with text
-        points.push(width / 12 * i + width / 18);
+        // x
+        points.push(width / 12 * i + width / 10);
         // y
         const proportion = game[`num${i+2}`] / rolls.length;
-        const scale = getScale(game);
-        points.push(height - height * proportion * scale - 15);
+        points.push(height - (height - 15) * proportion * scale - 20);
     }
     console.log(points);
     drawCurve(ctx, points, .5, false, 16, true);
@@ -167,19 +177,31 @@ function updateGraph() {
 
 function updatePerfectGraph() {
     const points = [];
+    const scale = getScale(game);
+    console.log(scale);
     for (let i = 0; i < 11; i++) {
-        // x isnt mathmatically inline but it lines up with text
-        points.push(width / 12 * i + width / 18);
+        // x
+        points.push(width / 12 * i + width / 10);
         // y
-        const proportion = perfectGame[`num${i+2}`] / rolls.length;
-        const scale = getScale(perfectGame);
-        console.log(scale);
-        points.push(height - height * proportion * scale - 15);
+        const proportion = perfectGame[`num${i+2}`];
+
+        points.push(height - (height - 15) * proportion * scale - 20);
     }
     console.log(points);
     drawCurve(ctx, points, .5, false, 16, true);
     ctx.fillStyle = '#700c6a';
     ctx.fill();
+}
+
+function drawSide() {
+    const segments = 11;
+    const scale = getScale(game);
+    for (let i = 0; i < segments; i++) {
+        ctx.strokeText(i / 10, 3, height - (height - 15) * (i / 10) * scale - 20, 10);
+    }
+    // bottom line
+    ctx.fillStyle = '#000000';
+    ctx.fillRect(15, 0, 5, height - 15);
 }
 
 function loadGameStats() {
@@ -189,4 +211,5 @@ function loadGameStats() {
     if (document.getElementById('perfectCheck').checked) {
         updatePerfectGraph();
     }
+    drawSide();
 }

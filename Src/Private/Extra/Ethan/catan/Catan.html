@@ -35,11 +35,14 @@
         </form>
     </div>
     <div id="gamePage" style="display: none;" class="pages">
+        <button id="back">Back</button>
         <h1 id="currentGame"></h1>
         <h3 id="Info"></h3>
         <h2>Current Game Stats</h2>
         <div id="graphHolder">
+            <div id="yInfo">Proportion</div>
             <canvas id="graph" width="360" height="200"></canvas>
+            <div id="xInfo">Number Rolled</div>
             <form>
                 <label for="perfect">Show Perfect</label>
                 <input type="checkbox" name="perfect" id="perfectCheck" onchange="loadGameStats()">
@@ -53,12 +56,12 @@
             <br>
             <button type="button" onclick="updateDice()">Add</button>
         </form>
-        <script src="privateStatic\Extra\Ethan\catan\lineSplicer.js"></script>
-        <script src="privateStatic\Extra\Ethan\catan\catanHandler.js"></script>
+        <br>
         <div id="rolls">
         </div>
     </div>
-
+    <script src="privateStatic\Extra\Ethan\catan\lineSplicer.js"></script>
+    <script src="privateStatic\Extra\Ethan\catan\catanHandler.js"></script>
 </body>
 
 </html>
