@@ -25,8 +25,8 @@
         </div>
     </div>
     <div id="scrollbar">
-        <div class="scrollbarcontent" id="leftscrollbarcontent" style="bottom: 86%;"></div>
-        <div class="scrollbar" id="scrollbar_left" onclick="moveBottom('left')" style="bottom: 86%;">
+        <div class="scrollbarcontent transitionClass" id="leftscrollbarcontent" style="bottom: 86%;"></div>
+        <div class="scrollbar transitionClass" id="scrollbar_left" style="bottom: 86%;">
         </div>
         <div class="scrollbar" id="scrollbar_middle">
             <input type="range" min="1" max="100" value="50" class="slider" id="switcherselector" oninput="updateslider()" onchange="updatesliderbar()" onmousedown="grab(this, true)" onmouseup="unGrab(this, 'grab')" style="cursor: grab;">
@@ -36,10 +36,10 @@
                 </div>
                 <% } %>
         </div>
-        <div class="scrollbarcontent" id="rightscrollbarcontent" style="bottom: 86%;">
+        <div class="scrollbarcontent transitionClass" id="rightscrollbarcontent" style="bottom: 86%;">
             <%- include('views/optionBars')  %>
         </div>
-        <div class="scrollbar" id="scrollbar_right" onclick=" moveBottom('right') " style="bottom: 86%;">
+        <div class="scrollbar transitionClass" id="scrollbar_right" style="bottom: 86%;">
         </div>
     </div>
 
@@ -47,7 +47,7 @@
         <iframe src='/privatestatic/html/<%=path%>.html' scrolling="no" id="embeded" onload="checkAuth()" title="embeded">
         </iframe>
     </div>
-    <div id="footer" style="bottom:0%;" onclick="moveBottom( 'bottom')">
+    <div id="footer" style="bottom: 0vh;" class="transitionClass">
         <table id="footerTable">
             <tr>
                 <th id="profile">
@@ -58,31 +58,31 @@
                 </th>
             </tr>
         </table>
-    </div>
-    <div id='Weather' style="bottom:-40%;">
-        <div id="openweathermap-widget-21"></div>
-        <script src='//openweathermap.org/themes/openweathermap/assets/vendor/owm/js/d3.min.js'></script>
-        <script>
-            window.myWidgetParam ? window.myWidgetParam : window.myWidgetParam = [];
-            window.myWidgetParam.push({
-                id: 21,
-                cityid: '4194474',
-                appid: '7b680d37f077e26a7117832bf236f2a8',
-                units: 'imperial',
-                containerid: 'openweathermap-widget-21',
-            });
-            (function() {
-                var script = document.createElement('script');
-                script.async = true;
-                script.charset = "utf-8";
-                script.src = "//openweathermap.org/themes/openweathermap/assets/vendor/owm/js/weather-widget-generator.js";
-                var s = document.getElementsByTagName('script')[0];
-                s.parentNode.insertBefore(script, s);
-            })();
-        </script>
+        <div id='Weather' class="transitionClass">
+            <div id="openweathermap-widget-21"></div>
+            <script src='//openweathermap.org/themes/openweathermap/assets/vendor/owm/js/d3.min.js'></script>
+            <script>
+                window.myWidgetParam ? window.myWidgetParam : window.myWidgetParam = [];
+                window.myWidgetParam.push({
+                    id: 21,
+                    cityid: '4194474',
+                    appid: '7b680d37f077e26a7117832bf236f2a8',
+                    units: 'imperial',
+                    containerid: 'openweathermap-widget-21',
+                });
+                (function() {
+                    var script = document.createElement('script');
+                    script.async = true;
+                    script.charset = "utf-8";
+                    script.src = "//openweathermap.org/themes/openweathermap/assets/vendor/owm/js/weather-widget-generator.js";
+                    var s = document.getElementsByTagName('script')[0];
+                    s.parentNode.insertBefore(script, s);
+                })();
+            </script>
+        </div>
     </div>
     <script src="/privatestatic/js/PageInfo.js" onerror="failedToLoad(this, true)"></script>
-    <script src="/publicstatic/js/Global.js" onerror="failedToLoad(this, true)"></script>
+    <script src="/publicstatic/js/movement.js" onerror="failedToLoad(this, true)"></script>
     <script src="/publicstatic/js/backSource.js" onerror="failedToLoad(this, true)"></script>
     <script>
         //multiple of 3

@@ -137,3 +137,7 @@
     height: 30px;
     background: transparent;
 }
+
+.transitionClass {
+    transition: 3s;
+}
