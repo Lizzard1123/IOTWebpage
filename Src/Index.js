@@ -285,6 +285,7 @@ app.post('/githubCommits', (req, res) => {
                         'name': github[i].commit.committer.name,
                         'date': github[i].commit.committer.date,
                         'message': github[i].commit.message,
+                        'url': github[i].html_url,
                     };
                     sendMess.push(currentmes);
                 }

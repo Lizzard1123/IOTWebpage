@@ -208,6 +208,8 @@ iframe {
 }
 
 #logout:hover {
-    background-color: #73a2c2;
+    background: linear-gradient(90deg, rgba(0, 203, 249, 0) 0%, rgba(115, 162, 194, 1) 20%);
+    transform: translateX(15px);
+    transition: 3s;
     cursor: pointer;
 }

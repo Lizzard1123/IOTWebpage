@@ -48,6 +48,7 @@ function setintoplace() {
     for (let i = 0; i < numberofpages; i++) {
         switches[i].style.left = `${maxdivbox * i - offset}%`;
         switches[i].style.width = `${maxdivbox}%`;
+        switches[i].style.visibility = `visible`;
         if (i != middle) {
             switches[i].style.zIndex = 5;
             switches[i].style.cursor = 'pointer';

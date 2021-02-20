@@ -31,7 +31,7 @@
         <div class="scrollbar" id="scrollbar_middle">
             <input type="range" min="1" max="100" value="50" class="slider" id="switcherselector" oninput="updateslider()" onchange="updatesliderbar()" onmousedown="grab(this, true)" onmouseup="unGrab(this, 'grab')" style="cursor: grab;">
             <% for( let index = 0; index < sites.length; index++ ) { %>
-                <div class="switchpages" onclick='updatesliderbar(<%-index + 1 %>)'>
+                <div class="switchpages" onclick='updatesliderbar(<%-index + 1 %>)' style="visibility: hidden;">
                     <%=sites[index]%>
                 </div>
                 <% } %>

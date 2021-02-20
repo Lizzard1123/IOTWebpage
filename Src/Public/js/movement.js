@@ -52,10 +52,10 @@ function moveMid() {
 function moveBottom() {
     let aim;
     if (bottomShowing) { // to closed
-        aim = 40;
+        aim = 0;
         bottomShowing = false;
     } else { // to open
-        aim = 0;
+        aim = 40;
         bottomShowing = true;
     }
     bottomcontents.style.bottom = `${aim}vh`;
