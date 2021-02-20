@@ -109,11 +109,12 @@ app.get('/login', (req, res) => {
     });
 });
 
-
+// redirects to login from main
 app.get('/', (req, res) => {
     res.redirect('/login');
 });
 
+// register page
 app.get('/register', (req, res) => {
     consoleLog('Served register Page');
     record('Gave register page to', req.connection.remoteAddress, 3);
@@ -126,7 +127,7 @@ app.get('/register', (req, res) => {
     });
 });
 
-
+// directs url to main with specific iframe
 app.get('/home/:page', (req, res, next) => {
     checkXLM(req, res, next);
 }, (req, res, next) => {
@@ -151,6 +152,7 @@ app.get('/home/:page', (req, res, next) => {
     });
 });
 
+// main page
 app.get('/home', (req, res, next) => {
     checkXLM(req, res, next);
 }, (req, res, next) => {
@@ -175,6 +177,7 @@ app.get('/home', (req, res, next) => {
     });
 });
 
+// create account
 app.post('/createAccount', (req, res, next) => {
     consoleLog('Creating and checking Account:', JSON.stringify(req.body));
     // request to login
@@ -196,6 +199,7 @@ app.post('/createAccount', (req, res, next) => {
     res.sendStatus(200);
 });
 
+// checks login
 app.post('/login',
     (req, res, next) => {
         consoleLog('Authenticating with whitelist for user', req.body.Name);
@@ -218,6 +222,7 @@ app.post('/login',
         // logging pourposes
     });
 
+// gets timers for user
 app.get('/timer', (req, res, next) => {
     auth('stranger', req, res, next);
 }, (req, res) => {
@@ -248,21 +253,21 @@ app.post('/ToDo/uploadCal', (req, res) => {
     });
 });
 
-// timerdel
+// deletes specific timer
 app.post('/timerdel', (req, res) => {
     const userId = getUserInfo(req).id;
     removeTimer(req.body.id, userId);
     res.end();
 });
 
-// timeredit
+// updates a timer
 app.post('/timeredit', (req, res) => {
     const userId = getUserInfo(req).id;
     editTimer(req.body, userId);
     res.end();
 });
 
-
+// handle and parses github api commits
 app.post('/githubCommits', (req, res) => {
     const sendMess = [];
     consoleLog('Github Page sent:', req.body.page);
@@ -295,6 +300,7 @@ app.post('/githubCommits', (req, res) => {
     });
 });
 
+// create an image form url
 app.post('/createImg', (req, res, next) => {
     auth('admin', req, res, next);
 }, (req, res) => {
@@ -335,7 +341,7 @@ app.post('/createImg', (req, res, next) => {
     res.sendFile(path.join(__dirname, '/Private/html/reciveImg.html'));
 });
 
-
+// download image link
 app.get('/getImg/:url', (req, res, next) => {
     auth('admin', req, res, next);
 }, (req, res) => {
@@ -361,24 +367,35 @@ app.get('/catanViewer', (req, res) => {
         res.send(str);
     });
 });
+
+// create a catan game
 app.post('/createCatanGame', (req, res) => {
     createCatan(req.body.name, req.body.info);
     res.sendStatus(200);
 });
+
+// adds a new dice to game
 app.post('/updateDice', (req, res) => {
-    consoleLog(getCatanId(req.body.name)[0].id);
-    updateCatanGame(getCatanId(req.body.name)[0].id, req.body.roll);
+    consoleLog(getCatanId(req.body.name));
+    updateCatanGame(getCatanId(req.body.name), req.body.roll);
     res.sendStatus(200);
 });
+
+// returns rolls associated with catan game
 app.post('/getCatanGame', (req, res) => {
-    res.send(getRolls(getCatanId(req.body.name)[0].id));
+    res.send(getRolls(getCatanId(req.body.name)));
 });
+
+// returns id of catan game
 app.post('/findCatanGame', (req, res) => {
     res.send(getCatanId(req.body.name));
 });
+
+// returns info associated with catan name
 app.post('/getCatanGameInfo', (req, res) => {
     res.send(getCatanInfo(req.body.name));
 });
+
 // SOCKET.IO
 
 // game vars
@@ -545,5 +562,6 @@ wss.on('close', function close() {
     clearInterval(interval);
 });
 
+// start servers
 IOTServer.listen(port, () => consoleLog(`IOTWebpage is listening on port ${port}!`));
 server.listen(wsServerPort, () => consoleLog(`wsServer is listening on port ${wsServerPort}!`));

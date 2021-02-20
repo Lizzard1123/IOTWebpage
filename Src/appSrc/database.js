@@ -205,7 +205,7 @@ export function logLampChange(id) {
 
 // catan handlers
 
-const catan_db = new Database('Private/Extra/Ethan/catan/catanGames.db', { verbose: consoleLog });
+const catanDB = new Database('Private/Extra/Ethan/catan/catanGames.db', { verbose: consoleLog });
 
 /**
  * Executes SQL
@@ -213,45 +213,74 @@ const catan_db = new Database('Private/Extra/Ethan/catan/catanGames.db', { verbo
  * @param {string} message - "SQL command"
  * @return {object} "Returned values in dictionary array"
  */
-function catan_dbexecute(returnVal, message) {
-    const stmt = catan_db.prepare(message);
+function catanDBExecute(returnVal, message) {
+    const stmt = catanDB.prepare(message);
     if (returnVal) {
         return stmt.all();
     }
     stmt.run();
 }
 
+/**
+ * Creates catan game in db
+ * @param {string} name - "Name of catan game"
+ * @param {string} info - "Catan game info"
+ */
 export function createCatan(name, info) {
     consoleLog('creating catan game');
-    const maxId = Number(catan_dbexecute(true, `SELECT MAX(id) FROM games`)[0]['MAX(id)']) + 1;
+    const maxId = Number(catanDBExecute(true, `SELECT MAX(id) FROM games`)[0]['MAX(id)']) + 1;
     // id int, name string, info string
     consoleLog('trying: ', `Insert into games values(${maxId}, '${name}', '${info}');`);
-    catan_dbexecute(false, `Insert into games values(${maxId}, '${name}', '${info}');`);
+    catanDBExecute(false, `Insert into games values(${maxId}, '${name}', '${info}');`);
 }
 
+/**
+ * Adds new roll to db associated to catan id
+ * @param {number} id - "Id of catan game"
+ * @param {number} rollNum - "Catan game roll number"
+ */
 export function updateCatanGame(id, rollNum) {
     consoleLog('adding roll');
     // (id int, roll int)
-    catan_dbexecute(false, `Insert into rolls values(${id}, ${rollNum});`);
+    catanDBExecute(false, `Insert into rolls values(${id}, ${rollNum});`);
 }
 
+/**
+ * Returns all rolls of catan game
+ * @param {number} id - "Id of catan game"
+ * @return {object} "Returns array of objects {roll: number}"
+ */
 export function getRolls(id) {
     consoleLog('returning roll');
     // (id int, roll int)
-    return catan_dbexecute(true, `select roll from rolls where id=${id};`);
+    return catanDBExecute(true, `select roll from rolls where id=${id};`);
 }
 
+/**
+ * Returns id of catan game
+ * @param {string} name - "name of catan game"
+ * @return {number} "Returns id of catan game"
+ */
 export function getCatanId(name) {
     consoleLog('returning id');
-    return catan_dbexecute(true, `select id from games where name='${name}';`);
+    return catanDBExecute(true, `select id from games where name='${name}';`)[0].id;
 }
 
+/**
+ * Returns info and name of catan game
+ * @param {string} name - "name of catan game"
+ * @return {string} "Returns name and info of catan game [{name: "", info: ""}]"
+ */
 export function getCatanInfo(name) {
     consoleLog('returning info');
-    return catan_dbexecute(true, `select name, info from games where name='${name}';`);
+    return catanDBExecute(true, `select name, info from games where name='${name}';`);
 }
 
+/**
+ * Returns all catan games
+ * @return {object} "Returns all catan games [{}, ...]"
+ */
 export function getCatanGames() {
     consoleLog('returning games');
-    return catan_dbexecute(true, `select name from games;`);
+    return catanDBExecute(true, `select name from games;`);
 }
