@@ -227,7 +227,9 @@ form {
 #stallimg {
     width: 250px;
     height: 250px;
-    position: absolute;
+    display: flex;
+    margin: auto;
+    padding-top: 50px;
 }
 
 .namecell {

@@ -38,7 +38,7 @@ if (dayVal < 10) {
 }
 
 const time = `${date.getHours()}.${date.getMinutes()}.${date.getSeconds()}`;
-const serverBusy = true;
+const serverBusy = false;
 
 /**
  * Executes SQL

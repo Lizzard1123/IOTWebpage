@@ -73,7 +73,7 @@ app.use('/privatestatic', (req, res, next) => {
 app.use('/privatestatic', express.static('Private'));
 
 function renderError(res, data) {
-    res.render(path.join(__dirname, 'Error.ejs'), { reason: data }, (err, str) => {
+    res.render(path.join(__dirname, 'Error.html'), { reason: data }, (err, str) => {
         if (err) {
             consoleLog('Error Rendering Error ah', err);
             res.sendStatus(500);
@@ -560,6 +560,10 @@ const interval = setInterval(function ping() {
 
 wss.on('close', function close() {
     clearInterval(interval);
+});
+
+app.get('*', (req, res) => {
+    renderError(res, '404 \n Not found');
 });
 
 // start servers
