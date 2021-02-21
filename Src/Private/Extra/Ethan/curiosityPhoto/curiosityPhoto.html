@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+    <title>Room</title>
+    <link href='https://fonts.googleapis.com/css?family=Archivo Black' rel='stylesheet'>
+    <style>
+        body {
+            background-color: #6fddff;
+            font-family: 'Archivo Black';
+        }
+        
+        img {
+            display: flex;
+            margin: auto;
+            padding-top: 20px;
+            max-width: 600px;
+        }
+        
+        h5,
+        h4,
+        h3 {
+            width: 100%;
+            text-align: center;
+        }
+        
+        button {
+            display: flex;
+            margin: auto!important;
+            width: 100px;
+            height: 40px;
+            border-radius: 20px;
+            background-color: transparent;
+            border: 3px solid black;
+            font-family: 'Archivo Black';
+            margin: 5px;
+        }
+    </style>
+</head>
+
+<body style="height:1000px">
+    <h4 id="Title">Photos taken by the NASA mars Curoisty Rover from its Mast Camera</h4>
+    <img src="" alt="Not here yet" id="pic">
+    <h5 id="id"></h5>
+    <h3 id="date"></h3>
+    <button id="random">Random Photo!</button>
+    <script>
+        document.getElementById('random').onclick = () => {
+            const xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    console.log(typeof this.responseText);
+                    const data = JSON.parse(this.responseText);
+                    document.getElementById('pic').src = data.url;
+                    document.getElementById('date').innerHTML = `Date taken: ${data.date}`;
+                    document.getElementById('id').innerHTML = `id: ${data.id}`;
+                }
+            };
+            xhttp.open('GET', '/curiosityPhoto', true);
+            xhttp.send();
+        };
+    </script>
+</body>
+
+</html>

@@ -173,3 +173,45 @@ export function checkXLM(req, res, next) {
         next();
     }
 }
+
+export function getNasaPhoto(res) {
+    const randomDay = Math.floor(Math.random() * 3037);
+    const photoInfo = {};
+    request.get(
+
+        {
+            url: process.env.nasaLink,
+            qs: {
+                sol: randomDay,
+                camera: 'MAST',
+                api_key: process.env.NASAAcsess,
+            },
+            headers: {
+                'User-Agent': 'EthanIOTBACKEND',
+                'Accept': 'application/json',
+            },
+        },
+        (error, response) => {
+            if (error || (response.statusCode == 500)) {
+                consoleLog('NASA request error', error);
+            }
+            if (response.statusCode != 200) {
+                consoleLog('NASA not ok StatusCode');
+            }
+            const result = JSON.parse(response.body);
+            const randomPhoto = Math.floor(Math.random() * result['photos'].length);
+            consoleLog(result['photos'].length);
+            consoleLog(randomDay);
+            if (result['photos'].length == 0) {
+                consoleLog('rec');
+                getNasaPhoto(res);
+            } else {
+                photoInfo['date'] = result.photos[randomPhoto].earth_date;
+                photoInfo['id'] = result.photos[randomPhoto].id;
+                photoInfo['url'] = result.photos[randomPhoto].img_src;
+                consoleLog(JSON.stringify(photoInfo));
+                return res.json(photoInfo);
+            }
+        },
+    );
+}

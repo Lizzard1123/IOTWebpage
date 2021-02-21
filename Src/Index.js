@@ -26,7 +26,7 @@ import {
     getCatanInfo,
     getCatanGames,
 } from './appSrc/database.js';
-import { getUserInfo, getUserInfoCookie, auth, getGithubCommits, checkXLM } from './appSrc/helpers.js';
+import { getUserInfo, getUserInfoCookie, auth, getGithubCommits, checkXLM, getNasaPhoto } from './appSrc/helpers.js';
 import { Worker } from 'worker_threads';
 import ejs from 'ejs';
 
@@ -354,6 +354,11 @@ cron.schedule('0 50 6 * * *', () => {
     globalWS.send(`${JSON.stringify({ bed: 'On', desk: 'On' })}`);
 });
 
+// Get nasa curiosity photo link
+app.get('/curiosityPhoto', (req, res) => {
+    getNasaPhoto(res);
+});
+
 // catan game viewer
 app.get('/catanViewer', (req, res) => {
     const catanGames = getCatanGames();
@@ -388,7 +393,7 @@ app.post('/getCatanGame', (req, res) => {
 
 // returns id of catan game
 app.post('/findCatanGame', (req, res) => {
-    res.send(getCatanId(req.body.name));
+    res.send(`${getCatanId(req.body.name)}`);
 });
 
 // returns info associated with catan name
