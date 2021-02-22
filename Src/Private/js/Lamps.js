@@ -33,10 +33,8 @@ const deskLamp = {
         this.HTMLnode.disabled = false;
         this.buttonBox.style.visibility = 'visible';
         all.enable();
-        console.log('setup');
     },
     clickWithoutChange: function(newState) {
-        console.log('clc');
         this.setUp();
         if (this.buttonState != newState) {
             console.log('change');

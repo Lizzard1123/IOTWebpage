@@ -26,7 +26,7 @@ import {
     getCatanInfo,
     getCatanGames,
 } from './appSrc/database.js';
-import { getUserInfo, getUserInfoCookie, auth, getGithubCommits, checkXLM, getNasaPhoto } from './appSrc/helpers.js';
+import { getUserInfo, getUserInfoCookie, getUserToken, auth, authWs, getGithubCommits, checkXLM, getNasaPhoto } from './appSrc/helpers.js';
 import { Worker } from 'worker_threads';
 import ejs from 'ejs';
 
@@ -424,11 +424,15 @@ io.on('connection', (socket) => {
         if (noComs || globalWS == null) {
             socket.emit('status', `${JSON.stringify({ status: 'noComs' })}`);
         } else {
-            logLampChange(getUserInfoCookie(socket.handshake.headers.cookie).id);
-            globalWS.send(message);
-            const response = JSON.parse(message);
-            response['status'] = 'online';
-            io.emit('status', JSON.stringify(response));
+            if (authWs('admin', getUserToken(socket.handshake.headers.cookie))) {
+                logLampChange(getUserInfoCookie(socket.handshake.headers.cookie).id);
+                globalWS.send(message);
+                const response = JSON.parse(message);
+                response['status'] = 'online';
+                io.emit('status', JSON.stringify(response));
+            } else {
+                socket.emit('status', `${JSON.stringify({ status: 'online', bed: bedStatus?'On':'Off', desk: deskStatus?'On':'Off' })}`);
+            }
         }
     });
 

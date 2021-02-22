@@ -27,7 +27,7 @@ export function getUserInfo(req) {
 }
 
 /**
- * returns object of user request cookies
+ * returns object of user request JWT
  * @param {req} str - "User cookie"
  * @return {object} - "User cookies or \'Invalid\' "
  */
@@ -40,6 +40,15 @@ export function getUserInfoCookie(str) {
         consoleLog('Invalid JWT', err);
         return 'Invalid';
     }
+}
+
+/**
+ * returns object of user request token from cookie string
+ * @param {string} str - "User cookie"
+ * @return {object} - "User token or \'Invalid\' "
+ */
+export function getUserToken(str) {
+    return cookie.parse(str).token;
 }
 
 /**
@@ -74,6 +83,27 @@ export function auth(privlage, req, res, next) {
             }
         }
     }
+}
+
+/**
+ * Checks if user is authenticated, redirects if invalid
+ * @param {string} privlage - "Level of security needed to access"
+ * @param {string} token - "cookie JWT"
+ * @return {boolean} - "True if authorized"
+ */
+export function authWs(privlage, token) {
+    try {
+        consoleLog(token);
+        const decoded = jwt.verify(token, process.env.secretkey);
+        consoleLog(JSON.stringify(decoded));
+        if (decoded.securityLevel == privlage || decoded.securityLevel == 'admin') {
+            return true;
+        }
+    } catch (err) {
+        consoleLog('No JWT: ', err);
+    }
+
+    return false;
 }
 
 
