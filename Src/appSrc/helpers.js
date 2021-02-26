@@ -93,9 +93,7 @@ export function auth(privlage, req, res, next) {
  */
 export function authWs(privlage, token) {
     try {
-        consoleLog(token);
         const decoded = jwt.verify(token, process.env.secretkey);
-        consoleLog(JSON.stringify(decoded));
         if (decoded.securityLevel == privlage || decoded.securityLevel == 'admin') {
             return true;
         }
@@ -224,9 +222,13 @@ export function getNasaPhoto(res) {
         (error, response) => {
             if (error || (response.statusCode == 500)) {
                 consoleLog('NASA request error', error);
+                res.json(404);
+                return;
             }
             if (response.statusCode != 200) {
                 consoleLog('NASA not ok StatusCode');
+                res.json(404);
+                return;
             }
             const result = JSON.parse(response.body);
             const randomPhoto = Math.floor(Math.random() * result['photos'].length);
