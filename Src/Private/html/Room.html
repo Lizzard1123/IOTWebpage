@@ -3,22 +3,76 @@
 
 <head>
     <title>Room</title>
+    <link href='https://fonts.googleapis.com/css?family=Archivo Black' rel='stylesheet'>
     <style>
         body {
             background-color: #006983;
+            font-family: 'Archivo Black';
+        }
+        
+        #container {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .collum {
+            position: absolute;
+            top: 0;
+            width: 33.33%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+        }
+        
+        #Collum1 {
+            left: 0;
+        }
+        
+        #Collum2 {
+            left: 33.33%;
+        }
+        
+        #Collum3 {
+            left: 66.66%;
+        }
+        
+        h2 {
+            width: 100%;
+            text-align: center;
         }
         
         img {
             position: absolute;
-            top: 10%;
-            left: 15%;
-            width: 70%;
+            top: 80px;
+            margin: auto;
+            width: 150px;
+            height: 150px;
+        }
+        
+        img:hover {
+            width: 175px;
+            height: 175px;
+            transition: 3s;
         }
     </style>
 </head>
 
 <body style="width:397px; height:1000px">
-    <img src="https://cdn.pixabay.com/photo/2017/06/16/07/26/under-construction-2408062_960_720.png" alt="Not here yet">
+    <!--<img src="https://cdn.pixabay.com/photo/2017/06/16/07/26/under-construction-2408062_960_720.png" alt="Not here yet">-->
+    <div id="container">
+        <div id="Collum1" class="collum">
+            <h2><strong>3D Printer</strong></h2>
+            <img id="printerImg" src="/publicstatic/img/3d-printer-svgrepo-com.svg" alt="3D-Printer">
+        </div>
+        <div id="Collum2" class="collum"></div>
+        <div id="Collum3" class="collum"></div>
+    </div>
+
+
+    <script src="/privatestatic/js/Room.js"></script>
 </body>
 
 </html>
