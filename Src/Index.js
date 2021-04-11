@@ -25,6 +25,8 @@ import {
     getCatanId,
     getCatanInfo,
     getCatanGames,
+    getPrinterIP,
+    setPrinterIP,
 } from './appSrc/database.js';
 import { getUserInfo, getUserInfoCookie, getUserToken, auth, authWs, getGithubCommits, checkXLM, getNasaPhoto } from './appSrc/helpers.js';
 import { Worker } from 'worker_threads';
@@ -399,6 +401,16 @@ app.post('/findCatanGame', (req, res) => {
 // returns info associated with catan name
 app.post('/getCatanGameInfo', (req, res) => {
     res.send(getCatanInfo(req.body.name));
+});
+
+// Octoprint
+app.post('/getPrinterIP', (req, res) => {
+    res.send(getPrinterIP(req.body.name));
+});
+
+app.post('/setPrinterIP', (req, res) => {
+    setPrinterIP(req.body.name, req.body.printerIP);
+    res.sendStatus(200);
 });
 
 // SOCKET.IO

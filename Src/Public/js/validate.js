@@ -1,7 +1,7 @@
 const form = document.getElementById('form');
 const nameinput = document.getElementById('Name');
 const passwordinput = document.getElementById('Password');
-const whitelist = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&* :\'';
+const whitelist = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&* :\'.';
 const namelabel = document.getElementById('namelabel');
 const passwordlabel = document.getElementById('passwordlabel');
 const title = document.getElementById('title');

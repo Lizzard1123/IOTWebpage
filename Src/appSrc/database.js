@@ -37,7 +37,7 @@ if (dayVal < 10) {
     dayVal = '0' + dayVal;
 }
 
-const time = `${date.getHours()}.${date.getMinutes()}.${date.getSeconds()}`;
+const time = `${monthActual}/${dayVal}/${date.getFullYear()} at ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
 const serverBusy = false;
 
 /**
@@ -283,4 +283,25 @@ export function getCatanInfo(name) {
 export function getCatanGames() {
     consoleLog('returning games');
     return catanDBExecute(true, `select name from games;`);
+}
+
+/**
+ * Returns ip of person's printer
+ * @param {string} userName "Name of user to find info for"
+ * @return {string} "Returns ip in string format"
+ */
+export function getPrinterIP(userName) {
+    consoleLog(`returning printer ip for ${userName}`);
+    return dbexecute(true, `select [3DPrinterIP] from users where name='${userName}';`)[0]['3DPrinterIP'];
+}
+
+/**
+ * set printer ip of name
+ * @param {string} userName "Name of user to set info for"
+ * @param {string} printerIP "Ip of printer to set info for"
+ * @return {object} "sets printerIP to userName"
+ */
+export function setPrinterIP(userName, printerIP) {
+    consoleLog(`setting ${printerIP} as printerIp for ${userName}`);
+    return dbexecute(false, `update users set [3DPrinterIP]='${printerIP}' where name='${userName}';`);
 }

@@ -6,17 +6,24 @@
     <link href='https://fonts.googleapis.com/css?family=Archivo Black' rel='stylesheet'>
     <style>
         body {
-            background-color: #3b8ea3;
+            background-color: #006983;
             font-family: 'Archivo Black';
         }
     </style>
 </head>
 
-<body style="width:397px; height:1000px">
+<body style="width:397px; height:1000px" id="Body">
     <!--<img src="https://cdn.pixabay.com/photo/2017/06/16/07/26/under-construction-2408062_960_720.png" alt="Not here yet">-->
-
-
-    <!--<script src="/privatestatic/js/Room.js"></script>-->
+    <div id="content">
+        <form id="ipForm">
+            <input type="text" name="userName" id="nameInput" style="display: none;">
+            <label for="printerIP">Printer IP Address</label>
+            <input type="text" name="printerIP" id="printerIP">
+            <button id="formSubmit">Submit</button>
+        </form>
+    </div>
+    <script src="/publicstatic/js/validate.js"></script>
+    <script src="/privatestatic/js/3DPrinter.js"></script>
 </body>
 
 </html>
