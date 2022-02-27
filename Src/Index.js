@@ -226,6 +226,8 @@ app.post('/timeredit', (req, res) => {
     res.end();
 });
 
+/* 
+//schedule wakeup lights
 cron.schedule('0 50 6 * * *', () => {
     consoleLog('Turning on lamps SCHEDULE test');
     sendMessageToESPLights('all', 'On', (err) => {
@@ -234,7 +236,7 @@ cron.schedule('0 50 6 * * *', () => {
         }
     });
 });
-
+*/
 
 // get lights status
 app.get('/espLights_Status', (req, res) => {
