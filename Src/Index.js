@@ -9,8 +9,26 @@ import cron from 'node-cron';
 import http, { createServer } from 'http';
 import WebSocket from 'ws';
 import { Server } from 'socket.io';
-import { error, handleLogin, createAccount, removeTimer, editTimer, getTimers, record, createTaskFromICAL } from './appSrc/database.js';
-import { getUserInfo, getUserInfoCookie, auth, sendMessageToESPLights, eSPPostErr, getGithubCommits, checkXLM } from './appSrc/helpers.js';
+import {
+    error,
+    handleLogin,
+    createAccount,
+    removeTimer,
+    editTimer,
+    getTimers,
+    record,
+    createTaskFromICAL,
+    logLampChange,
+    createCatan,
+    updateCatanGame,
+    getRolls,
+    getCatanId,
+    getCatanInfo,
+    getCatanGames,
+    getPrinterIP,
+    setPrinterIP,
+} from './appSrc/database.js';
+import { getUserInfo, getUserInfoCookie, getUserToken, auth, authWs, getGithubCommits, checkXLM, getNasaPhoto } from './appSrc/helpers.js';
 import { Worker } from 'worker_threads';
 import ejs from 'ejs';
 
@@ -30,7 +48,7 @@ if (result.error) {
     consoleLog('Dotnev Error Loading env', result.error);
 }
 
-const port = 80;
+const port = 3000;
 const wsServerPort = 3001;
 const app = express();
 app.engine('html', ejs.renderFile);
@@ -56,14 +74,18 @@ app.use('/privatestatic', (req, res, next) => {
 });
 app.use('/privatestatic', express.static('Private'));
 
-app.get('/error', (req, res) => {
-    res.render(path.join(__dirname, 'Error.html'), {}, (err, str) => {
+function renderError(res, data) {
+    res.render(path.join(__dirname, 'Error.html'), { reason: data }, (err, str) => {
         if (err) {
             consoleLog('Error Rendering Error ah', err);
             res.sendStatus(500);
         }
         res.send(str);
     });
+}
+
+app.get('/error', (req, res) => {
+    renderError(res, 'uh Oh');
 });
 
 app.get('/busy', (req, res) => {
@@ -89,6 +111,12 @@ app.get('/login', (req, res) => {
     });
 });
 
+// redirects to login from main
+app.get('/', (req, res) => {
+    res.redirect('/login');
+});
+
+// register page
 app.get('/register', (req, res) => {
     consoleLog('Served register Page');
     record('Gave register page to', req.connection.remoteAddress, 3);
@@ -101,6 +129,32 @@ app.get('/register', (req, res) => {
     });
 });
 
+// directs url to main with specific iframe
+app.get('/home/:page', (req, res, next) => {
+    checkXLM(req, res, next);
+}, (req, res, next) => {
+    auth('stranger', req, res, next);
+}, (req, res) => {
+    const userDat = getUserInfo(req);
+    record('Gave login page to', `${req.connection.remoteAddress} as ${userDat.name}`, 4);
+    consoleLog('Served Home Path');
+    const userInfo = getUserInfo(req);
+    const permmitedSites = userInfo.securityLevel == 'admin' ? process.env.adminSites : process.env.strangerSites;
+    consoleLog(permmitedSites.split(',')[0]);
+    res.render(path.join(__dirname, 'Main.html'), {
+        sites: permmitedSites.split(','),
+        userName: userInfo.name,
+        path: req.params.page,
+    }, (err, str) => {
+        if (err) {
+            consoleLog('Error Rendering Main with req', err);
+            renderError(res, err);
+        }
+        res.send(str);
+    });
+});
+
+// main page
 app.get('/home', (req, res, next) => {
     checkXLM(req, res, next);
 }, (req, res, next) => {
@@ -109,15 +163,23 @@ app.get('/home', (req, res, next) => {
     const userDat = getUserInfo(req);
     record('Gave login page to', `${req.connection.remoteAddress} as ${userDat.name}`, 4);
     consoleLog('Served Home Path');
-    res.render(path.join(__dirname, 'Main.html'), {}, (err, str) => {
+    const userInfo = getUserInfo(req);
+    const permmitedSites = userInfo.securityLevel == 'admin' ? process.env.adminSites : process.env.strangerSites;
+    consoleLog(permmitedSites.split(',')[0]);
+    res.render(path.join(__dirname, 'Main.html'), {
+        sites: permmitedSites.split(','),
+        userName: userInfo.name,
+        path: 'Home',
+    }, (err, str) => {
         if (err) {
             consoleLog('Error Rendering Main', err);
-            res.redirect('/error');
+            renderError(res, err);
         }
         res.send(str);
     });
 });
 
+// create account
 app.post('/createAccount', (req, res, next) => {
     consoleLog('Creating and checking Account:', JSON.stringify(req.body));
     // request to login
@@ -139,6 +201,7 @@ app.post('/createAccount', (req, res, next) => {
     res.sendStatus(200);
 });
 
+// checks login
 app.post('/login',
     (req, res, next) => {
         consoleLog('Authenticating with whitelist for user', req.body.Name);
@@ -161,6 +224,7 @@ app.post('/login',
         // logging pourposes
     });
 
+// gets timers for user
 app.get('/timer', (req, res, next) => {
     auth('stranger', req, res, next);
 }, (req, res) => {
@@ -169,28 +233,7 @@ app.get('/timer', (req, res, next) => {
     return res.json(mess);
 });
 
-app.post('/espLights_Update', (req, res, next) => {
-    auth('admin', req, res, next);
-}, (req, res) => {
-    const reqMessage = req.body;
-    const firstObj = Object.keys(reqMessage)[0];
-    if (reqMessage[firstObj] == 'On') {
-        consoleLog('Turning Light On:', firstObj);
-        sendMessageToESPLights(firstObj, 'On', (err) => {
-            eSPPostErr(err, res);
-        });
-    } else if (reqMessage[firstObj] == 'Off') {
-        consoleLog('Turning Light Off:', firstObj);
-        sendMessageToESPLights(firstObj, 'Off', (err) => {
-            eSPPostErr(err, res);
-        });
-    } else {
-        consoleLog('Unknown body', req.body);
-    }
-    return;
-});
-
-// TODO FIX
+// TODO FIX it works? oh wait i dont think i use this actual method below a couple
 app.post('/ToDo/uploadCal', (req, res) => {
     const userId = getUserInfo(req).id;
     const form = new formidable.IncomingForm();
@@ -212,47 +255,21 @@ app.post('/ToDo/uploadCal', (req, res) => {
     });
 });
 
-// timerdel
+// deletes specific timer
 app.post('/timerdel', (req, res) => {
     const userId = getUserInfo(req).id;
     removeTimer(req.body.id, userId);
     res.end();
 });
 
-// timeredit
+// updates a timer
 app.post('/timeredit', (req, res) => {
     const userId = getUserInfo(req).id;
     editTimer(req.body, userId);
     res.end();
 });
 
-/* 
-//schedule wakeup lights
-cron.schedule('0 50 6 * * *', () => {
-    consoleLog('Turning on lamps SCHEDULE test');
-    sendMessageToESPLights('all', 'On', (err) => {
-        if (err) {
-            consoleLog('ESP post err', err);
-        }
-    });
-});
-*/
-
-// get lights status
-app.get('/espLights_Status', (req, res) => {
-    sendMessageToESPLights('status', 'question', (err, mes) => {
-        if (err) {
-            if (err.errno == 'ETIMEDOUT') {
-                consoleLog('No response from ESP');
-                res.json({ status: 'noComs' });
-            }
-        } else {
-            res.json(JSON.parse(mes));
-        }
-    });
-});
-
-
+// handle and parses github api commits
 app.post('/githubCommits', (req, res) => {
     const sendMess = [];
     consoleLog('Github Page sent:', req.body.page);
@@ -275,6 +292,7 @@ app.post('/githubCommits', (req, res) => {
                         'name': github[i].commit.committer.name,
                         'date': github[i].commit.committer.date,
                         'message': github[i].commit.message,
+                        'url': github[i].html_url,
                     };
                     sendMess.push(currentmes);
                 }
@@ -284,6 +302,7 @@ app.post('/githubCommits', (req, res) => {
     });
 });
 
+// create an image form url
 app.post('/createImg', (req, res, next) => {
     auth('admin', req, res, next);
 }, (req, res) => {
@@ -294,10 +313,7 @@ app.post('/createImg', (req, res, next) => {
             consoleLog('Submited error');
             return;
         }
-        consoleLog('hereee');
         consoleLog(JSON.stringify(fields));
-        consoleLog(files.file.path.toString());
-        consoleLog(files.file.name);
         const data = {
             pathName: files.file.path.toString(),
             path: __dirname,
@@ -305,17 +321,18 @@ app.post('/createImg', (req, res, next) => {
             width: parseInt(fields.screenwidth),
             height: parseInt(fields.screenheight),
             id: getUserInfo(req).id,
+            fields: fields,
         };
         const worker = new Worker('./appSrc/imgCreate.js', { workerData: data });
-        worker.on('error', (err) => {
-            throw err;
+        worker.on('error', (connecterr) => {
+            throw connecterr;
         });
         worker.on('exit', () => {
             consoleLog('Worker Done');
         });
         worker.on('message', (msg) => {
             if (msg.done) {
-                consoleLog('Done?: ', JSON.parse(msg));
+                consoleLog('Done?: ', JSON.stringify(msg));
                 consoleLog('sending to:', connected[(getUserInfo(req).id).toString()]);
                 io.to(connected[(getUserInfo(req).id).toString()]).emit('done', msg.data);
             } else {
@@ -326,7 +343,7 @@ app.post('/createImg', (req, res, next) => {
     res.sendFile(path.join(__dirname, '/Private/html/reciveImg.html'));
 });
 
-
+// download image link
 app.get('/getImg/:url', (req, res, next) => {
     auth('admin', req, res, next);
 }, (req, res) => {
@@ -334,21 +351,84 @@ app.get('/getImg/:url', (req, res, next) => {
     res.sendFile(path.join(__dirname, '/Private/js/ICstore/', req.params.url));
 });
 
-// sending to all clients except sender
-// socket.broadcast.emit('messages', `recived from ${message} friends!`);
+cron.schedule('0 50 6 * * *', () => {
+    consoleLog('Turning on lamps SCHEDULE test');
+    globalWS.send(`${JSON.stringify({ bed: 'On', desk: 'On' })}`);
+});
+
+// Get nasa curiosity photo link
+app.get('/curiosityPhoto', (req, res) => {
+    getNasaPhoto(res);
+});
+
+// catan game viewer
+app.get('/catanViewer', (req, res) => {
+    const catanGames = getCatanGames();
+    res.render(path.join(__dirname, 'Private/Extra/Ethan/catan/Catan.html'), {
+        games: catanGames,
+    }, (err, str) => {
+        if (err) {
+            consoleLog('Error Rendering Error ah', err);
+            res.sendStatus(500);
+        }
+        res.send(str);
+    });
+});
+
+// create a catan game
+app.post('/createCatanGame', (req, res) => {
+    createCatan(req.body.name, req.body.info);
+    res.sendStatus(200);
+});
+
+// adds a new dice to game
+app.post('/updateDice', (req, res) => {
+    consoleLog(getCatanId(req.body.name));
+    updateCatanGame(getCatanId(req.body.name), req.body.roll);
+    res.sendStatus(200);
+});
+
+// returns rolls associated with catan game
+app.post('/getCatanGame', (req, res) => {
+    res.send(getRolls(getCatanId(req.body.name)));
+});
+
+// returns id of catan game
+app.post('/findCatanGame', (req, res) => {
+    res.send(`${getCatanId(req.body.name)}`);
+});
+
+// returns info associated with catan name
+app.post('/getCatanGameInfo', (req, res) => {
+    res.send(getCatanInfo(req.body.name));
+});
+
+// Octoprint
+app.post('/getPrinterIP', (req, res) => {
+    res.send(getPrinterIP(req.body.name));
+});
+
+app.post('/setPrinterIP', (req, res) => {
+    setPrinterIP(req.body.name, req.body.printerIP);
+    res.sendStatus(200);
+});
 
 // SOCKET.IO
+
+// game vars
+let usersGame = [];
+let gameUserData = [];
+const gameDat = {};
 
 io.on('connection', (socket) => {
     consoleLog('New client id: ', socket.client.id);
     connected[getUserInfoCookie(socket.handshake.headers.cookie).id] = socket.id;
-    consoleLog(JSON.stringify(connected));
     socket.on('status', (message) => {
         // sending to the client
         if (noComs) {
             socket.emit('status', `${JSON.stringify({ status: 'noComs' })}`);
         } else {
-            socket.emit('status', `${JSON.stringify({ bed: bedStatus?'On':'Off', desk: deskStatus?'On':'Off' })}`);
+            socket.emit('status', `${JSON.stringify({ status: 'online', bed: bedStatus?'On':'Off', desk: deskStatus?'On':'Off' })}`);
         }
     });
     socket.on('update', (message) => {
@@ -356,9 +436,113 @@ io.on('connection', (socket) => {
         if (noComs || globalWS == null) {
             socket.emit('status', `${JSON.stringify({ status: 'noComs' })}`);
         } else {
-            globalWS.send(message);
-            socket.emit('status', `${JSON.stringify({ bed: bedStatus?'On':'Off', desk: deskStatus?'On':'Off' })}`);
+            if (authWs('admin', getUserToken(socket.handshake.headers.cookie))) {
+                logLampChange(getUserInfoCookie(socket.handshake.headers.cookie).id);
+                globalWS.send(message);
+                const response = JSON.parse(message);
+                response['status'] = 'online';
+                io.emit('status', JSON.stringify(response));
+            } else {
+                socket.emit('status', `${JSON.stringify({ status: 'online', bed: bedStatus?'On':'Off', desk: deskStatus?'On':'Off' })}`);
+            }
         }
+    });
+
+    // game
+
+    socket.on('join', (data) => {
+        usersGame.push((data));
+        consoleLog(JSON.stringify(usersGame[0]));
+        io.emit('updateUsers', (data));
+    });
+
+    socket.on('startGame', (data) => {
+        gameDat['start'] = data.start;
+        gameDat['end'] = data.end;
+        io.emit('start');
+    });
+
+    socket.on('updateStart', (data) => {
+        consoleLog('sending', JSON.stringify(data));
+        io.emit('updateStartPos', (data));
+    });
+
+    socket.on('updateEnd', (data) => {
+        consoleLog('sending', JSON.stringify(data));
+        io.emit('updateEndPos', (data));
+    });
+
+    socket.on('getUsers', () => {
+        consoleLog('updating');
+        consoleLog(usersGame[0]);
+        for (let i = 0; i < usersGame.length; i++) {
+            consoleLog(JSON.stringify(usersGame[i]));
+            socket.emit('updateUsers', usersGame[i]);
+        }
+    });
+
+    socket.on('removeUser', (data) => {
+        consoleLog('removing');
+        const newUserGame = [];
+        for (let i = 0; i < usersGame.length; i++) {
+            consoleLog('array', usersGame[i].name);
+            consoleLog('rem', data.name);
+            if (usersGame[i].name != data.name) {
+                consoleLog('add');
+                newUserGame.push(data);
+            } else {
+                consoleLog('sent');
+                data.remove = true;
+                io.emit('updateUsers', (data));
+            }
+        }
+        consoleLog('new', JSON.stringify(newUserGame[0]));
+        usersGame = newUserGame;
+    });
+
+    // gmae game
+
+    socket.on('joinGame', (data) => {
+        gameUserData.push(data);
+        socket.emit('settings', gameDat);
+    });
+
+    socket.on('leaveGame', (data) => {
+        consoleLog('removing game user');
+        const newUserGameList = [];
+        for (let i = 0; i < newUserGameList.length; i++) {
+            if (newUserGameList[i].name != data.name) {
+                newUserGameList.push(data.name);
+            }
+        }
+        usersGame = newUserGameList;
+    });
+
+    socket.on('quitGame', (data) => {
+        consoleLog('wuitting');
+        let giveup = true;
+        for (let i = 0; i < gameUserData.length; i++) {
+            if (data.name == gameUserData[i].name) {
+                consoleLog('wuitting', gameUserData[i].name);
+                gameUserData[i].playing = false;
+                for (let j = 0; j < gameUserData.length; j++) {
+                    if (gameUserData[j].playing) {
+                        giveup = false;
+                    }
+                }
+            }
+        }
+
+        if (giveup) {
+            gameUserData = [];
+            consoleLog('donezo');
+            io.emit('quit');
+        }
+        socket.emit('quit');
+    });
+
+    socket.on('end', (data) => {
+        io.emit('endScreen', (data));
     });
 });
 
@@ -375,10 +559,11 @@ wss.on('connection', function(ws) {
     ws.isAlive = true;
     ws.on('pong', heartbeat);
     ws.on('message', (data) => {
-        consoleLog('recived: ', data);
-        // const updateVar = JSON.parse(data);
-        // bedStatus = updateVar['bed'];
-        // deskStatus = updateVar['desk'];
+        if (data != 'Connected') {
+            const updateVar = JSON.parse(data);
+            bedStatus = updateVar['bed'] == 'On' ? true : false;
+            deskStatus = updateVar['desk'] == 'On' ? true : false;
+        }
     });
     ws.on('close', function() {
         noComs = true;
@@ -398,5 +583,10 @@ wss.on('close', function close() {
     clearInterval(interval);
 });
 
+app.get('*', (req, res) => {
+    renderError(res, '404 \n Not found');
+});
+
+// start servers
 IOTServer.listen(port, () => consoleLog(`IOTWebpage is listening on port ${port}!`));
 server.listen(wsServerPort, () => consoleLog(`wsServer is listening on port ${wsServerPort}!`));

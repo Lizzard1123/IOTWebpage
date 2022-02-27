@@ -101,7 +101,7 @@ let totalTriangles = 0;
 
 // created staggered rows of all coordindates for triangles
 // eslint-disable-next-line no-unused-vars
-function backpoints(width, height, actualhigh) {
+function backpoints(actualhigh) {
     const coords = [];
     let count = 0;
     for (let g = 0; g <= actualhigh + heightBuffer; g++) {
@@ -346,7 +346,7 @@ function fadeBody() {
         } else {
             Fadeinterval = setInterval(fadeInBody, Fadetime);
         }
-    } else {}
+    }
 }
 
 

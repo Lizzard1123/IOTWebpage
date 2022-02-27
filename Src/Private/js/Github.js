@@ -34,6 +34,7 @@ function getGithub(pagenum, callback) {
 
 function cloneRow(obj, example, parent, id) {
     const cln = example.cloneNode(true);
+    cln.href = obj.url;
     cln.id = id;
     const d = new Date(obj.date);
     const dateShort = (d.getMonth() + 1) + '/' + d.getDate() + '/' + d.getFullYear();
@@ -54,7 +55,7 @@ function cloneRow(obj, example, parent, id) {
     }
     const timeShort = hour + ':' + min + timeOfDay;
     const content = obj.name + ' made a commit on ' + dateShort + ' at ' + timeShort + '<br />' + obj.message;
-    cln.innerHTML = content;
+    cln.firstElementChild.innerHTML = content;
     parent.appendChild(cln);
 }
 

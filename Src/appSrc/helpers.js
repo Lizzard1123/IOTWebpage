@@ -27,7 +27,7 @@ export function getUserInfo(req) {
 }
 
 /**
- * returns object of user request cookies
+ * returns object of user request JWT
  * @param {req} str - "User cookie"
  * @return {object} - "User cookies or \'Invalid\' "
  */
@@ -43,6 +43,15 @@ export function getUserInfoCookie(str) {
 }
 
 /**
+ * returns object of user request token from cookie string
+ * @param {string} str - "User cookie"
+ * @return {object} - "User token or \'Invalid\' "
+ */
+export function getUserToken(str) {
+    return cookie.parse(str).token;
+}
+
+/**
  * Checks if user is authenticated, redirects if invalid
  * @param {string} privlage - "Level of security needed to access"
  * @param {req} req - "User request"
@@ -50,7 +59,7 @@ export function getUserInfoCookie(str) {
  * @param {next} next - "Next function"
  */
 export function auth(privlage, req, res, next) {
-    consoleLog('Authenticating user');
+    // consoleLog('Authenticating user');
     try {
         const decoded = jwt.verify(req.cookies.token, process.env.secretkey);
         if (decoded.securityLevel == privlage || decoded.securityLevel == 'admin') {
@@ -74,6 +83,25 @@ export function auth(privlage, req, res, next) {
             }
         }
     }
+}
+
+/**
+ * Checks if user is authenticated, redirects if invalid
+ * @param {string} privlage - "Level of security needed to access"
+ * @param {string} token - "cookie JWT"
+ * @return {boolean} - "True if authorized"
+ */
+export function authWs(privlage, token) {
+    try {
+        const decoded = jwt.verify(token, process.env.secretkey);
+        if (decoded.securityLevel == privlage || decoded.securityLevel == 'admin') {
+            return true;
+        }
+    } catch (err) {
+        consoleLog('No JWT: ', err);
+    }
+
+    return false;
 }
 
 
@@ -172,4 +200,50 @@ export function checkXLM(req, res, next) {
     } else {
         next();
     }
+}
+
+export function getNasaPhoto(res) {
+    const randomDay = Math.floor(Math.random() * 3037);
+    const photoInfo = {};
+    request.get(
+
+        {
+            url: process.env.nasaLink,
+            qs: {
+                sol: randomDay,
+                camera: 'MAST',
+                api_key: process.env.NASAAcsess,
+            },
+            headers: {
+                'User-Agent': 'EthanIOTBACKEND',
+                'Accept': 'application/json',
+            },
+        },
+        (error, response) => {
+            if (error || (response.statusCode == 500)) {
+                consoleLog('NASA request error', error);
+                res.json(404);
+                return;
+            }
+            if (response.statusCode != 200) {
+                consoleLog('NASA not ok StatusCode');
+                res.json(404);
+                return;
+            }
+            const result = JSON.parse(response.body);
+            const randomPhoto = Math.floor(Math.random() * result['photos'].length);
+            consoleLog(result['photos'].length);
+            consoleLog(randomDay);
+            if (result['photos'].length == 0) {
+                consoleLog('rec');
+                getNasaPhoto(res);
+            } else {
+                photoInfo['date'] = result.photos[randomPhoto].earth_date;
+                photoInfo['id'] = result.photos[randomPhoto].id;
+                photoInfo['url'] = result.photos[randomPhoto].img_src;
+                consoleLog(JSON.stringify(photoInfo));
+                return res.json(photoInfo);
+            }
+        },
+    );
 }

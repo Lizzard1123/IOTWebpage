@@ -1,15 +1,15 @@
 document.getElementById('about').onclick = function() {
-    window.open('http://localhost:3000/privateStatic/Extra/Ethan/CS50/Webpage/about.html');
+    window.open('/privateStatic/Extra/Ethan/CS50/Webpage/about.html');
 };
 
 document.getElementById('funFacts').onclick = function() {
-    window.open('http://localhost:3000/privateStatic/Extra/Ethan/CS50/Webpage/funFacts.html');
+    window.open('/privateStatic/Extra/Ethan/CS50/Webpage/funFacts.html');
 };
 
 document.getElementById('sideProjects').onclick = function() {
-    window.open('http://localhost:3000/privateStatic/Extra/Ethan/CS50/Webpage/sideProjects.html');
+    window.open('/privateStatic/Extra/Ethan/CS50/Webpage/sideProjects.html');
 };
 
 document.getElementById('reactionTester').onclick = function() {
-    window.open('http://localhost:3000/privateStatic/Extra/Ethan/CS50/Webpage/reactionTester.html');
+    window.open('/privateStatic/Extra/Ethan/CS50/Webpage/reactionTester.html');
 };

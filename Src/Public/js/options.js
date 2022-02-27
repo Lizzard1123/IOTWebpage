@@ -21,11 +21,22 @@ let custom;
 const normal = ['true', 'true', 'true', 'true', 'true', 'true', 'false', 'true', 'true'];
 const slider = document.getElementById('switcherselector');
 const switches = document.getElementsByClassName('switchpages');
-const titles = ['Extra', 'Remote', 'Lamps', 'Home', 'To-Do', 'Image', 'Game'];
-const pagelink = ['Extra', 'Remote', 'Lamps', 'Home', 'To-Do', 'image', 'Game'];
-const numberofpages = titles.length;
-const maxdivbox = 100 / numberofpages;
-const offset = 2.5;
+// ['Extra', 'Remote', 'Lamps', 'Home', 'To-Do', 'Image', 'Game'];
+const titles = [];
+let numberofpages;
+let middle;
+let maxdivbox;
+let offset;
+
+function setUp(collection) {
+    for (let i = 0; i < collection.length; i++) {
+        titles.push(collection[i].innerHTML.replace(/\s/g, ''));
+    }
+    numberofpages = titles.length;
+    middle = numberofpages / 2 - .5;
+    maxdivbox = 100 / numberofpages;
+    offset = 0;
+}
 
 function givetitles() {
     for (let i = 0; i < numberofpages; i++) {
@@ -34,9 +45,10 @@ function givetitles() {
 }
 
 function setintoplace() {
-    const middle = numberofpages / 2 - .5;
     for (let i = 0; i < numberofpages; i++) {
         switches[i].style.left = `${maxdivbox * i - offset}%`;
+        switches[i].style.width = `${maxdivbox}%`;
+        switches[i].style.visibility = `visible`;
         if (i != middle) {
             switches[i].style.zIndex = 5;
             switches[i].style.cursor = 'pointer';
@@ -82,21 +94,20 @@ function updateslider() {
 }
 
 // eslint-disable-next-line no-unused-vars
-function updatesliderbar(name) {
+function updatesliderbar(num) {
     slider.value = 50;
     let targetmiddle;
-    if (name == undefined) {
+    if (num == undefined) {
         targetmiddle = titles[closesttomiddle()];
     } else {
-        targetmiddle = titles[numbers.indexOf(name)];
+        targetmiddle = titles[num - 1];
     }
-    while (titles[2] != targetmiddle) {
+    while (titles[middle] != targetmiddle) {
         titles.unshift(titles.pop());
-        pagelink.unshift(pagelink.pop());
     }
     setintoplace();
-    iframe.src = `privatestatic/html/${pagelink[2]}.html`;
-    document.getElementById('Title').innerHTML = titles[2];
+    iframe.src = `/privatestatic/html/${titles[middle]}.html`;
+    document.getElementById('Title').innerHTML = titles[middle];
 }
 
 // eslint-disable-next-line no-unused-vars
@@ -114,16 +125,15 @@ function checkAuth() {
 function getinfo(number) {
     let thisValue;
     if (typeof number == 'string') {
-        numbertoreturn = numbers.indexOf(number);
+        const numbertoreturn = numbers.indexOf(number);
         thisValue = custom[numbertoreturn];
     } else {
         thisValue = custom[number - 1];
     }
     if (thisValue == 'false') {
         return false;
-    } else {
-        return true;
     }
+    return true;
 }
 
 function addtoall() {
@@ -182,9 +192,9 @@ function loadsettings(titleset) {
         resetPage();
         if (titleset) {
             // home
-            // set bottom bar to name
-            document.getElementById('profilename').innerHTML = `Signed in as: ${globalUserData().name}`;
+            setUp(document.getElementsByClassName('switchpages'));
             setintoplace();
+            document.getElementById('scrollbar_middle').style.visibility = 'visible';
         } else {
             // auth
             if (window.location.href.includes('/login')) {

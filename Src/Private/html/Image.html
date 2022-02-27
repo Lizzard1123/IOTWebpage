@@ -1,7 +1,9 @@
 <!DOCTYPE html>
-<html>
+<html lang='en'>
 
 <head>
+    <title>Image Create</title>
+    <link href='https://fonts.googleapis.com/css?family=Archivo Black' rel='stylesheet'>
     <link rel="stylesheet" type="text/css" href="/privatestatic/css/img.css">
 </head>
 
@@ -14,13 +16,33 @@
         </select>
         <br>
         <label for="file">Select a file:</label>
+        <br>
         <input type="file" id="file" name="file">
         <br>
         <label for="screenheight">Screen Height</label>
+        <br>
         <input type="number" id="screenheight" name="screenheight" value="0">
         <br>
         <label for="screenwidth">Screen Width</label>
+        <br>
         <input type="number" id="screenwidth" name="screenwidth" value="0">
+        <br>
+        <h4>Type</h4>
+        <label for="screenwidth">looseColor</label>
+        <input type="checkbox" name="looseColor">
+        <br>
+        <label for="screenwidth">stretch</label>
+        <input type="checkbox" name="stretch">
+        <br>
+        <label for="screenwidth">node</label>
+        <input type="checkbox" name="random">
+        <br>
+        <h4>Effects</h4>
+        <label for="screenwidth">Greyscale</label>
+        <input type="checkbox" name="BW">
+        <br>
+        <label for="screenwidth">reverse</label>
+        <input type="checkbox" name="reverse">
         <br>
         <button type="button" id="button">Submit</button>
     </form>

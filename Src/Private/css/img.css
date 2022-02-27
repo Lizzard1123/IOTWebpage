@@ -1,5 +1,8 @@
 body {
-    background-color: #004455;
+    background-color: #007e9e;
+    font-family: 'Archivo Black';
+    display: flex;
+    justify-content: center;
 }
 
 #imgContainer {
@@ -8,4 +11,36 @@ body {
 
 img {
     width: 100%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+button {
+    width: 100px;
+    height: 40px;
+    border-radius: 20px;
+    background-color: transparent;
+    border: 3px solid black;
+    font-family: 'Archivo Black';
+    margin: 5px;
+}
+
+input:not(input[type=checkbox], input[type=file]),
+select {
+    width: 200px;
+    height: 30px;
+    border-radius: 20px;
+    background-color: #598a9c;
+    border: 3px solid black;
+    font-family: 'Archivo Black';
+    margin: 5px;
+}
+
+#back {
+    margin-top: 20px;
+}
+
+button:hover {
+    background-color: rgba(128, 128, 128, .2);
 }

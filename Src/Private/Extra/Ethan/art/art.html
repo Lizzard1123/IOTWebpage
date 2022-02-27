@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title> arty </title>
+</head>
+
+<body>
+    <canvas id="canvas" style="border:1px solid black" width=800 height=500></canvas>
+</body>
+<script>
+    const width = 800;
+    const height = 500;
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    ctx.fillStyle = '#e240ff';
+    ctx.fillRect(0, height - 10, width, 10);
+    const numOfPoints = 8;
+    const points = [];
+    class point {
+        pointOneX;
+        pointOneY;
+        pointTwoX;
+        pointTwoY;
+        startPointOneX;
+        startPointOneY;
+        startPointTwoX;
+        startPointTwoY;
+        setPointOneX;
+        setPointOneY;
+        setPointTwoX;
+        setPointTwoY;
+        constructor(x, y, x2, y2) {
+            this.pointOneX = x;
+            this.pointOneY = y;
+            this.pointTwoX = x2;
+            this.pointTwoY = y2;
+            this.startPointOneX = x;
+            this.startPointOneY = y;
+            this.startPointTwoX = x2;
+            this.startPointTwoY = y2;
+            this.setPointOneX = x;
+            this.setPointOneY = y;
+            this.setPointTwoX = x2;
+            this.setPointTwoY = y2;
+        }
+        static maxDistx = width / numOfPoints / 2;
+        static maxDisty = 200;
+        static step = 1;
+        static stepMin = 1;
+        getRandom() {
+            return Math.floor(Math.random() * 2) == 0;
+        }
+        updateSets() {
+            this.setPointOneX = (this.getRandom() ? 1 : -1) * Math.floor(Math.random() * point.maxDistx) + this.startPointOneX;
+            this.setPointOneY = this.startPointOneY - Math.floor(Math.random() * point.maxDisty);
+            this.setPointTwoX = (this.getRandom() ? 1 : -1) * Math.floor(Math.random() * point.maxDistx) + this.startPointTwoX;
+            this.setPointTwoY = this.startPointTwoY - Math.floor(Math.random() * point.maxDisty);
+        }
+        updatePos() {
+            this.needToUpdate = [false, false, false, false];
+            if (this.pointOneX != this.setPointOneX) {
+                if (this.pointOneX < this.setPointOneX) {
+                    this.pointOneX += point.step;
+                } else {
+                    this.pointOneX -= point.stepMin;
+                }
+            } else {
+                this.needToUpdate[0] = true;
+            }
+            if (this.pointOneY != this.setPointOneY) {
+                if (this.pointOneY < this.setPointOneY) {
+                    this.pointOneY += point.step;
+                } else {
+                    this.pointOneY -= point.stepMin;
+                }
+            } else {
+                this.needToUpdate[1] = true;
+            }
+            if (this.pointTwoX != this.setPointTwoX) {
+                if (this.pointTwoX < this.setPointTwoX) {
+                    this.pointTwoX += point.step;
+                } else {
+                    this.pointTwoX -= point.stepMin;
+                }
+            } else {
+                this.needToUpdate[2] = true;
+            }
+            if (this.pointTwoY != this.setPointTwoY) {
+                if (this.pointTwoY < this.setPointTwoY) {
+                    this.pointTwoY += point.step;
+                } else {
+                    this.pointTwoY -= point.stepMin;
+                }
+            } else {
+                this.needToUpdate[3] = true;
+            }
+            this.needTo = true
+            for (let i = 0; i < this.needToUpdate.length; i++) {
+                if (!this.needToUpdate[i]) {
+                    this.needTo = false;
+                }
+            }
+            if (this.needTo) {
+                this.updateSets();
+            }
+        }
+        getPoints() {
+            return [this.pointOneX, this.pointOneY, this.pointTwoX, this.pointTwoY];
+        }
+    }
+
+    function drawEye(x, y) {
+        const radius = 10;
+        ctx.beginPath();
+        ctx.strokeStyle = "#FF0000";
+        ctx.fillStyle = 'white';
+        ctx.lineWidth = 5;
+        ctx.arc(x, y, radius, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.fill();
+        ctx.beginPath();
+        ctx.fillStyle = 'black';
+        ctx.strokeStyle = "#FF0000";
+        ctx.lineWidth = 5;
+        ctx.arc(x, y, radius / 2, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.fill();
+    }
+
+    function drawStem(x1, y1, x2, y2) {
+        ctx.strokeStyle = '#e240ff';
+        ctx.lineWidth = 5;
+
+        ctx.beginPath();
+        ctx.moveTo(x1, y1);
+        ctx.lineTo((x1 + x2) / 2, height);
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.moveTo(x2, y2);
+        ctx.lineTo((x1 + x2) / 2, height);
+        ctx.stroke();
+    }
+
+    for (let i = 0; i < numOfPoints; i++) {
+        const heightConst = height - 10;
+        const offset = width / numOfPoints / 8;
+        const curve = new point(width / numOfPoints * i + offset, heightConst, width / numOfPoints * (i + 1) - offset, heightConst);
+        points.push(curve);
+    }
+
+    function updateAll() {
+
+        ctx.fillStyle = '#e240ff';
+        ctx.fillRect(0, height - 10, width, 10);
+        ctx.fillStyle = 'white';
+        ctx.fillRect(0, 0, width, height - 10);
+        ctx.strokeStyle = 'black';
+        for (let i = 0; i < points.length; i++) {
+            drawStem(points[i].pointOneX, points[i].pointOneY, points[i].pointTwoX, points[i].pointTwoY);
+            ctx.beginPath();
+            ctx.strokeStyle = 'black';
+            ctx.lineWidth = 5;
+            const heightConst = height - 10;
+            ctx.moveTo(width / numOfPoints * i, heightConst);
+            points[i].updatePos();
+            const newPoints = points[i].getPoints();
+            // console.log(newPoints);
+            ctx.bezierCurveTo(newPoints[0], newPoints[1],
+                newPoints[2], newPoints[3], width / numOfPoints * (i + 1), heightConst);
+            ctx.fillStyle = '#e240ff';
+            ctx.fill();
+            drawEye(points[i].pointOneX, points[i].pointOneY);
+            drawEye(points[i].pointTwoX, points[i].pointTwoY);
+        }
+    }
+    setInterval(updateAll, 10);
+</script>
+
+</html>

@@ -37,8 +37,8 @@ if (dayVal < 10) {
     dayVal = '0' + dayVal;
 }
 
-const time = `${date.getHours()}.${date.getMinutes()}.${date.getSeconds()}`;
-const serverBusy = true;
+const time = `${monthActual}/${dayVal}/${date.getFullYear()} at ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
+const serverBusy = false;
 
 /**
  * Executes SQL
@@ -179,8 +179,8 @@ export function createTaskFromICAL(userId, now, end, summary) {
     const maxid = Number(dbexecute(true, `SELECT MAX(taskId) FROM tasks WHERE id = ${userId}`)[0]['MAX(taskId)']) + 1;
     const oldDate = new Date(end);
     const day = oldDate.getDate() < 10 ? '0' + oldDate.getDate() : oldDate.getDate();
-    const month = (oldDate.getMonth() + 1) < 10 ? '0' + (oldDate.getMonth() + 1) : (oldDate.getMonth() + 1);
-    const newDate = oldDate.getFullYear() + '-' + month + '-' + day;
+    const newmonth = (oldDate.getMonth() + 1) < 10 ? '0' + (oldDate.getMonth() + 1) : (oldDate.getMonth() + 1);
+    const newDate = oldDate.getFullYear() + '-' + newmonth + '-' + day;
     dbexecute(false, `INSERT INTO tasks VALUES(${userId}, '${summary}', ${now}, '${newDate}', ${maxid})`);
 }
 
@@ -192,4 +192,116 @@ export function createTaskFromICAL(userId, now, end, summary) {
 export function getTimers(id) {
     consoleLog(id);
     return dbexecute(true, `SELECT * FROM tasks WHERE id = ${id}`);
+}
+
+
+/**
+ * Logs that a user (id) has changed a lamp status, Does not contain which lamp
+ * @param {number} id - "User id"
+ */
+export function logLampChange(id) {
+    record('lamp change', '', 4, id);
+}
+
+// catan handlers
+
+const catanDB = new Database('Private/Extra/Ethan/catan/catanGames.db', { verbose: consoleLog });
+
+/**
+ * Executes SQL
+ * @param {boolean} returnVal - "True if expected return val"
+ * @param {string} message - "SQL command"
+ * @return {object} "Returned values in dictionary array"
+ */
+function catanDBExecute(returnVal, message) {
+    const stmt = catanDB.prepare(message);
+    if (returnVal) {
+        return stmt.all();
+    }
+    stmt.run();
+}
+
+/**
+ * Creates catan game in db
+ * @param {string} name - "Name of catan game"
+ * @param {string} info - "Catan game info"
+ */
+export function createCatan(name, info) {
+    consoleLog('creating catan game');
+    const maxId = Number(catanDBExecute(true, `SELECT MAX(id) FROM games`)[0]['MAX(id)']) + 1;
+    // id int, name string, info string
+    consoleLog('trying: ', `Insert into games values(${maxId}, '${name}', '${info}');`);
+    catanDBExecute(false, `Insert into games values(${maxId}, '${name}', '${info}');`);
+}
+
+/**
+ * Adds new roll to db associated to catan id
+ * @param {number} id - "Id of catan game"
+ * @param {number} rollNum - "Catan game roll number"
+ */
+export function updateCatanGame(id, rollNum) {
+    consoleLog('adding roll');
+    // (id int, roll int)
+    catanDBExecute(false, `Insert into rolls values(${id}, ${rollNum});`);
+}
+
+/**
+ * Returns all rolls of catan game
+ * @param {number} id - "Id of catan game"
+ * @return {object} "Returns array of objects {roll: number}"
+ */
+export function getRolls(id) {
+    consoleLog('returning roll');
+    // (id int, roll int)
+    return catanDBExecute(true, `select roll from rolls where id=${id};`);
+}
+
+/**
+ * Returns id of catan game
+ * @param {string} name - "name of catan game"
+ * @return {number} "Returns id of catan game"
+ */
+export function getCatanId(name) {
+    consoleLog('returning id');
+    return catanDBExecute(true, `select id from games where name='${name}';`)[0].id;
+}
+
+/**
+ * Returns info and name of catan game
+ * @param {string} name - "name of catan game"
+ * @return {string} "Returns name and info of catan game [{name: "", info: ""}]"
+ */
+export function getCatanInfo(name) {
+    consoleLog('returning info');
+    return catanDBExecute(true, `select name, info from games where name='${name}';`);
+}
+
+/**
+ * Returns all catan games
+ * @return {object} "Returns all catan games [{}, ...]"
+ */
+export function getCatanGames() {
+    consoleLog('returning games');
+    return catanDBExecute(true, `select name from games;`);
+}
+
+/**
+ * Returns ip of person's printer
+ * @param {string} userName "Name of user to find info for"
+ * @return {string} "Returns ip in string format"
+ */
+export function getPrinterIP(userName) {
+    consoleLog(`returning printer ip for ${userName}`);
+    return dbexecute(true, `select [3DPrinterIP] from users where name='${userName}';`)[0]['3DPrinterIP'];
+}
+
+/**
+ * set printer ip of name
+ * @param {string} userName "Name of user to set info for"
+ * @param {string} printerIP "Ip of printer to set info for"
+ * @return {object} "sets printerIP to userName"
+ */
+export function setPrinterIP(userName, printerIP) {
+    consoleLog(`setting ${printerIP} as printerIp for ${userName}`);
+    return dbexecute(false, `update users set [3DPrinterIP]='${printerIP}' where name='${userName}';`);
 }

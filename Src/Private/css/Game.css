@@ -1,0 +1,15 @@
+.users {
+    width: 90%;
+    position: relative;
+    height: 40px;
+    left: calc(5% - 5px);
+    padding-top: 10px;
+    padding-bottom: 10px;
+    background-color: rgb(6, 85, 30);
+    border: 5px solid rgb(0, 0, 0);
+    border-radius: 45px;
+    vertical-align: middle;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    box-shadow: 0px 5px 8px #000000;
+}

@@ -55,7 +55,7 @@ svg {
     border-top: 5px solid black;
 }
 
-#scrollbar_right {
+#scrollbar_mid {
     z-index: 2;
     left: 25%;
     width: 50%;
@@ -64,7 +64,7 @@ svg {
     border-right: 5px solid black;
 }
 
-#scrollbar_right:hover {
+#scrollbar_mid:hover {
     background-color: #11477a;
 }
 
@@ -75,7 +75,7 @@ svg {
     position: absolute;
 }
 
-#rightscrollbarcontent {
+#midscrollbarcontent {
     pointer-events: all;
     height: calc(40vh + 5px);
     left: 0%;
@@ -227,7 +227,9 @@ form {
 #stallimg {
     width: 250px;
     height: 250px;
-    position: absolute;
+    display: flex;
+    margin: auto;
+    padding-top: 50px;
 }
 
 .namecell {
